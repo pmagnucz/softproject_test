@@ -7,7 +7,7 @@ import java.util.Date;
  */
 public class Vehicle {
     private String id;
-    private String type;
+    private VehichleType type;
     private String manufacturer;
     private Date yearOfManufacture;
     private double rentCost;
@@ -23,11 +23,11 @@ public class Vehicle {
         this.id = id;
     }
 
-    public String getType() {
+    public VehichleType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(VehichleType type) {
         this.type = type;
     }
 
