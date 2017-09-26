@@ -6,7 +6,7 @@ public class Rent {
 
 	private long id;
 	
-	private AbstractUser user;
+	private User user;
 	private Vehicle vehicle;	
 	
 	private Date rentStartDate;
@@ -26,10 +26,10 @@ public class Rent {
 	public void setId(long id) {
 		this.id = id;
 	}
-	public AbstractUser getUser() {
+	public User getUser() {
 		return user;
 	}
-	public void setUser(AbstractUser user) {
+	public void setUser(User user) {
 		this.user = user;
 	}
 	public Vehicle getVehicle() {
