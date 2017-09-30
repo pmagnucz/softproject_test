@@ -4,15 +4,15 @@ package hu.uni.miskolc.iit.model;
  * Created by rozgonyi on 2017. 09. 29..
  */
 public class Customer extends User {
-    private String userId;
+    private int userId;
     private int yearOfBirth;
     private String drivingLicenceNumber;
 
-    public String getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 
@@ -40,17 +40,15 @@ public class Customer extends User {
 
         Customer customer = (Customer) o;
 
+        if (userId != customer.userId) return false;
         if (yearOfBirth != customer.yearOfBirth) return false;
-        if (userId != null ? userId.equals(customer.userId) : customer.userId == null)
-            if (drivingLicenceNumber != null ? drivingLicenceNumber.equals(customer.drivingLicenceNumber) : customer.drivingLicenceNumber == null)
-                return true;
-        return false;
+        return drivingLicenceNumber != null ? drivingLicenceNumber.equals(customer.drivingLicenceNumber) : customer.drivingLicenceNumber == null;
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (userId != null ? userId.hashCode() : 0);
+        result = 31 * result + userId;
         result = 31 * result + yearOfBirth;
         result = 31 * result + (drivingLicenceNumber != null ? drivingLicenceNumber.hashCode() : 0);
         return result;
@@ -59,7 +57,7 @@ public class Customer extends User {
     @Override
     public String toString() {
         return "Customer{" +
-                "userId='" + userId + '\'' +
+                "userId=" + userId +
                 ", yearOfBirth=" + yearOfBirth +
                 ", drivingLicenceNumber='" + drivingLicenceNumber + '\'' +
                 '}';
