@@ -1,15 +1,12 @@
 package hu.uni.miskolc.iit.entity;
 
-import com.sun.istack.internal.NotNull;
 import hu.uni.miskolc.iit.model.User;
 import hu.uni.miskolc.iit.model.Vehicle;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
-
+/*
 @Entity
 public class RentEntity {
 
@@ -19,10 +16,8 @@ public class RentEntity {
 
     @NotNull
     private User user;
-
     @NotNull
     private Vehicle vehicle;
-
     @NotNull
     private Date rentStartDate;
     private Date rentEndDate;
@@ -161,4 +156,4 @@ public class RentEntity {
                 ", paid=" + paid +
                 '}';
     }
-}
+}*/
