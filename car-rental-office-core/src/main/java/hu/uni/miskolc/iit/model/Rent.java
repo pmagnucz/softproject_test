@@ -4,6 +4,8 @@ import java.util.Date;
 
 public class Rent {
 
+	private long id;
+
 	private User user;
 	private Vehicle vehicle;	
 	
@@ -21,6 +23,14 @@ public class Rent {
 	private double totalFee;
 
 	private boolean paid;
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
 
 	public User getUser() {
 		return user;
@@ -121,7 +131,8 @@ public class Rent {
 	@Override
 	public String toString() {
 		return "Rent{" +
-				"user=" + user +
+				"id=" + id +
+				", user=" + user +
 				", vehicle=" + vehicle +
 				", rentStartDate=" + rentStartDate +
 				", rentEndDate=" + rentEndDate +
