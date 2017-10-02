@@ -1,6 +1,6 @@
 package hu.uni.miskolc.iit.repository;
 
-import hu.uni.miskolc.iit.entity.RentEntity;
+//import hu.uni.miskolc.iit.entity.RentEntity;
 import hu.uni.miskolc.iit.model.User;
 import hu.uni.miskolc.iit.model.Vehicle;
 import org.springframework.data.repository.CrudRepository;
