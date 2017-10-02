@@ -48,7 +48,6 @@ public class Customer extends User {
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + userId;
         result = 31 * result + yearOfBirth;
         result = 31 * result + (drivingLicenceNumber != null ? drivingLicenceNumber.hashCode() : 0);
         return result;

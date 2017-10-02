@@ -1,38 +1,22 @@
 package hu.uni.miskolc.iit.entity;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.util.Date;
 
 @Entity
 public class RentEntity {
+    private static final String ID = "ID";
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    private long id;
+    @GeneratedValue
+    @Column(name = ID)
+    private Long id;
 
-    /**
-     * UserEntity
-     *
-     * Mivel azt beszéltük hogy a User vagy cég lesz vagy magánszemély ezért szerintem külön kellene őket kezelni.
-     * Lásd Customer és Company modellek és a többi.
-     * Kölcsönzésnél csak az id-t kellene a kölcsönzéshez tenni Jármű és kölcsönző esetében is.
-     *
-     * VehicleEntity és UserEntity helyett Long mező kell, ami a vehicleId-t és a customerId-t , companyId-t fogja tartalmazni ami pedig a megfelelő táblára mutat.
-     *
-     * private Long vehicleId;
-     * private Long customerId;
-     * private Long companyId;
-     * */
-
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "VEHICLE_Entity_id")
-    private VehicleEntity vehicleEntity;
-
-    @NotNull
     private Date rentStartDate;
-    @NotNull
+
     private Date rentEndDate;
 
     private boolean durationExtendable;
@@ -53,14 +37,6 @@ public class RentEntity {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public VehicleEntity getVehicleEntity() {
-        return vehicleEntity;
-    }
-
-    public void setVehicleEntity(VehicleEntity vehicleEntity) {
-        this.vehicleEntity = vehicleEntity;
     }
 
     public Date getRentStartDate() {
