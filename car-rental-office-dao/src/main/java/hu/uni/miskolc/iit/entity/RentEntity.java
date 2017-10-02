@@ -1,12 +1,9 @@
 package hu.uni.miskolc.iit.entity;
 
-import hu.uni.miskolc.iit.model.User;
-import hu.uni.miskolc.iit.model.Vehicle;
-
-import javax.persistence.*;
+/*import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
-/*
+
 @Entity
 public class RentEntity {
 
@@ -15,11 +12,18 @@ public class RentEntity {
     private long id;
 
     @NotNull
-    private User user;
+    @ManyToOne
+    @JoinColumn(name = "USER_Entity_id")
+    private UserEntity userEntity;
+
     @NotNull
-    private Vehicle vehicle;
+    @ManyToOne
+    @JoinColumn(name = "VEHICLE_Entity_id")
+    private VehicleEntity vehicleEntity;
+
     @NotNull
     private Date rentStartDate;
+    @NotNull
     private Date rentEndDate;
 
     private boolean durationExtendable;
@@ -42,20 +46,20 @@ public class RentEntity {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public UserEntity getUserEntity() {
+        return userEntity;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 
-    public Vehicle getVehicle() {
-        return vehicle;
+    public VehicleEntity getVehicleEntity() {
+        return vehicleEntity;
     }
 
-    public void setVehicle(Vehicle vehicle) {
-        this.vehicle = vehicle;
+    public void setVehicleEntity(VehicleEntity vehicleEntity) {
+        this.vehicleEntity = vehicleEntity;
     }
 
     public Date getRentStartDate() {
@@ -138,22 +142,4 @@ public class RentEntity {
         this.paid = paid;
     }
 
-    @Override
-    public String toString() {
-        return "RentEntity{" +
-                "id=" + id +
-                ", user=" + user +
-                ", vehicle=" + vehicle +
-                ", rentStartDate=" + rentStartDate +
-                ", rentEndDate=" + rentEndDate +
-                ", durationExtendable=" + durationExtendable +
-                ", extendedHours=" + extendedHours +
-                ", kmUsed=" + kmUsed +
-                ", dayFee=" + dayFee +
-                ", kmFee=" + kmFee +
-                ", otherFee=" + otherFee +
-                ", totalFee=" + totalFee +
-                ", paid=" + paid +
-                '}';
-    }
 }*/
