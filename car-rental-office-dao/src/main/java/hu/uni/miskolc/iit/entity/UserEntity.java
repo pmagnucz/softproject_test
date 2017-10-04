@@ -39,7 +39,7 @@ public class UserEntity {
     private String companyId;
 
     @Column(name = BUSINESS_REPRESENTATIVE)
-    private Long representative;
+    private String representative;
 
     @Column(name = FINANCIAL_ADDRESS)
     private String billingAddress;
@@ -51,7 +51,7 @@ public class UserEntity {
     private String address;
 
     @Column(name = PHONE_NUMBER)
-    private long phoneNumber;
+    private String phoneNumber;
 
     public Long getId() {
         return id;
@@ -93,11 +93,11 @@ public class UserEntity {
         this.companyId = companyId;
     }
 
-    public Long getRepresentative() {
+    public String getRepresentative() {
         return representative;
     }
 
-    public void setRepresentative(Long representative) {
+    public void setRepresentative(String representative) {
         this.representative = representative;
     }
 
@@ -125,11 +125,55 @@ public class UserEntity {
         this.address = address;
     }
 
-    public long getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(long phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                "id=" + id +
+                ", customerId='" + customerId + '\'' +
+                ", drivingLicenseNumber='" + drivingLicenseNumber + '\'' +
+                ", yearOfBirth='" + yearOfBirth + '\'' +
+                ", companyId='" + companyId + '\'' +
+                ", representative='" + representative + '\'' +
+                ", billingAddress='" + billingAddress + '\'' +
+                ", userName='" + userName + '\'' +
+                ", address='" + address + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        UserEntity that = (UserEntity) o;
+
+        if (getId() != null ? !getId().equals(that.getId()) : that.getId() != null) return false;
+        if (getCustomerId() != null ? !getCustomerId().equals(that.getCustomerId()) : that.getCustomerId() != null)
+            return false;
+        if (getDrivingLicenseNumber() != null ? !getDrivingLicenseNumber().equals(that.getDrivingLicenseNumber()) : that.getDrivingLicenseNumber() != null)
+            return false;
+        if (getYearOfBirth() != null ? !getYearOfBirth().equals(that.getYearOfBirth()) : that.getYearOfBirth() != null)
+            return false;
+        if (getCompanyId() != null ? !getCompanyId().equals(that.getCompanyId()) : that.getCompanyId() != null)
+            return false;
+        if (getRepresentative() != null ? !getRepresentative().equals(that.getRepresentative()) : that.getRepresentative() != null)
+            return false;
+        if (getBillingAddress() != null ? !getBillingAddress().equals(that.getBillingAddress()) : that.getBillingAddress() != null)
+            return false;
+        if (getUserName() != null ? !getUserName().equals(that.getUserName()) : that.getUserName() != null)
+            return false;
+        if (getAddress() != null ? !getAddress().equals(that.getAddress()) : that.getAddress() != null) return false;
+        return getPhoneNumber() != null ? getPhoneNumber().equals(that.getPhoneNumber()) : that.getPhoneNumber() == null;
+
+    }
+
 }

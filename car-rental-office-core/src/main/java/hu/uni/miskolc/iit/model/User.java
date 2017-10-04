@@ -3,6 +3,15 @@ package hu.uni.miskolc.iit.model;
 public class User {
 	private String userName;
 	private String address;
+	private String phoneNumber;
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
 
 	public String getUserName() {
 		return userName;

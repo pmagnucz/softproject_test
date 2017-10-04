@@ -4,15 +4,15 @@ package hu.uni.miskolc.iit.model;
  * Created by rozgonyi on 2017. 09. 29..
  */
 public class Customer extends User {
-    private int userId;
+    private String userId;
     private int yearOfBirth;
     private String drivingLicenceNumber;
 
-    public int getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
@@ -55,7 +55,7 @@ public class Customer extends User {
 
     @Override
     public String toString() {
-        return "Customer{" +
+        return super.toString() +
                 "userId=" + userId +
                 ", yearOfBirth=" + yearOfBirth +
                 ", drivingLicenceNumber='" + drivingLicenceNumber + '\'' +

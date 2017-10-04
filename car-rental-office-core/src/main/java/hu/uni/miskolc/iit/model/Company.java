@@ -4,15 +4,15 @@ package hu.uni.miskolc.iit.model;
  * Created by rozgonyi on 2017. 09. 29..
  */
 public class Company extends User {
-    private int companyId;
+    private String companyId;
     private String billingAddress;
     private Customer representative;
 
-    public int getCompanyId() {
+    public String getCompanyId() {
         return companyId;
     }
 
-    public void setCompanyId(int companyId) {
+    public void setCompanyId(String companyId) {
         this.companyId = companyId;
     }
 
@@ -49,7 +49,6 @@ public class Company extends User {
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + companyId;
         result = 31 * result + (billingAddress != null ? billingAddress.hashCode() : 0);
         result = 31 * result + (representative != null ? representative.hashCode() : 0);
         return result;
