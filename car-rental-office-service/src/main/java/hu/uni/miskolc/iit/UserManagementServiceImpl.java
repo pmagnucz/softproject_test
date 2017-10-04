@@ -27,7 +27,9 @@ public class UserManagementServiceImpl implements UserManagementService {
 
     @Override
     public User createNewUser(User user) {
-        return null;
+        UserEntity userEntity = UserMapper.mapModelToEntity(user);
+        User storedUser = UserMapper.mapUserEntityToModel(userRepository.save(userEntity));
+        return storedUser;
     }
 
     @Override
