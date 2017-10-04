@@ -1,5 +1,9 @@
 package hu.uni.miskolc.iit;
 
+import hu.uni.miskolc.iit.entity.UserEntity;
+import hu.uni.miskolc.iit.exception.UserNotFoundException;
+import hu.uni.miskolc.iit.exception.WrongUserIdFormatException;
+import hu.uni.miskolc.iit.mapper.UserMapper;
 import hu.uni.miskolc.iit.model.SearchUserRequest;
 import hu.uni.miskolc.iit.model.User;
 import hu.uni.miskolc.iit.repositories.UserRepository;
@@ -48,6 +52,9 @@ public class UserManagementServiceImpl implements UserManagementService {
 
     @Override
     public void deleteUser(User user) {
-
+        UserEntity userEntity = UserMapper.mapModelToEntity(user);
+        userRepository.delete(userEntity);
     }
+
+
 }
