@@ -4,25 +4,34 @@ import java.util.Date;
 
 public class SearchRentRequest {
 
-    private User user;
-    private Vehicle vehicle;
+    private Long customerId;
+    private Long companyId;
+    private Long vehicleId;
     private Date startDate;
     private Date endDate;
 
-    public User getUser() {
-        return user;
+    public Long getCustomerId() {
+        return customerId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
     }
 
-    public Vehicle getVehicle() {
-        return vehicle;
+    public Long getCompanyId() {
+        return companyId;
     }
 
-    public void setVehicle(Vehicle vehicle) {
-        this.vehicle = vehicle;
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
+    }
+
+    public Long getVehicleId() {
+        return vehicleId;
+    }
+
+    public void setVehicleId(Long vehicleId) {
+        this.vehicleId = vehicleId;
     }
 
     public Date getStartDate() {

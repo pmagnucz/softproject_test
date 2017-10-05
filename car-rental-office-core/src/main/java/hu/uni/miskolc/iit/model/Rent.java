@@ -4,13 +4,14 @@ import java.util.Date;
 
 public class Rent {
 
-	private long id;
+	private Long id;
 
-	private User user;
-	private Vehicle vehicle;	
-	
-	private Date rentStartDate;
-	private Date rentEndDate;
+	private Long customerId;
+	private Long companyId;
+	private Long vehicleId;
+
+	private Date startDate;
+	private Date endDate;
 
 	private boolean durationExtendable;
 
@@ -24,44 +25,52 @@ public class Rent {
 
 	private boolean paid;
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public User getUser() {
-		return user;
+	public Long getCustomerId() {
+		return customerId;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setCustomerId(Long customerId) {
+		this.customerId = customerId;
 	}
 
-	public Vehicle getVehicle() {
-		return vehicle;
+	public Long getCompanyId() {
+		return companyId;
 	}
 
-	public void setVehicle(Vehicle vehicle) {
-		this.vehicle = vehicle;
+	public void setCompanyId(Long companyId) {
+		this.companyId = companyId;
 	}
 
-	public Date getRentStartDate() {
-		return rentStartDate;
+	public Long getVehicleId() {
+		return vehicleId;
 	}
 
-	public void setRentStartDate(Date rentStartDate) {
-		this.rentStartDate = rentStartDate;
+	public void setVehicleId(Long vehicleId) {
+		this.vehicleId = vehicleId;
 	}
 
-	public Date getRentEndDate() {
-		return rentEndDate;
+	public Date getStartDate() {
+		return startDate;
 	}
 
-	public void setRentEndDate(Date rentEndDate) {
-		this.rentEndDate = rentEndDate;
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
 
 	public boolean isDurationExtendable() {
@@ -132,10 +141,11 @@ public class Rent {
 	public String toString() {
 		return "Rent{" +
 				"id=" + id +
-				", user=" + user +
-				", vehicle=" + vehicle +
-				", rentStartDate=" + rentStartDate +
-				", rentEndDate=" + rentEndDate +
+				", customerId=" + customerId +
+				", companyId=" + companyId +
+				", vehicleId=" + vehicleId +
+				", startDate=" + startDate +
+				", endDate=" + endDate +
 				", durationExtendable=" + durationExtendable +
 				", extendedHours=" + extendedHours +
 				", kmUsed=" + kmUsed +
@@ -146,4 +156,28 @@ public class Rent {
 				", paid=" + paid +
 				'}';
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		Rent rent = (Rent) o;
+
+		if (durationExtendable != rent.durationExtendable) return false;
+		if (extendedHours != rent.extendedHours) return false;
+		if (kmUsed != rent.kmUsed) return false;
+		if (Double.compare(rent.dayFee, dayFee) != 0) return false;
+		if (Double.compare(rent.kmFee, kmFee) != 0) return false;
+		if (Double.compare(rent.otherFee, otherFee) != 0) return false;
+		if (Double.compare(rent.totalFee, totalFee) != 0) return false;
+		if (paid != rent.paid) return false;
+		if (!id.equals(rent.id)) return false;
+		if (!customerId.equals(rent.customerId)) return false;
+		if (!companyId.equals(rent.companyId)) return false;
+		if (!vehicleId.equals(rent.vehicleId)) return false;
+		if (!startDate.equals(rent.startDate)) return false;
+		return endDate.equals(rent.endDate);
+	}
+
 }

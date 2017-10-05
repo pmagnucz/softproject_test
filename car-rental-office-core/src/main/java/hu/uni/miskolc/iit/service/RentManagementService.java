@@ -21,7 +21,7 @@ public interface RentManagementService {
 
     /**
      * A szűrési paramétereknek megfelelő kölcsönöket adja vissza
-     * @param searchRentRequest filter options (user,vehicle,startDate,endDate)
+     * @param searchRentRequest filter options (customerId,companyId,vehicleId,startDate,endDate)
      * @return List of Rent object
      * */
     <List> Rent getRentByFilterOptions(SearchRentRequest searchRentRequest);
