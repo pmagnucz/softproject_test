@@ -9,4 +9,3 @@ public class UserManagementServiceImplTest {
     private UserRepository userRepository;
 
     }
-}
