@@ -5,47 +5,29 @@ package hu.uni.miskolc.iit.model;
  */
 
 public class Ship extends Vehicle{
-    private String Id;
-    private String ProductName;
-    private double Length;
-    private int NumberOfPeopleBeingTransported;
+    private String id;
+    private double length;
     private boolean withTrailer;
 
     @Override
     public String getId() {
-        return Id;
+        return id;
     }
 
     @Override
     public void setId(String id) {
-        Id = id;
-    }
-
-    public String getProductName() {
-        return ProductName;
-    }
-
-    public void setProductName(String productName) {
-        ProductName = productName;
+        this.id = id;
     }
 
     public double getLength() {
-        return Length;
+        return length;
     }
 
     public void setLength(double length) {
-        Length = length;
+        this.length = length;
     }
 
-    public int getNumberOfPeopleBeingTransported() {
-        return NumberOfPeopleBeingTransported;
-    }
-
-    public void setNumberOfPeopleBeingTransported(int numberOfPeopleBeingTransported) {
-        NumberOfPeopleBeingTransported = numberOfPeopleBeingTransported;
-    }
-
-    public boolean getWithTrailer() {
+    public boolean isWithTrailer() {
         return withTrailer;
     }
 
@@ -61,22 +43,18 @@ public class Ship extends Vehicle{
 
         Ship ship = (Ship) o;
 
-        if (Double.compare(ship.Length, Length) != 0) return false;
-        if (NumberOfPeopleBeingTransported != ship.NumberOfPeopleBeingTransported) return false;
+        if (Double.compare(ship.length, length) != 0) return false;
         if (withTrailer != ship.withTrailer) return false;
-        if (Id != null ? !Id.equals(ship.Id) : ship.Id != null) return false;
-        return ProductName != null ? ProductName.equals(ship.ProductName) : ship.ProductName == null;
+        return id != null ? id.equals(ship.id) : ship.id == null;
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
         long temp;
-        result = 31 * result + (Id != null ? Id.hashCode() : 0);
-        result = 31 * result + (ProductName != null ? ProductName.hashCode() : 0);
-        temp = Double.doubleToLongBits(Length);
+        result = 31 * result + (id != null ? id.hashCode() : 0);
+        temp = Double.doubleToLongBits(length);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + NumberOfPeopleBeingTransported;
         result = 31 * result + (withTrailer ? 1 : 0);
         return result;
     }
@@ -84,10 +62,8 @@ public class Ship extends Vehicle{
     @Override
     public String toString() {
         return "Ship{" +
-                "Id='" + Id + '\'' +
-                ", ProductName='" + ProductName + '\'' +
-                ", Length=" + Length +
-                ", NumberOfPeopleBeingTransported=" + NumberOfPeopleBeingTransported +
+                "id='" + id + '\'' +
+                ", length=" + length +
                 ", withTrailer=" + withTrailer +
                 '}';
     }
