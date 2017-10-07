@@ -36,11 +36,9 @@ public class UserManagementServiceImpl implements UserManagementService {
     public User getUserById(long id) {
         List<UserEntity> elements = (List<UserEntity>)userRepository.findAll();
         User user = null;
-        long requestedId;
 
         for(int i = 0; i < elements.size(); i++){
-            requestedId = elements.get(i).getId();
-            if(id == requestedId){
+            if(id == elements.get(i).getId()){
                  user = UserMapper.mapUserEntityToModel(elements.get(i));
             }
         }
