@@ -33,8 +33,19 @@ public class UserManagementServiceImpl implements UserManagementService {
     }
 
     @Override
-    public User getUserById(int id) {
-        return null;
+    public User getUserById(long id) {
+        List<UserEntity> elements = (List<UserEntity>)userRepository.findAll();
+        User user = null;
+        long requestedId;
+
+        for(int i = 0; i < elements.size(); i++){
+            requestedId = elements.get(i).getId();
+            if(id == requestedId){
+                 user = UserMapper.mapUserEntityToModel(elements.get(i));
+            }
+        }
+
+        return user;
     }
 
     @Override
@@ -43,9 +54,7 @@ public class UserManagementServiceImpl implements UserManagementService {
     }
 
     @Override
-    public List<User> getUsers() {
-        return null;
-    }
+    public List<User> getUsers() { return null; }
 
     @Override
     public User updateUser(User user) {
