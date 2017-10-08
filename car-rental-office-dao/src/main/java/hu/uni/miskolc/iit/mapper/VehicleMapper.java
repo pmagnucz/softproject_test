@@ -16,7 +16,7 @@ import java.util.List;
 public class VehicleMapper {
 
     public static VehicleEntity mapModelToEntity(Vehicle vehicle) {
-        //converting format for String to Date, yearOfManufacture
+        //converting format for Date to String, yearOfManufacture from Vehicle
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
         VehicleEntity vehicleEntity = new VehicleEntity();
@@ -53,10 +53,15 @@ public class VehicleMapper {
         return vehicleEntityList;
     }
 
-    public static Vehicle mapEntityToModel(VehicleEntity vehicleEntity) throws ParseException {
-        //converting String to Date, yearOfManufacture
+    public static Vehicle mapEntityToModel(VehicleEntity vehicleEntity) {
+        //converting String to Date, yearOfManufacture from VehicleEntity
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date yearOfManufactureDate = format.parse(vehicleEntity.getYearOfManufacture());
+        Date yearOfManufactureDate = null;
+        try {
+            yearOfManufactureDate = format.parse(vehicleEntity.getYearOfManufacture());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         if(vehicleEntity.getPlateNumber() != null && !vehicleEntity.getPlateNumber().isEmpty()) {
             //vehicle has a PlateNumber means its a Car
@@ -103,7 +108,7 @@ public class VehicleMapper {
 
     }
 
-    public static List<Vehicle> mapEntityListToModelList(List<VehicleEntity> vehicleEntityList) throws ParseException {
+    public static List<Vehicle> mapEntityListToModelList(List<VehicleEntity> vehicleEntityList)  {
         List<Vehicle> vehicleList = new ArrayList<>(vehicleEntityList.size());
         for (VehicleEntity vehicleEntity : vehicleEntityList) {
             vehicleList.add(mapEntityToModel(vehicleEntity));
