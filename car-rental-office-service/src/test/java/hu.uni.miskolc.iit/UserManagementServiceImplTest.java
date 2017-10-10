@@ -7,6 +7,4 @@ import hu.uni.miskolc.iit.service.UserManagementService;
 public class UserManagementServiceImplTest {
     private UserManagementService userManagementService;
     private UserRepository userRepository;
-
-    }
 }
