@@ -44,7 +44,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 
     @Override
     public List<User> getUsers() {
-        return null;
+        return UserMapper.mapUserEntitiesToModelList((List<UserEntity>)userRepository.findAll());
     }
 
     @Override
