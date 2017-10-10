@@ -1,11 +1,14 @@
 package hu.uni.miskolc.iit;
 
 import hu.uni.miskolc.iit.exception.NotSupportedVehicleTypeException;
+import hu.uni.miskolc.iit.mapper.VehicleMapper;
 import hu.uni.miskolc.iit.model.Car;
 import hu.uni.miskolc.iit.model.SearchVehicleRequest;
 import hu.uni.miskolc.iit.model.Ship;
 import hu.uni.miskolc.iit.model.Vehicle;
+import hu.uni.miskolc.iit.repositories.VehicleRepository;
 import hu.uni.miskolc.iit.service.VehicleManagementService;
+import hu.uni.miskolc.iit.entity.VehicleEntity;
 
 import java.util.List;
 
@@ -13,7 +16,8 @@ import java.util.List;
  * Created by pmagnucz on 2017. 09. 26..
  */
 public class VehicleManagementServiceImpl implements VehicleManagementService {
-    // private VehicleMapper vehicleMapper;
+     private VehicleMapper vehicleMapper;
+    private VehicleRepository vehicleRepository;
 
     @Override
     public Vehicle addNewVehicle(Vehicle vehicle) {
@@ -53,6 +57,7 @@ public class VehicleManagementServiceImpl implements VehicleManagementService {
 
     @Override
     public void removeVehicle(Vehicle vehicle) {
-
+        VehicleEntity vehicleEntity = VehicleMapper.mapModelToEntity(vehicle);
+        vehicleRepository.delete(vehicleEntity);
     }
 }
