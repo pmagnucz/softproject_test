@@ -21,23 +21,33 @@ public class VehicleManagementServiceImpl implements VehicleManagementService {
 
     @Override
     public Vehicle addNewVehicle(Vehicle vehicle) {
+        VehicleEntity vehicleEntity = VehicleMapper.mapModelToEntity(vehicle);
         // Common check, all required field has value, the value fit to the regex
         if (vehicle instanceof Car)
         {
+            Vehicle storedCar = VehicleMapper.mapEntityToModel(vehicleRepository.save(vehicleEntity));
+            return storedCar;
             // CAR
         } else if (vehicle instanceof Ship)
         {
+            Vehicle storedShip = VehicleMapper.mapEntityToModel(vehicleRepository.save(vehicleEntity));
+            return storedShip;
             // SHIP
         } else {
             throw new NotSupportedVehicleTypeException(vehicle.getType().toString());
         }
-
-        return null;
     }
 
     @Override
     public Vehicle getVehicleById(int id) {
-        return null;
+        List<VehicleEntity> elements = (List<VehicleEntity>) vehicleRepository.findAll();
+        Vehicle vehicle = null;
+        for (int i = 0; i < elements.size(); i++) {
+            if (id == elements.get(i).getId()) {
+                vehicle = VehicleMapper.mapEntityToModel(elements.get(i));
+            }
+        }
+        return vehicle;
     }
 
     @Override
