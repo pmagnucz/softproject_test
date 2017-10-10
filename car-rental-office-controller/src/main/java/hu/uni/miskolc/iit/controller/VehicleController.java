@@ -13,8 +13,8 @@ import java.util.List;
  * Created by botty on 2017. 10. 10..
  */
 
-@RestController
-@RequestMapping("/vehicle")
+/*@RestController
+@RequestMapping("/vehicle")*/
 
 
 public class VehicleController {
