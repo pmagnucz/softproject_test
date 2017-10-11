@@ -65,21 +65,10 @@ public class VehicleManagementServiceImpl implements VehicleManagementService {
 
         List<VehicleEntity> entities = (List<VehicleEntity>) vehicleRepository.findAll();
         for(VehicleEntity vehicleEntity : entities){
-            if(vehicleEntity.getId().equals(vehicle.getId())){
+            if(Long.toString(vehicleEntity.getId()).equals(vehicle.getId())){
                 if (vehicle instanceof Car){
                     //Car
                     Car car = (Car) vehicle;
-                    car.getPlateNumber();
-                    car.getVehicleIdentificationNumber();
-                    car.getManufacturer();
-                    car.getPerformance();
-                    car.getPersons();
-                    car.getRentCost();
-                    car.getType();
-                    car.getVehicleStatus();
-                    car.getYearOfManufacture();
-                    car.isDrawBar();
-
                     vehicleEntity.setPlateNumber(car.getPlateNumber());
                     vehicleEntity.setVehicleIdentificationNumber(car.getVehicleIdentificationNumber());
                     vehicleEntity.setManufacturer(car.getManufacturer());
@@ -96,16 +85,6 @@ public class VehicleManagementServiceImpl implements VehicleManagementService {
                 } else if (vehicle instanceof Ship){
                     //Ship
                     Ship ship = (Ship) vehicle;
-                    ship.getLength();
-                    ship.isWithTrailer();
-                    ship.getManufacturer();
-                    ship.getPerformance();
-                    ship.getPersons();
-                    ship.getRentCost();
-                    ship.getType();
-                    ship.getVehicleStatus();
-                    ship.getYearOfManufacture();
-
                     vehicleEntity.setLength(Double.toString(ship.getLength()));
                     vehicleEntity.setWithTrailer(Boolean.toString(ship.isWithTrailer()));
                     vehicleEntity.setManufacturer(ship.getManufacturer());
