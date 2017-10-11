@@ -54,7 +54,11 @@ public class UserManagementServiceImpl implements UserManagementService {
     }
 
     @Override
-    public List<User> getUsers() { return null; }
+    public List<User> getUsers() {
+        return UserMapper.mapUserEntitiesToModelList((List<UserEntity>)userRepository.findAll());
+    }
+
+
 
     @Override
     public User updateUser(User user) {
@@ -62,12 +66,9 @@ public class UserManagementServiceImpl implements UserManagementService {
         for(UserEntity userEntity : entities){
             if(userEntity.getUserName().equals(user.getUserName())){
                 if (user instanceof Customer){
+                    //Customer
                     Customer customer = (Customer) user;
-                    customer.getDrivingLicenceNumber();
-                    customer.getYearOfBirth();
-                    customer.getAddress();
-                    customer.getPhoneNumber();
-                    customer.getUserId();
+
                     userEntity.setCustomerId(customer.getUserId());
                     userEntity.setDrivingLicenseNumber(customer.getDrivingLicenceNumber());
                     userEntity.setYearOfBirth(Integer.toString(customer.getYearOfBirth()));
@@ -77,14 +78,10 @@ public class UserManagementServiceImpl implements UserManagementService {
                     UserEntity updatedUser = userRepository.save(userEntity);
                     return UserMapper.mapUserEntityToModel(updatedUser);
 
-                } else {
+                } else if (user instanceof Company) {
                     //Company
                     Company company = (Company) user;
-                    company.getBillingAddress();
-                    company.getCompanyId();
-                    company.getRepresentative();
-                    company.getAddress();
-                    company.getPhoneNumber();
+
                     userEntity.setPhoneNumber(company.getPhoneNumber());
                     userEntity.setCompanyId(company.getCompanyId());
                     userEntity.setBillingAddress(company.getBillingAddress());
