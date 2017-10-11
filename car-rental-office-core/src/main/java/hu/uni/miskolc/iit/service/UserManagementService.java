@@ -21,7 +21,7 @@ public interface UserManagementService {
      * @param id
      * @return User object
      * */
-    User getUserById(int id);
+    User getUserById(long id);
 
     /**
      * A szűrési paramétereknek megfelelő felhasználót adja vissza.

@@ -4,6 +4,8 @@ import hu.uni.miskolc.iit.entity.UserEntity;
 import hu.uni.miskolc.iit.exception.UserNotFoundException;
 import hu.uni.miskolc.iit.exception.WrongUserIdFormatException;
 import hu.uni.miskolc.iit.mapper.UserMapper;
+import hu.uni.miskolc.iit.model.Company;
+import hu.uni.miskolc.iit.model.Customer;
 import hu.uni.miskolc.iit.model.SearchUserRequest;
 import hu.uni.miskolc.iit.model.User;
 import hu.uni.miskolc.iit.repositories.UserRepository;
@@ -33,8 +35,17 @@ public class UserManagementServiceImpl implements UserManagementService {
     }
 
     @Override
-    public User getUserById(int id) {
-        return null;
+    public User getUserById(long id) {
+        List<UserEntity> elements = (List<UserEntity>)userRepository.findAll();
+        User user = null;
+
+        for(int i = 0; i < elements.size(); i++){
+            if(id == elements.get(i).getId()){
+                 user = UserMapper.mapUserEntityToModel(elements.get(i));
+            }
+        }
+
+        return user;
     }
 
     @Override
@@ -47,8 +58,49 @@ public class UserManagementServiceImpl implements UserManagementService {
         return UserMapper.mapUserEntitiesToModelList((List<UserEntity>)userRepository.findAll());
     }
 
+
+
     @Override
     public User updateUser(User user) {
+        List<UserEntity> entities = (List<UserEntity>) userRepository.findAll();
+        for(UserEntity userEntity : entities){
+            if(userEntity.getUserName().equals(user.getUserName())){
+                if (user instanceof Customer){
+                    Customer customer = (Customer) user;
+                    customer.getDrivingLicenceNumber();
+                    customer.getYearOfBirth();
+                    customer.getAddress();
+                    customer.getPhoneNumber();
+                    customer.getUserId();
+                    userEntity.setCustomerId(customer.getUserId());
+                    userEntity.setDrivingLicenseNumber(customer.getDrivingLicenceNumber());
+                    userEntity.setYearOfBirth(Integer.toString(customer.getYearOfBirth()));
+                    userEntity.setAddress(customer.getAddress());
+                    userEntity.setPhoneNumber(customer.getPhoneNumber());
+
+                    UserEntity updatedUser = userRepository.save(userEntity);
+                    return UserMapper.mapUserEntityToModel(updatedUser);
+
+                } else {
+                    //Company
+                    Company company = (Company) user;
+                    company.getBillingAddress();
+                    company.getCompanyId();
+                    company.getRepresentative();
+                    company.getAddress();
+                    company.getPhoneNumber();
+                    userEntity.setPhoneNumber(company.getPhoneNumber());
+                    userEntity.setCompanyId(company.getCompanyId());
+                    userEntity.setBillingAddress(company.getBillingAddress());
+                    userEntity.setAddress(company.getAddress());
+                    userEntity.setRepresentative(String.valueOf(company.getRepresentative()));
+
+                    UserEntity updatedUser = userRepository.save(userEntity);
+                    return UserMapper.mapUserEntityToModel(updatedUser);
+                }
+            }
+        }
+
         return null;
     }
 
