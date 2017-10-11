@@ -1,0 +1,8 @@
+hu.uni.miskolc.iit
+hu.uni.miskolc.iit.controller
+hu.uni.miskolc.iit.entity
+hu.uni.miskolc.iit.exception
+hu.uni.miskolc.iit.mapper
+hu.uni.miskolc.iit.model
+hu.uni.miskolc.iit.repositories
+hu.uni.miskolc.iit.service
