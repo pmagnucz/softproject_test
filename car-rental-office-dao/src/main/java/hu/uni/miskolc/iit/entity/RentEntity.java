@@ -29,37 +29,37 @@ public class RentEntity {
     private Long id;
 
     @Column(name = CUSTOMER_ID)
-    private Long customerId;
+    private String customerId;
     @Column(name = COMPANY_ID)
-    private Long companyId;
+    private String companyId;
     @Column(name = VEHICLE_ID)
-    private Long vehicleId;
+    private String vehicleId;
 
     @Column(name = START_DATE)
-    private Date startDate;
+    private String startDate;
 
     @Column(name = END_DATE)
-    private Date endDate;
+    private String endDate;
 
     @Column(name = DURATION_EXTENDABLE)
-    private boolean durationExtendable;
+    private String durationExtendable;
 
     @Column(name = EXTENDED_HOURS)
-    private int extendedHours;
+    private String extendedHours;
     @Column(name = KM_USED)
-    private int kmUsed;
+    private String kmUsed;
 
     @Column(name = DAY_FEE)
-    private double dayFee;
+    private String dayFee;
     @Column(name = KM_FEE)
-    private double kmFee;
+    private String kmFee;
     @Column(name = OTHER_FEE)
-    private double otherFee;
+    private String otherFee;
     @Column(name = TOTAL_FEE)
-    private double totalFee;
+    private String totalFee;
 
     @Column(name = PAID)
-    private boolean paid;
+    private String paid;
 
     public Long getId() {
         return id;
@@ -69,128 +69,108 @@ public class RentEntity {
         this.id = id;
     }
 
-    public Long getCustomerId() {
+    public String getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(Long customerId) {
+    public void setCustomerId(String customerId) {
         this.customerId = customerId;
     }
 
-    public Long getCompanyId() {
+    public String getCompanyId() {
         return companyId;
     }
 
-    public void setCompanyId(Long companyId) {
+    public void setCompanyId(String companyId) {
         this.companyId = companyId;
     }
 
-    public Long getVehicleId() {
+    public String getVehicleId() {
         return vehicleId;
     }
 
-    public void setVehicleId(Long vehicleId) {
+    public void setVehicleId(String vehicleId) {
         this.vehicleId = vehicleId;
     }
 
-    public Date getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 
-    public boolean isDurationExtendable() {
+    public String getDurationExtendable() {
         return durationExtendable;
     }
 
-    public void setDurationExtendable(boolean durationExtendable) {
+    public void setDurationExtendable(String durationExtendable) {
         this.durationExtendable = durationExtendable;
     }
 
-    public int getExtendedHours() {
+    public String getExtendedHours() {
         return extendedHours;
     }
 
-    public void setExtendedHours(int extendedHours) {
+    public void setExtendedHours(String extendedHours) {
         this.extendedHours = extendedHours;
     }
 
-    public int getKmUsed() {
+    public String getKmUsed() {
         return kmUsed;
     }
 
-    public void setKmUsed(int kmUsed) {
+    public void setKmUsed(String kmUsed) {
         this.kmUsed = kmUsed;
     }
 
-    public double getDayFee() {
+    public String getDayFee() {
         return dayFee;
     }
 
-    public void setDayFee(double dayFee) {
+    public void setDayFee(String dayFee) {
         this.dayFee = dayFee;
     }
 
-    public double getKmFee() {
+    public String getKmFee() {
         return kmFee;
     }
 
-    public void setKmFee(double kmFee) {
+    public void setKmFee(String kmFee) {
         this.kmFee = kmFee;
     }
 
-    public double getOtherFee() {
+    public String getOtherFee() {
         return otherFee;
     }
 
-    public void setOtherFee(double otherFee) {
+    public void setOtherFee(String otherFee) {
         this.otherFee = otherFee;
     }
 
-    public double getTotalFee() {
+    public String getTotalFee() {
         return totalFee;
     }
 
-    public void setTotalFee(double totalFee) {
+    public void setTotalFee(String totalFee) {
         this.totalFee = totalFee;
     }
 
-    public boolean isPaid() {
+    public String getPaid() {
         return paid;
     }
 
-    public void setPaid(boolean paid) {
+    public void setPaid(String paid) {
         this.paid = paid;
-    }
-
-    @Override
-    public String toString() {
-        return "RentEntity{" +
-                "id=" + id +
-                ", customerId=" + customerId +
-                ", companyId=" + companyId +
-                ", vehicleId=" + vehicleId +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
-                ", durationExtendable=" + durationExtendable +
-                ", extendedHours=" + extendedHours +
-                ", kmUsed=" + kmUsed +
-                ", dayFee=" + dayFee +
-                ", kmFee=" + kmFee +
-                ", otherFee=" + otherFee +
-                ", totalFee=" + totalFee +
-                ", paid=" + paid +
-                '}';
     }
 
     @Override
@@ -200,20 +180,41 @@ public class RentEntity {
 
         RentEntity that = (RentEntity) o;
 
-        if (durationExtendable != that.durationExtendable) return false;
-        if (extendedHours != that.extendedHours) return false;
-        if (kmUsed != that.kmUsed) return false;
-        if (Double.compare(that.dayFee, dayFee) != 0) return false;
-        if (Double.compare(that.kmFee, kmFee) != 0) return false;
-        if (Double.compare(that.otherFee, otherFee) != 0) return false;
-        if (Double.compare(that.totalFee, totalFee) != 0) return false;
-        if (paid != that.paid) return false;
-        if (!id.equals(that.id)) return false;
-        if (!customerId.equals(that.customerId)) return false;
-        if (!companyId.equals(that.companyId)) return false;
-        if (!vehicleId.equals(that.vehicleId)) return false;
-        if (!startDate.equals(that.startDate)) return false;
-        return endDate.equals(that.endDate);
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (customerId != null ? !customerId.equals(that.customerId) : that.customerId != null) return false;
+        if (companyId != null ? !companyId.equals(that.companyId) : that.companyId != null) return false;
+        if (vehicleId != null ? !vehicleId.equals(that.vehicleId) : that.vehicleId != null) return false;
+        if (startDate != null ? !startDate.equals(that.startDate) : that.startDate != null) return false;
+        if (endDate != null ? !endDate.equals(that.endDate) : that.endDate != null) return false;
+        if (durationExtendable != null ? !durationExtendable.equals(that.durationExtendable) : that.durationExtendable != null)
+            return false;
+        if (extendedHours != null ? !extendedHours.equals(that.extendedHours) : that.extendedHours != null)
+            return false;
+        if (kmUsed != null ? !kmUsed.equals(that.kmUsed) : that.kmUsed != null) return false;
+        if (dayFee != null ? !dayFee.equals(that.dayFee) : that.dayFee != null) return false;
+        if (kmFee != null ? !kmFee.equals(that.kmFee) : that.kmFee != null) return false;
+        if (otherFee != null ? !otherFee.equals(that.otherFee) : that.otherFee != null) return false;
+        if (totalFee != null ? !totalFee.equals(that.totalFee) : that.totalFee != null) return false;
+        return paid != null ? paid.equals(that.paid) : that.paid == null;
     }
 
+    @Override
+    public String toString() {
+        return "RentEntity{" +
+                "id=" + id +
+                ", customerId='" + customerId + '\'' +
+                ", companyId='" + companyId + '\'' +
+                ", vehicleId='" + vehicleId + '\'' +
+                ", startDate='" + startDate + '\'' +
+                ", endDate='" + endDate + '\'' +
+                ", durationExtendable='" + durationExtendable + '\'' +
+                ", extendedHours='" + extendedHours + '\'' +
+                ", kmUsed='" + kmUsed + '\'' +
+                ", dayFee='" + dayFee + '\'' +
+                ", kmFee='" + kmFee + '\'' +
+                ", otherFee='" + otherFee + '\'' +
+                ", totalFee='" + totalFee + '\'' +
+                ", paid='" + paid + '\'' +
+                '}';
+    }
 }

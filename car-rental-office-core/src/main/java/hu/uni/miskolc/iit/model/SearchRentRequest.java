@@ -4,33 +4,41 @@ import java.util.Date;
 
 public class SearchRentRequest {
 
-    private Long customerId;
-    private Long companyId;
-    private Long vehicleId;
+    private int customerId;
+    private int companyId;
+    private int vehicleId;
     private Date startDate;
     private Date endDate;
 
-    public Long getCustomerId() {
+    public SearchRentRequest(int customerId, int companyId, int vehicleId, Date startDate, Date endDate) {
+        this.customerId = customerId;
+        this.companyId = companyId;
+        this.vehicleId = vehicleId;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
+    public int getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(Long customerId) {
+    public void setCustomerId(int customerId) {
         this.customerId = customerId;
     }
 
-    public Long getCompanyId() {
+    public int getCompanyId() {
         return companyId;
     }
 
-    public void setCompanyId(Long companyId) {
+    public void setCompanyId(int companyId) {
         this.companyId = companyId;
     }
 
-    public Long getVehicleId() {
+    public int getVehicleId() {
         return vehicleId;
     }
 
-    public void setVehicleId(Long vehicleId) {
+    public void setVehicleId(int vehicleId) {
         this.vehicleId = vehicleId;
     }
 
