@@ -8,6 +8,6 @@ public class UserTypeDoesNotExistException extends Exception {
 
     @Override
     public String toString() {
-        return message;
+        return message + "Hello!";
     }
 }
