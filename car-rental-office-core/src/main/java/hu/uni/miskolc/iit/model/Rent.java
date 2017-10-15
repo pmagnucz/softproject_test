@@ -25,6 +25,10 @@ public class Rent {
 
 	private boolean paid;
 
+	public Rent() {
+
+	}
+
 	public Rent(int id, int customerId, int companyId, int vehicleId, Date startDate, Date endDate, boolean durationExtendable, int extendedHours, int kmUsed, double dayFee, double kmFee, double otherFee, double totalFee, boolean paid) {
 		this.id = id;
 		this.customerId = customerId;
