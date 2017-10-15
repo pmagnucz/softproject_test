@@ -1,5 +1,7 @@
 package hu.uni.miskolc.iit.model;
 
+import java.util.Date;
+
 /**
  * Created by pmagnucz on 2017. 09. 26..
  */
@@ -32,6 +34,17 @@ public class Ship extends Vehicle{
     }
 
     public void setWithTrailer(boolean withTrailer) {
+        this.withTrailer = withTrailer;
+    }
+
+    public Ship(){
+
+    }
+
+    public Ship(String id, VehichleType type, String manufacturer, Date yearOfManufacture, double rentCost, int persons, double performance, String vehicleStatus, String id1, double length, boolean withTrailer) {
+        super(id, type, manufacturer, yearOfManufacture, rentCost, persons, performance, vehicleStatus);
+        this.id = id1;
+        this.length = length;
         this.withTrailer = withTrailer;
     }
 

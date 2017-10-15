@@ -79,6 +79,20 @@ public class Vehicle {
         this.vehicleStatus = vehicleStatus;
     }
 
+    public Vehicle() {
+    }
+
+    public Vehicle(String id, VehichleType type, String manufacturer, Date yearOfManufacture, double rentCost, int persons, double performance, String vehicleStatus) {
+        this.id = id;
+        this.type = type;
+        this.manufacturer = manufacturer;
+        this.yearOfManufacture = yearOfManufacture;
+        this.rentCost = rentCost;
+        this.persons = persons;
+        this.performance = performance;
+        this.vehicleStatus = vehicleStatus;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

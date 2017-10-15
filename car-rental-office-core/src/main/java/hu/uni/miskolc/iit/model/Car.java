@@ -1,5 +1,7 @@
 package hu.uni.miskolc.iit.model;
 
+import java.util.Date;
+
 /**
  * Created by pmagnucz on 2017. 09. 25..
  */
@@ -29,6 +31,17 @@ public class Car extends Vehicle {
     }
 
     public void setDrawBar(boolean drawBar) {
+        this.drawBar = drawBar;
+    }
+
+    public Car(){
+
+    }
+
+    public Car(String id, VehichleType type, String manufacturer, Date yearOfManufacture, double rentCost, int persons, double performance, String vehicleStatus, String plateNumber, String vehicleIdentificationNumber, boolean drawBar) {
+        super(id, type, manufacturer, yearOfManufacture, rentCost, persons, performance, vehicleStatus);
+        this.plateNumber = plateNumber;
+        this.vehicleIdentificationNumber = vehicleIdentificationNumber;
         this.drawBar = drawBar;
     }
 
