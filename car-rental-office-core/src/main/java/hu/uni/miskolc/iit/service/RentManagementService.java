@@ -17,7 +17,7 @@ public interface RentManagementService {
      * @param id
      * @return Rent object
      * */
-    Rent getRentById(long id);
+    Rent getRentById(int id);
 
     /**
      * A szűrési paramétereknek megfelelő kölcsönöket adja vissza
