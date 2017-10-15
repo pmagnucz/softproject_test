@@ -78,7 +78,7 @@ public class VehicleManagementServiceImpl implements VehicleManagementService {
                     vehicleEntity.setPersons(Integer.toString(car.getPersons()));
                     vehicleEntity.setRentCost(Double.toString(car.getRentCost()));
                     vehicleEntity.setType(car.getType().toString());
-                    vehicleEntity.setVehicleStatus(car.getVehicleStatus());
+                    vehicleEntity.setVehicleStatus(car.getVehicleStatus().toString());
                     vehicleEntity.setYearOfManufacture(car.getYearOfManufacture().toString());
                     vehicleEntity.setDrawBar(Boolean.toString(car.isDrawBar()));
 
@@ -94,7 +94,7 @@ public class VehicleManagementServiceImpl implements VehicleManagementService {
                     vehicleEntity.setPersons(Integer.toString(ship.getPersons()));
                     vehicleEntity.setRentCost(Double.toString(ship.getRentCost()));
                     vehicleEntity.setType(ship.getType().toString());
-                    vehicleEntity.setVehicleStatus(ship.getVehicleStatus());
+                    vehicleEntity.setVehicleStatus(ship.getVehicleStatus().toString());
                     vehicleEntity.setYearOfManufacture(ship.getYearOfManufacture().toString());
 
                     VehicleEntity updatedVehicleShip = vehicleRepository.save(vehicleEntity);

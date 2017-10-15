@@ -19,16 +19,17 @@ public class VehicleModelTest {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM");
         String dateString =  "2001-09";
         Date yearOfManufactureDate = dateFormat.parse(dateString);
-        this.vehicle = new Vehicle("1", VehichleType.CAR, "Volkswagen", yearOfManufactureDate, 15000, 5, 178, "free" );
+        this.vehicle = new Vehicle(1, VehichleType.CAR, "Volkswagen", yearOfManufactureDate, 15000, 5, 178, VehicleStatusType.FREE);
     }
+
     @After
     public void tearDown() throws Exception {
     }
 
     @Test
     public void getId() throws Exception {
-        String expected = "1";
-        String actual = vehicle.getId();
+        int expected = 1;
+        int actual = vehicle.getId();
         assertEquals(expected, actual);
     }
 
@@ -78,8 +79,8 @@ public class VehicleModelTest {
 
     @Test
     public void getVehicleStatus() throws Exception {
-        String expected = "free";
-        String actual = vehicle.getVehicleStatus();
+        String expected = VehicleStatusType.FREE.name();
+        String actual = vehicle.getVehicleStatus().name();
         assertEquals(expected, actual);
     }
 }

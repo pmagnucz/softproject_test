@@ -35,10 +35,15 @@ public class Car extends Vehicle {
     }
 
     public Car(){
-
     }
 
-    public Car(String id, VehichleType type, String manufacturer, Date yearOfManufacture, double rentCost, int persons, double performance, String vehicleStatus, String plateNumber, String vehicleIdentificationNumber, boolean drawBar) {
+    public Car(String plateNumber, String vehicleIdentificationNumber, boolean drawBar) {
+        this.plateNumber = plateNumber;
+        this.vehicleIdentificationNumber = vehicleIdentificationNumber;
+        this.drawBar = drawBar;
+    }
+
+    public Car(int id, VehichleType type, String manufacturer, Date yearOfManufacture, double rentCost, int persons, double performance, VehicleStatusType vehicleStatus, String plateNumber, String vehicleIdentificationNumber, boolean drawBar) {
         super(id, type, manufacturer, yearOfManufacture, rentCost, persons, performance, vehicleStatus);
         this.plateNumber = plateNumber;
         this.vehicleIdentificationNumber = vehicleIdentificationNumber;

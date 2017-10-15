@@ -7,18 +7,16 @@ import java.util.Date;
  */
 
 public class Ship extends Vehicle{
-    private String id;
+    private String shipId;
     private double length;
     private boolean withTrailer;
 
-    @Override
-    public String getId() {
-        return id;
+    public String getShipId() {
+        return shipId;
     }
 
-    @Override
-    public void setId(String id) {
-        this.id = id;
+    public void setShipId(String shipId) {
+        this.shipId = shipId;
     }
 
     public double getLength() {
@@ -37,13 +35,19 @@ public class Ship extends Vehicle{
         this.withTrailer = withTrailer;
     }
 
-    public Ship(){
+    public  Ship(){
 
     }
 
-    public Ship(String id, VehichleType type, String manufacturer, Date yearOfManufacture, double rentCost, int persons, double performance, String vehicleStatus, String id1, double length, boolean withTrailer) {
+    public Ship(String shipId, double length, boolean withTrailer) {
+        this.shipId = shipId;
+        this.length = length;
+        this.withTrailer = withTrailer;
+    }
+
+    public Ship(int id, VehichleType type, String manufacturer, Date yearOfManufacture, double rentCost, int persons, double performance, VehicleStatusType vehicleStatus, String shipId, double length, boolean withTrailer) {
         super(id, type, manufacturer, yearOfManufacture, rentCost, persons, performance, vehicleStatus);
-        this.id = id1;
+        this.shipId = shipId;
         this.length = length;
         this.withTrailer = withTrailer;
     }
@@ -58,14 +62,14 @@ public class Ship extends Vehicle{
 
         if (Double.compare(ship.length, length) != 0) return false;
         if (withTrailer != ship.withTrailer) return false;
-        return id != null ? id.equals(ship.id) : ship.id == null;
+        return shipId != null ? shipId.equals(ship.shipId) : ship.shipId == null;
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
         long temp;
-        result = 31 * result + (id != null ? id.hashCode() : 0);
+        result = 31 * result + (shipId != null ? shipId.hashCode() : 0);
         temp = Double.doubleToLongBits(length);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + (withTrailer ? 1 : 0);
@@ -75,7 +79,7 @@ public class Ship extends Vehicle{
     @Override
     public String toString() {
         return "Ship{" +
-                "id='" + id + '\'' +
+                "shipId='" + shipId + '\'' +
                 ", length=" + length +
                 ", withTrailer=" + withTrailer +
                 '}';
