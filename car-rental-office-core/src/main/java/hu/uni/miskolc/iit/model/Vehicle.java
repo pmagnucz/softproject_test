@@ -6,20 +6,20 @@ import java.util.Date;
  * Created by pmagnucz on 2017. 09. 25..
  */
 public class Vehicle {
-    private String id;
+    private int id;
     private VehichleType type;
     private String manufacturer;
     private Date yearOfManufacture;
     private double rentCost;
     private int persons;
     private double performance;
-    private String vehicleStatus;
+    private VehicleStatusType vehicleStatus;
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -71,11 +71,26 @@ public class Vehicle {
         this.performance = performance;
     }
 
-    public String getVehicleStatus() {
+    public VehicleStatusType getVehicleStatus() {
         return vehicleStatus;
     }
 
-    public void setVehicleStatus(String vehicleStatus) {
+    public void setVehicleStatus(VehicleStatusType vehicleStatus) {
+        this.vehicleStatus = vehicleStatus;
+    }
+
+    public Vehicle(){
+
+    }
+
+    public Vehicle(int id, VehichleType type, String manufacturer, Date yearOfManufacture, double rentCost, int persons, double performance, VehicleStatusType vehicleStatus) {
+        this.id = id;
+        this.type = type;
+        this.manufacturer = manufacturer;
+        this.yearOfManufacture = yearOfManufacture;
+        this.rentCost = rentCost;
+        this.persons = persons;
+        this.performance = performance;
         this.vehicleStatus = vehicleStatus;
     }
 
@@ -86,47 +101,46 @@ public class Vehicle {
 
         Vehicle vehicle = (Vehicle) o;
 
-        if (Double.compare(vehicle.getRentCost(), getRentCost()) != 0) return false;
-        if (getPersons() != vehicle.getPersons()) return false;
-        if (Double.compare(vehicle.getPerformance(), getPerformance()) != 0) return false;
-        if (getId() != null ? !getId().equals(vehicle.getId()) : vehicle.getId() != null) return false;
-        if (getType() != null ? !getType().equals(vehicle.getType()) : vehicle.getType() != null) return false;
-        if (getManufacturer() != null ? !getManufacturer().equals(vehicle.getManufacturer()) : vehicle.getManufacturer() != null)
+        if (id != vehicle.id) return false;
+        if (Double.compare(vehicle.rentCost, rentCost) != 0) return false;
+        if (persons != vehicle.persons) return false;
+        if (Double.compare(vehicle.performance, performance) != 0) return false;
+        if (type != vehicle.type) return false;
+        if (manufacturer != null ? !manufacturer.equals(vehicle.manufacturer) : vehicle.manufacturer != null)
             return false;
-        if (getYearOfManufacture() != null ? !getYearOfManufacture().equals(vehicle.getYearOfManufacture()) : vehicle.getYearOfManufacture() != null)
+        if (yearOfManufacture != null ? !yearOfManufacture.equals(vehicle.yearOfManufacture) : vehicle.yearOfManufacture != null)
             return false;
-        return getVehicleStatus() != null ? getVehicleStatus().equals(vehicle.getVehicleStatus()) : vehicle.getVehicleStatus() == null;
-
+        return vehicleStatus == vehicle.vehicleStatus;
     }
 
     @Override
     public int hashCode() {
         int result;
         long temp;
-        result = getId() != null ? getId().hashCode() : 0;
-        result = 31 * result + (getType() != null ? getType().hashCode() : 0);
-        result = 31 * result + (getManufacturer() != null ? getManufacturer().hashCode() : 0);
-        result = 31 * result + (getYearOfManufacture() != null ? getYearOfManufacture().hashCode() : 0);
-        temp = Double.doubleToLongBits(getRentCost());
+        result = id;
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (manufacturer != null ? manufacturer.hashCode() : 0);
+        result = 31 * result + (yearOfManufacture != null ? yearOfManufacture.hashCode() : 0);
+        temp = Double.doubleToLongBits(rentCost);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + getPersons();
-        temp = Double.doubleToLongBits(getPerformance());
+        result = 31 * result + persons;
+        temp = Double.doubleToLongBits(performance);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + (getVehicleStatus() != null ? getVehicleStatus().hashCode() : 0);
+        result = 31 * result + (vehicleStatus != null ? vehicleStatus.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
         return "Vehicle{" +
-                "id='" + id + '\'' +
-                ", type='" + type + '\'' +
+                "id=" + id +
+                ", type=" + type +
                 ", manufacturer='" + manufacturer + '\'' +
                 ", yearOfManufacture=" + yearOfManufacture +
                 ", rentCost=" + rentCost +
                 ", persons=" + persons +
                 ", performance=" + performance +
-                ", vehicleStatus='" + vehicleStatus + '\'' +
+                ", vehicleStatus=" + vehicleStatus +
                 '}';
     }
 }
