@@ -1,13 +1,15 @@
 package hu.uni.miskolc.iit.controller;
 import hu.uni.miskolc.iit.model.SearchVehicleRequest;
+import hu.uni.miskolc.iit.model.VehichleType;
 import hu.uni.miskolc.iit.model.Vehicle;
+import hu.uni.miskolc.iit.model.VehicleStatusType;
 import hu.uni.miskolc.iit.service.VehicleManagementService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by botty on 2017. 10. 10..
@@ -24,15 +26,15 @@ public class VehicleController {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String addNewVehice(@RequestBody Vehicle vehicle){
+    public Vehicle addNewVehice(@RequestBody Vehicle vehicle){
         Vehicle returned = vehicleManagementService.addNewVehicle(vehicle);
-        return returned.toString() + "car added.";
+        return returned;
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public String getVehicleById(@PathVariable int id){
+    public Vehicle getVehicleById(@PathVariable int id){
         Vehicle vehicle = vehicleManagementService.getVehicleById(id);
-        return vehicle.toString();
+        return vehicle;
     }
 
     @PostMapping(value = "/search")
@@ -42,21 +44,20 @@ public class VehicleController {
     }
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public String getVehicles(){
+    public ResponseEntity<List<Vehicle>> getVehicles(){
         List<Vehicle> vehicles = vehicleManagementService.getVehicles();
-        return vehicles.toString();
+        return ResponseEntity.ok(vehicles);
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String updateVehicle(@RequestBody Vehicle vehicle){
+    public Vehicle updateVehicle(@RequestBody Vehicle vehicle){
         Vehicle returned = vehicleManagementService.updateVehicle(vehicle);
-        return vehicle.toString() + "changed to: " + returned.toString();
+        return returned;
     }
 
-    /*itt 200-as kellene majd küldeni, ha jó lesz, ha nem valami hibát*/
     @RequestMapping(value = "/remove", method = RequestMethod.POST)
     public String removeVehicle(@RequestBody Vehicle vehicle){
         vehicleManagementService.removeVehicle(vehicle);
-        return "Lefutott.";
+        return "Ok.";
     }
 }
