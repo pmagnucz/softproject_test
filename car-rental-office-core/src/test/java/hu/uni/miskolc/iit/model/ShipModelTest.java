@@ -5,11 +5,6 @@ import static org.junit.Assert.*;
 import hu.uni.miskolc.iit.model.Ship;
 import org.junit.*;
 
-import java.lang.Exception;
-import java.lang.String;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class ShipModelTest {
     private Ship ship;
