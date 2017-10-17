@@ -42,4 +42,14 @@ public class SearchVehicleRequest {
     public void setRentCost(double rentCost) {
         this.rentCost = rentCost;
     }
+
+    public SearchVehicleRequest(VehichleType type, String manufacturer, Date yearOfManufacture, double rentCost) {
+        this.type = type;
+        this.manufacturer = manufacturer;
+        this.yearOfManufacture = yearOfManufacture;
+        this.rentCost = rentCost;
+    }
+
+    public SearchVehicleRequest() {
+    }
 }
