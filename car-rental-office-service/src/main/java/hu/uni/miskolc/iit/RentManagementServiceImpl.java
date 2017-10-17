@@ -1,5 +1,6 @@
 package hu.uni.miskolc.iit;
 
+import hu.uni.miskolc.iit.entity.RentEntity;
 import hu.uni.miskolc.iit.mapper.RentMapper;
 import hu.uni.miskolc.iit.model.Rent;
 import hu.uni.miskolc.iit.model.SearchRentRequest;
@@ -7,6 +8,7 @@ import hu.uni.miskolc.iit.repositories.RentRepository;
 import hu.uni.miskolc.iit.service.RentManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -65,11 +67,29 @@ public class RentManagementServiceImpl implements RentManagementService {
 
     @Override
     public Rent updateRent(Rent rent) {
-        return null;
+        RentEntity mappedEntity = rentMapper.mapModelToEntity(rent);
+
+        this.rentRepository.findOne(Long.valueOf(rent.getId())).setCustomerId(mappedEntity.getCustomerId());
+        this.rentRepository.findOne(Long.valueOf(rent.getId())).setCompanyId(mappedEntity.getCompanyId());
+        this.rentRepository.findOne(Long.valueOf(rent.getId())).setVehicleId(mappedEntity.getVehicleId());
+        this.rentRepository.findOne(Long.valueOf(rent.getId())).setStartDate(mappedEntity.getStartDate());
+        this.rentRepository.findOne(Long.valueOf(rent.getId())).setEndDate(mappedEntity.getEndDate());
+        this.rentRepository.findOne(Long.valueOf(rent.getId())).setDurationExtendable(mappedEntity.getDurationExtendable());
+        this.rentRepository.findOne(Long.valueOf(rent.getId())).setExtendedHours(mappedEntity.getExtendedHours());
+        this.rentRepository.findOne(Long.valueOf(rent.getId())).setKmUsed(mappedEntity.getKmUsed());
+        this.rentRepository.findOne(Long.valueOf(rent.getId())).setDayFee(mappedEntity.getDayFee());
+        this.rentRepository.findOne(Long.valueOf(rent.getId())).setKmFee(mappedEntity.getKmFee());
+        this.rentRepository.findOne(Long.valueOf(rent.getId())).setOtherFee(mappedEntity.getOtherFee());
+        this.rentRepository.findOne(Long.valueOf(rent.getId())).setTotalFee(mappedEntity.getTotalFee());
+        this.rentRepository.findOne(Long.valueOf(rent.getId())).setPaid(mappedEntity.getPaid());
+
+        this.rentRepository.save(rentRepository.findOne(Long.valueOf(rent.getId())));
+
+        return rent;
     }
 
     @Override
-    public Rent removeRent(Rent rent) {
-        return null;
+    public void removeRent(Rent rent) {
+        this.rentRepository.delete(Long.valueOf(rent.getId()));
     }
 }

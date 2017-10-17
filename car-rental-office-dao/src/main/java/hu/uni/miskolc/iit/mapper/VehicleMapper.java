@@ -76,9 +76,8 @@ public class VehicleMapper {
             return car;
         } else if(vehicleEntity.getShipId() != null && !vehicleEntity.getShipId().isEmpty()) {
             //vehicle has a ShipId means its a Ship
-            //problem: 2 id exist with Ship with same name and type,one in Vehicle and one in Ship
             Ship ship = new Ship();
-            ship.setId(Integer.parseInt(vehicleEntity.getShipId()));
+            ship.setId(Math.toIntExact(vehicleEntity.getId()));
             ship.setType(VehichleType.SHIP);
             ship.setManufacturer(vehicleEntity.getManufacturer());
             ship.setYearOfManufacture(yearOfManufactureDate);
@@ -86,6 +85,7 @@ public class VehicleMapper {
             ship.setPersons(Integer.parseInt(vehicleEntity.getPersons()));
             ship.setPerformance(Double.parseDouble(vehicleEntity.getPerformance()));
             ship.setVehicleStatus(VehicleStatusType.valueOf(vehicleEntity.getVehicleStatus()));
+            ship.setShipId(vehicleEntity.getShipId());
             ship.setLength(Double.parseDouble(vehicleEntity.getLength()));
             ship.setWithTrailer(Boolean.valueOf(vehicleEntity.getWithTrailer()));
             return ship;

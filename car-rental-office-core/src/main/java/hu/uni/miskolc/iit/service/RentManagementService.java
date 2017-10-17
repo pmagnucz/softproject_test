@@ -44,6 +44,6 @@ public interface RentManagementService {
     /**Törli a paraméterben kapott kölcsönt.
      * @param rent
      */
-    Rent removeRent(Rent rent);
+    void removeRent(Rent rent);
 }
 
