@@ -24,7 +24,8 @@ public class RentManagementServiceImpl implements RentManagementService {
 
     @Override
     public Rent addNewRent(Rent rent) {
-        return null;
+        this.rentRepository.save(rentMapper.mapModelToEntity(rent));
+        return rent;
     }
 
     @Override
@@ -41,7 +42,20 @@ public class RentManagementServiceImpl implements RentManagementService {
 
     @Override
     public List<Rent> getRentByFilterOptions(SearchRentRequest searchRentRequest) {
-        return null;
+        List<Rent> rentList = rentMapper.mapRentEntityListToModelList(((List)this.rentRepository.findAll()));
+        List<Rent> requestedRents = new ArrayList<Rent>();
+
+        for(Rent rent : rentList) {
+            if(rent.getCustomerId() == searchRentRequest.getCustomerId()
+                    || rent.getCompanyId() == searchRentRequest.getCompanyId()
+                    || rent.getVehicleId() == searchRentRequest.getVehicleId()
+                    || rent.getStartDate() == searchRentRequest.getStartDate()
+                    || rent.getEndDate() == searchRentRequest.getEndDate()) {
+                requestedRents.add(rent);
+            }
+        }
+
+        return requestedRents;
     }
 
     @Override
