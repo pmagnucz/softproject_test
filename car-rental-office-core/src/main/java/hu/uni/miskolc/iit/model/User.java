@@ -5,6 +5,15 @@ public class User {
 	private String address;
 	private String phoneNumber;
 
+	public User() {
+	}
+
+	public User(String userName, String address, String phoneNumber) {
+		this.userName = userName;
+		this.address = address;
+		this.phoneNumber = phoneNumber;
+	}
+
 	public String getPhoneNumber() {
 		return phoneNumber;
 	}
