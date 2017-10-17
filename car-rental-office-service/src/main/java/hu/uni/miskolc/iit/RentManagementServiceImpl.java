@@ -29,7 +29,14 @@ public class RentManagementServiceImpl implements RentManagementService {
 
     @Override
     public Rent getRentById(int id) {
-        return null;
+        List<RentEntity> elements = (List<RentEntity>) rentRepository.findAll();
+        Rent rent = null;
+        for (int i = 0; i < elements.size(); i++) {
+            if (id == elements.get(i).getId()) {
+                rent = RentMapper.mapEntityToModel(elements.get(i));
+            }
+        }
+        return rent;
     }
 
     @Override
@@ -39,7 +46,7 @@ public class RentManagementServiceImpl implements RentManagementService {
 
     @Override
     public List<Rent> getRents() {
-        return null;
+        return RentMapper.mapRentEntityListToModelList((List<RentEntity>)rentRepository.findAll());
     }
 
     @Override
