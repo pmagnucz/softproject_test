@@ -62,4 +62,13 @@ public class Company extends User {
                 ", representative=" + representative +
                 '}';
     }
+
+    public Company(String companyId, String billingAddress, Customer representative) {
+        this.companyId = companyId;
+        this.billingAddress = billingAddress;
+        this.representative = representative;
+    }
+
+    public Company() {
+    }
 }

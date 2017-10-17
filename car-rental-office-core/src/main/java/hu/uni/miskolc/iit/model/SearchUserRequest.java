@@ -40,4 +40,14 @@ public class SearchUserRequest {
     public void setDrivingLicenceNumber(String drivingLicenceNumber) {
         this.drivingLicenceNumber = drivingLicenceNumber;
     }
+
+    public SearchUserRequest(String userName, long phoneNumber, String address, String drivingLicenceNumber) {
+        this.userName = userName;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.drivingLicenceNumber = drivingLicenceNumber;
+    }
+
+    public SearchUserRequest() {
+    }
 }

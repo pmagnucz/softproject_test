@@ -61,4 +61,13 @@ public class Customer extends User {
                 ", drivingLicenceNumber='" + drivingLicenceNumber + '\'' +
                 '}';
     }
+
+    public Customer(String userId, int yearOfBirth, String drivingLicenceNumber) {
+        this.userId = userId;
+        this.yearOfBirth = yearOfBirth;
+        this.drivingLicenceNumber = drivingLicenceNumber;
+    }
+
+    public Customer() {
+    }
 }
