@@ -2,12 +2,6 @@ package hu.uni.miskolc.iit.model;
 
 import static org.junit.Assert.*;
 import org.junit.*;
-
-import org.junit.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 /**
  * Created by botty on 2017. 10. 16..
  */
@@ -25,9 +19,9 @@ public class CarModelTest{
     }
 
     @Test
-    public void getplateNumber() throws Exception {
+    public void getPlateNumber() throws Exception {
         String expected = "ABC-123";
-        String actual = car.getplateNumber();
+        String actual = car.getPlateNumber();
         assertEquals(expected, actual);
     }
 
