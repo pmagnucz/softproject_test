@@ -1,7 +1,6 @@
 package hu.uni.miskolc.iit.model;
 
 import static org.junit.Assert.*;
-import org.junit.*;
 
 public class CompanyTest {
 
