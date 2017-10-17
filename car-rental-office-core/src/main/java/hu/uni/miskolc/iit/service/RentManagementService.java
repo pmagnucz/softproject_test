@@ -3,6 +3,8 @@ package hu.uni.miskolc.iit.service;
 import hu.uni.miskolc.iit.model.Rent;
 import hu.uni.miskolc.iit.model.SearchRentRequest;
 
+import java.util.List;
+
 public interface RentManagementService {
 
     /**
@@ -24,13 +26,13 @@ public interface RentManagementService {
      * @param searchRentRequest filter options (customerId,companyId,vehicleId,startDate,endDate)
      * @return List of Rent object
      * */
-    <List> Rent getRentByFilterOptions(SearchRentRequest searchRentRequest);
+    List<Rent> getRentByFilterOptions(SearchRentRequest searchRentRequest);
 
     /**
      * Visszaadja a kölcsön objektumok listáját
      * @return List of Rents
      * */
-    <List> Rent getRents();
+    List<Rent> getRents();
 
     /**
      * Egy kölcsön tulajdonságait módosítja.
