@@ -10,14 +10,16 @@ import hu.uni.miskolc.iit.model.Vehicle;
 import hu.uni.miskolc.iit.repositories.VehicleRepository;
 import hu.uni.miskolc.iit.service.VehicleManagementService;
 import hu.uni.miskolc.iit.entity.VehicleEntity;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
  * Created by pmagnucz on 2017. 09. 26..
  */
-public class VehicleManagementServiceImpl implements VehicleManagementService {
 
+@Service
+public class VehicleManagementServiceImpl implements VehicleManagementService {
     private VehicleMapper vehicleMapper;
     private VehicleRepository vehicleRepository;
 
@@ -64,7 +66,6 @@ public class VehicleManagementServiceImpl implements VehicleManagementService {
 
     @Override
     public Vehicle updateVehicle(Vehicle vehicle) {
-
         List<VehicleEntity> entities = (List<VehicleEntity>) vehicleRepository.findAll();
         for(VehicleEntity vehicleEntity : entities){
             if(Long.toString(vehicleEntity.getId()).equals(vehicle.getId())){

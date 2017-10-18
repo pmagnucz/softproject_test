@@ -1,10 +1,12 @@
 package hu.uni.miskolc.iit.model;
 
+import java.io.Serializable;
+
 /**
  * Created by rozgonyi on 2017. 10. 15..
  */
 
-public enum VehicleStatusType {
+public enum VehicleStatusType implements Serializable {
     FREE("FREE"),
     RESERVED("RESERVED"),
     NOT_AVAILABLE("NOT_AVAILABLE");

@@ -1,9 +1,11 @@
 package hu.uni.miskolc.iit.model;
 
+import java.io.Serializable;
+
 /**
  * Created by pmagnucz on 2017. 09. 26..
  */
-public enum VehichleType {
+public enum VehichleType implements Serializable {
     CAR("CAR"),
     SHIP("SHIP"),
     OTHER("OTHER");
