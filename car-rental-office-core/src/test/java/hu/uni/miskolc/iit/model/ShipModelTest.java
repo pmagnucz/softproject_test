@@ -11,7 +11,7 @@ public class ShipModelTest {
 
     @Before
     public void setUp() throws Exception{
-        this.ship = new Ship("Cunami", 10000, TRUE);
+        this.ship = new Ship("Cunami", 10000, true);
     }
 
     @After
@@ -28,7 +28,7 @@ public class ShipModelTest {
     @Test
     public void getLenght() throws Exception {
         double expected = 10000;
-        double actual = vehicle.getLenght();
+        double actual = ship.getLength();
         assertEquals(expected, actual, 0.1);
     }
 
