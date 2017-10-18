@@ -1,5 +1,6 @@
 package hu.uni.miskolc.iit.service;
 
+import hu.uni.miskolc.iit.exception.UserNotFoundException;
 import hu.uni.miskolc.iit.model.SearchUserRequest;
 import hu.uni.miskolc.iit.model.User;
 
@@ -41,7 +42,7 @@ public interface UserManagementService {
      * @param user
      * @return User object
      * */
-    User updateUser(User user);
+    User updateUser(User user) throws UserNotFoundException;
 
     /**Törli a paraméterben kapott felhasználót.
      * @param user
