@@ -11,7 +11,7 @@ public class CarModelTest{
 
     @Before
     public void setUp() throws Exception{
-        this.car = new Car("ABC-123","a123a321b",TRUE);
+        this.car = new Car("ABC-123","a123a321b",true);
     }
 
     @After

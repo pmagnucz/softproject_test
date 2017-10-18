@@ -58,10 +58,8 @@ public class UserManagementServiceImpl implements UserManagementService {
         return UserMapper.mapUserEntitiesToModelList((List<UserEntity>)userRepository.findAll());
     }
 
-
-
     @Override
-    public User updateUser(User user) {
+    public User updateUser(User user) throws UserNotFoundException {
         List<UserEntity> entities = (List<UserEntity>) userRepository.findAll();
         for(UserEntity userEntity : entities){
             if(userEntity.getUserName().equals(user.getUserName())){
@@ -93,8 +91,7 @@ public class UserManagementServiceImpl implements UserManagementService {
                 }
             }
         }
-
-        return null;
+        throw new UserNotFoundException("User: " + user.toString() + "not found!");
     }
 
     @Override
@@ -102,6 +99,4 @@ public class UserManagementServiceImpl implements UserManagementService {
         UserEntity userEntity = UserMapper.mapModelToEntity(user);
         userRepository.delete(userEntity);
     }
-
-
 }
