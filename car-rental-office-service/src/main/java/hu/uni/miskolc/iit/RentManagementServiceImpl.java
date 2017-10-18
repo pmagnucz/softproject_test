@@ -7,6 +7,7 @@ import hu.uni.miskolc.iit.model.SearchRentRequest;
 import hu.uni.miskolc.iit.repositories.RentRepository;
 import hu.uni.miskolc.iit.service.RentManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,8 @@ import java.util.List;
 /**
  * Created by zsoltme on 2017.10.17..
  */
+
+@Service
 public class RentManagementServiceImpl implements RentManagementService {
 
     private RentRepository rentRepository;
