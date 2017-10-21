@@ -33,7 +33,7 @@ public class VehicleMapper {
             vehicleEntity.setDrawBar(String.valueOf(car.isDrawBar()));
         } else if (vehicle instanceof Ship) {
             Ship ship = (Ship)vehicle;
-            vehicleEntity.setShipId(String.valueOf(ship.getId()));
+            vehicleEntity.setShipId(ship.getShipId());
             vehicleEntity.setLength(String.valueOf(ship.getLength()));
             vehicleEntity.setWithTrailer(String.valueOf(ship.isWithTrailer()));
         }
@@ -77,7 +77,7 @@ public class VehicleMapper {
         } else if(vehicleEntity.getShipId() != null && !vehicleEntity.getShipId().isEmpty()) {
             //vehicle has a ShipId means its a Ship
             Ship ship = new Ship();
-            ship.setId(Math.toIntExact(vehicleEntity.getId()));
+            ship.setId(Integer.parseInt(vehicleEntity.getVehicleId()));
             ship.setType(VehichleType.SHIP);
             ship.setManufacturer(vehicleEntity.getManufacturer());
             ship.setYearOfManufacture(yearOfManufactureDate);
