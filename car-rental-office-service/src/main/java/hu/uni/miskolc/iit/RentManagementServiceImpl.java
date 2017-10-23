@@ -130,7 +130,7 @@ public class RentManagementServiceImpl implements RentManagementService {
             }
         }
 
-        if(rent.getEndDate().after(rent.getStartDate())) {
+        if(rent.getStartDate().after(rent.getEndDate())) {
             try {
                 throw new WrongRentDateException("EndDate cannot be before startDate.");
             } catch (WrongRentDateException e) {
