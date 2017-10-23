@@ -30,8 +30,8 @@ public class RentManagementServiceImpl implements RentManagementService {
     }
 
     @Override
-    public Rent addNewRent(Rent rent) {
-        catchExceptions(rent);
+    public Rent addNewRent(Rent rent) throws WrongRentDateException, NegativeValueException {
+        validate(rent);
         this.rentRepository.save(rentMapper.mapModelToEntity(rent));
         return rent;
     }
@@ -93,7 +93,7 @@ public class RentManagementServiceImpl implements RentManagementService {
     }
 
     @Override
-    public void catchExceptions(Rent rent) {
+    public void validate(Rent rent) throws NegativeValueException, WrongRentDateException {
         String negativeValueExceptionMessage = "";
         boolean negativeValueException = false;
 
@@ -123,19 +123,11 @@ public class RentManagementServiceImpl implements RentManagementService {
         }
 
         if (negativeValueException == true) {
-            try {
                 throw new NegativeValueException(negativeValueExceptionMessage);
-            } catch (NegativeValueException e) {
-                e.printStackTrace();
-            }
         }
 
         if(rent.getStartDate().after(rent.getEndDate())) {
-            try {
                 throw new WrongRentDateException("EndDate cannot be before startDate.");
-            } catch (WrongRentDateException e) {
-                e.printStackTrace();
-            }
         }
     }
 }

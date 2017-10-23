@@ -14,7 +14,7 @@ public interface RentManagementService {
      * @param rent
      * @return Rent object
      * */
-    Rent addNewRent(Rent rent);
+    Rent addNewRent(Rent rent) throws WrongRentDateException, NegativeValueException;
 
     /**
      * A paraméterben adott azonosítójú kölcsön objektummal tér vissza
@@ -51,6 +51,6 @@ public interface RentManagementService {
     /**Testing a Rent for Exceptions
      * @param rent
      */
-    void catchExceptions(Rent rent);
+    void validate(Rent rent) throws NegativeValueException, WrongRentDateException;
 }
 

@@ -1,5 +1,7 @@
 package hu.uni.miskolc.iit.controller;
 
+import hu.uni.miskolc.iit.exception.NegativeValueException;
+import hu.uni.miskolc.iit.exception.WrongRentDateException;
 import hu.uni.miskolc.iit.model.Rent;
 import hu.uni.miskolc.iit.model.SearchRentRequest;
 import hu.uni.miskolc.iit.service.RentManagementService;
@@ -27,7 +29,7 @@ public class RentController {
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public ResponseEntity<Rent> createRent(@RequestBody Rent rent){
+    public ResponseEntity<Rent> createRent(@RequestBody Rent rent) throws WrongRentDateException, NegativeValueException {
         return ResponseEntity.ok(rentManagementService.addNewRent(rent));
     }
 

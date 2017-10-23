@@ -1,6 +1,8 @@
 package hu.uni.miskolc.iit;
 
 import hu.uni.miskolc.iit.entity.RentEntity;
+import hu.uni.miskolc.iit.exception.NegativeValueException;
+import hu.uni.miskolc.iit.exception.WrongRentDateException;
 import hu.uni.miskolc.iit.mapper.RentMapper;
 import hu.uni.miskolc.iit.model.Rent;
 import hu.uni.miskolc.iit.repositories.RentRepository;
@@ -128,4 +130,69 @@ public class RentManagementServiceImplTest {
     public void catchExceptions() throws Exception {
     }
 
+    @Test(expected = NegativeValueException.class)
+    public void negativeNumberException() throws Exception {
+
+        Rent rent = new Rent();
+
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date startDate = null;
+        Date endDate = null;
+        try {
+            startDate = format.parse("2017-02-01");
+            endDate = format.parse("2017-03-01");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        rent.setCustomerId(1);
+        rent.setCompanyId(2);
+        rent.setVehicleId(3);
+        rent.setStartDate(startDate);
+        rent.setEndDate(endDate);
+        rent.setDurationExtendable(true);
+        rent.setExtendedHours(-1);
+        rent.setKmUsed(-1);
+        rent.setKmFee(-1);
+        rent.setDayFee(-1);
+        rent.setOtherFee(-1);
+        rent.setTotalFee(-1);
+        rent.setPaid(false);
+
+        rentManagementService.addNewRent(rent);
+
+    }
+
+    @Test(expected = WrongRentDateException.class)
+    public void wrongDateException() throws Exception {
+
+        Rent rent = new Rent();
+
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date startDate = null;
+        Date endDate = null;
+        try {
+            startDate = format.parse("2017-03-01");
+            endDate = format.parse("2017-02-01");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        rent.setCustomerId(1);
+        rent.setCompanyId(2);
+        rent.setVehicleId(3);
+        rent.setStartDate(startDate);
+        rent.setEndDate(endDate);
+        rent.setDurationExtendable(true);
+        rent.setExtendedHours(24);
+        rent.setKmUsed(100);
+        rent.setKmFee(100000);
+        rent.setDayFee(150000);
+        rent.setOtherFee(0);
+        rent.setTotalFee(250000);
+        rent.setPaid(false);
+
+        rentManagementService.addNewRent(rent);
+
+    }
 }
