@@ -38,14 +38,7 @@ public class RentManagementServiceImpl implements RentManagementService {
 
     @Override
     public Rent getRentById(int id) {
-        List<RentEntity> elements = (List<RentEntity>) rentRepository.findAll();
-        Rent rent = null;
-        for (int i = 0; i < elements.size(); i++) {
-            if (id == elements.get(i).getId()) {
-                rent = RentMapper.mapEntityToModel(elements.get(i));
-            }
-        }
-        return rent;
+        return rentMapper.mapEntityToModel(rentRepository.findOne(Long.valueOf(id)));
     }
 
     @Override
