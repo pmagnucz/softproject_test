@@ -2,9 +2,7 @@ package hu.uni.miskolc.iit;
 
 import hu.uni.miskolc.iit.entity.VehicleEntity;
 import hu.uni.miskolc.iit.mapper.VehicleMapper;
-import hu.uni.miskolc.iit.model.VehichleType;
-import hu.uni.miskolc.iit.model.Vehicle;
-import hu.uni.miskolc.iit.model.VehicleStatusType;
+import hu.uni.miskolc.iit.model.*;
 import hu.uni.miskolc.iit.repositories.VehicleRepository;
 import hu.uni.miskolc.iit.service.VehicleManagementService;
 import org.junit.After;
@@ -30,8 +28,8 @@ public class VehicleManagementServiceImplTest {
 
     @Before
     public void setUp() throws Exception {
-        vehicleRepository = mock(VehicleRepository.class);
-        vehicleManagementService = new VehicleManagementServiceImpl(vehicleRepository);
+        //vehicleRepository = mock(VehicleRepository.class);
+        //vehicleManagementService = new VehicleManagementServiceImpl(vehicleRepository);
 
     }
 
@@ -42,31 +40,64 @@ public class VehicleManagementServiceImplTest {
     @Test
     public void addNewVehicle() throws Exception {
         Vehicle vehicle = new Vehicle();
+        Car car = new Car();
+        Ship ship = new Ship();
 
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = null;
-        try {
-            date = format.parse("2017-02-01");
-        } catch (ParseException e) {
-            e.printStackTrace();
+        if (vehicle instanceof Car){
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = null;
+            try {
+                date = format.parse("2007-08-21");
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            car.setDrawBar(true);
+            car.setPlateNumber("AAA-111");
+            car.setVehicleIdentificationNumber("245354sd");
+            car.setId(1);
+            car.setType(VehichleType.CAR);
+            car.setManufacturer("Ford");
+            car.setPerformance(1500.24);
+            car.setPersons(5);
+            car.setRentCost(15000);
+            car.setVehicleStatus(VehicleStatusType.FREE);
+            car.setYearOfManufacture(date);
+
+            VehicleEntity mockedVehicleEntity= VehicleMapper.mapModelToEntity(car);
+            when(vehicleRepository.save(any(VehicleEntity.class))).thenReturn(mockedVehicleEntity);
+
+            Vehicle actual = vehicleManagementService.addNewVehicle(car);
+
+            assertEquals(car, actual);
+        } else if(vehicle instanceof Ship){
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = null;
+            try {
+                date = format.parse("2010-07-18");
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            ship.setId(2);
+            ship.setLength(2000);
+            ship.setWithTrailer(true);
+            ship.setType(VehichleType.SHIP);
+            ship.setManufacturer("Lambo");
+            ship.setPerformance(120);
+            ship.setPersons(6);
+            ship.setRentCost(13000);
+            ship.setVehicleStatus(VehicleStatusType.RESERVED);
+            ship.setYearOfManufacture(date);
+
+            VehicleEntity mockedVehicleEntity= VehicleMapper.mapModelToEntity(ship);
+            when(vehicleRepository.save(any(VehicleEntity.class))).thenReturn(mockedVehicleEntity);
+
+            Vehicle actual = vehicleManagementService.addNewVehicle(ship);
+
+            assertEquals(ship, actual);
         }
 
-        String a = "CAR";
-
-        vehicle.setId(1);
-        vehicle.setType(VehichleType.CAR);
-        vehicle.setManufacturer("Ford");
-        vehicle.setPerformance(1500.24);
-        vehicle.setPersons(5);
-        vehicle.setRentCost(15000);
-        vehicle.setVehicleStatus(VehicleStatusType.FREE);
-        vehicle.setYearOfManufacture(date);
-
-        VehicleEntity mockedVehicleEntity= VehicleMapper.mapModelToEntity(vehicle);
-        when(vehicleRepository.save(any(VehicleEntity.class))).thenReturn(mockedVehicleEntity);
-
-        Vehicle actual = vehicleManagementService.addNewVehicle(vehicle);
-        assertEquals(vehicle, actual);
     }
 
     @Test
