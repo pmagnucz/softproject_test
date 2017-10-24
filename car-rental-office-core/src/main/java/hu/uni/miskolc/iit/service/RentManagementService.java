@@ -1,5 +1,7 @@
 package hu.uni.miskolc.iit.service;
 
+import hu.uni.miskolc.iit.exception.NegativeValueException;
+import hu.uni.miskolc.iit.exception.WrongRentDateException;
 import hu.uni.miskolc.iit.model.Rent;
 import hu.uni.miskolc.iit.model.SearchRentRequest;
 
@@ -12,7 +14,7 @@ public interface RentManagementService {
      * @param rent
      * @return Rent object
      * */
-    Rent addNewRent(Rent rent);
+    Rent addNewRent(Rent rent) throws WrongRentDateException, NegativeValueException;
 
     /**
      * A paraméterben adott azonosítójú kölcsön objektummal tér vissza
@@ -45,5 +47,10 @@ public interface RentManagementService {
      * @param rent
      */
     void removeRent(Rent rent);
+
+    /**Testing a Rent for Exceptions
+     * @param rent
+     */
+    void validate(Rent rent) throws NegativeValueException, WrongRentDateException;
 }
 

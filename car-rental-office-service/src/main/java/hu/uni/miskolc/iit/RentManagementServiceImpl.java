@@ -1,6 +1,8 @@
 package hu.uni.miskolc.iit;
 
 import hu.uni.miskolc.iit.entity.RentEntity;
+import hu.uni.miskolc.iit.exception.NegativeValueException;
+import hu.uni.miskolc.iit.exception.WrongRentDateException;
 import hu.uni.miskolc.iit.mapper.RentMapper;
 import hu.uni.miskolc.iit.model.Rent;
 import hu.uni.miskolc.iit.model.SearchRentRequest;
@@ -28,21 +30,15 @@ public class RentManagementServiceImpl implements RentManagementService {
     }
 
     @Override
-    public Rent addNewRent(Rent rent) {
+    public Rent addNewRent(Rent rent) throws WrongRentDateException, NegativeValueException {
+        validate(rent);
         this.rentRepository.save(rentMapper.mapModelToEntity(rent));
         return rent;
     }
 
     @Override
     public Rent getRentById(int id) {
-        List<RentEntity> elements = (List<RentEntity>) rentRepository.findAll();
-        Rent rent = null;
-        for (int i = 0; i < elements.size(); i++) {
-            if (id == elements.get(i).getId()) {
-                rent = RentMapper.mapEntityToModel(elements.get(i));
-            }
-        }
-        return rent;
+        return rentMapper.mapEntityToModel(rentRepository.findOne(Long.valueOf(id)));
     }
 
     @Override
@@ -94,5 +90,44 @@ public class RentManagementServiceImpl implements RentManagementService {
     @Override
     public void removeRent(Rent rent) {
         this.rentRepository.delete(Long.valueOf(rent.getId()));
+    }
+
+    @Override
+    public void validate(Rent rent) throws NegativeValueException, WrongRentDateException {
+        String negativeValueExceptionMessage = "";
+        boolean negativeValueException = false;
+
+        if(rent.getExtendedHours() < 0){
+            negativeValueExceptionMessage.concat(" ,extendedHours");
+            negativeValueException = true;
+        }
+        if(rent.getKmUsed() < 0) {
+            negativeValueExceptionMessage.concat(" ,kmUsed");
+            negativeValueException = true;
+        }
+        if (rent.getKmFee() < 0) {
+            negativeValueExceptionMessage.concat(" ,,kmFee");
+            negativeValueException = true;
+        }
+        if (rent.getDayFee() < 0) {
+            negativeValueExceptionMessage.concat(" ,dayFee");
+            negativeValueException = true;
+        }
+        if (rent.getOtherFee() < 0) {
+            negativeValueExceptionMessage.concat(" ,otherFee");
+            negativeValueException = true;
+        }
+        if (rent.getTotalFee() < 0) {
+            negativeValueExceptionMessage.concat(" ,totalFee");
+            negativeValueException = true;
+        }
+
+        if (negativeValueException == true) {
+                throw new NegativeValueException(negativeValueExceptionMessage);
+        }
+
+        if(rent.getStartDate().after(rent.getEndDate())) {
+                throw new WrongRentDateException("EndDate cannot be before startDate.");
+        }
     }
 }
