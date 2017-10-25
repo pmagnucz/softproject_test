@@ -1,6 +1,7 @@
 package hu.uni.miskolc.iit;
 
 import hu.uni.miskolc.iit.entity.VehicleEntity;
+import hu.uni.miskolc.iit.mapper.CarMapper;
 import hu.uni.miskolc.iit.mapper.VehicleMapper;
 import hu.uni.miskolc.iit.model.*;
 import hu.uni.miskolc.iit.repositories.VehicleRepository;
@@ -21,6 +22,7 @@ import static org.mockito.Matchers.any;
 import static org.junit.Assert.*;
 
 
+
 public class VehicleManagementServiceImplTest {
 
     private VehicleManagementService vehicleManagementService;
@@ -28,8 +30,8 @@ public class VehicleManagementServiceImplTest {
 
     @Before
     public void setUp() throws Exception {
-        //vehicleRepository = mock(VehicleRepository.class);
-        //vehicleManagementService = new VehicleManagementServiceImpl(vehicleRepository);
+        vehicleRepository = mock(VehicleRepository.class);
+        vehicleManagementService = new VehicleManagementServiceImpl(vehicleRepository);
 
     }
 
@@ -38,67 +40,66 @@ public class VehicleManagementServiceImplTest {
     }
 
     @Test
-    public void addNewVehicle() throws Exception {
-        Vehicle vehicle = new Vehicle();
+    public void addNewVehicleCar() throws Exception {
         Car car = new Car();
-        Ship ship = new Ship();
 
-        if (vehicle instanceof Car){
-            DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            Date date = null;
-            try {
-                date = format.parse("2007-08-21");
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
-            car.setDrawBar(true);
-            car.setPlateNumber("AAA-111");
-            car.setVehicleIdentificationNumber("245354sd");
-            car.setId(1);
-            car.setType(VehichleType.CAR);
-            car.setManufacturer("Ford");
-            car.setPerformance(1500.24);
-            car.setPersons(5);
-            car.setRentCost(15000);
-            car.setVehicleStatus(VehicleStatusType.FREE);
-            car.setYearOfManufacture(date);
-
-            VehicleEntity mockedVehicleEntity= VehicleMapper.mapModelToEntity(car);
-            when(vehicleRepository.save(any(VehicleEntity.class))).thenReturn(mockedVehicleEntity);
-
-            Vehicle actual = vehicleManagementService.addNewVehicle(car);
-
-            assertEquals(car, actual);
-        } else if(vehicle instanceof Ship){
-            DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            Date date = null;
-            try {
-                date = format.parse("2010-07-18");
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
-            ship.setId(2);
-            ship.setLength(2000);
-            ship.setWithTrailer(true);
-            ship.setType(VehichleType.SHIP);
-            ship.setManufacturer("Lambo");
-            ship.setPerformance(120);
-            ship.setPersons(6);
-            ship.setRentCost(13000);
-            ship.setVehicleStatus(VehicleStatusType.RESERVED);
-            ship.setYearOfManufacture(date);
-
-            VehicleEntity mockedVehicleEntity= VehicleMapper.mapModelToEntity(ship);
-            when(vehicleRepository.save(any(VehicleEntity.class))).thenReturn(mockedVehicleEntity);
-
-            Vehicle actual = vehicleManagementService.addNewVehicle(ship);
-
-            assertEquals(ship, actual);
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = null;
+        try {
+            date = format.parse("2007-08-21");
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
 
+        car.setId(1);
+        car.setType(VehichleType.CAR);
+        car.setManufacturer("Ford");
+        car.setYearOfManufacture(date);
+        car.setRentCost(15000);
+        car.setPersons(5);
+        car.setPerformance(1500.24);
+        car.setVehicleStatus(VehicleStatusType.FREE);
+        car.setPlateNumber("AAA-111");
+        car.setVehicleIdentificationNumber("245354sd");
+        car.setDrawBar(true);
+
+        VehicleEntity mockedVehicleEntity = VehicleMapper.mapModelToEntity(car);
+        when(vehicleRepository.save(any(VehicleEntity.class))).thenReturn(mockedVehicleEntity);
+
+        Vehicle actual = vehicleManagementService.addNewVehicle(car);
+        assertEquals(car, actual);
     }
+
+    @Test
+    public void addNewVehicleShip() throws Exception {
+        Ship ship = new Ship();
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = null;
+        try {
+        date = format.parse("2010-07-18");
+        } catch (ParseException e) {
+        e.printStackTrace();
+        }
+
+        ship.setId(2);
+        ship.setLength(2000.0);
+        ship.setWithTrailer(true);
+        ship.setType(VehichleType.SHIP);
+        ship.setShipId("M");
+        ship.setManufacturer("Lambo");
+        ship.setPerformance(120);
+        ship.setPersons(6);
+        ship.setRentCost(13000);
+        ship.setVehicleStatus(VehicleStatusType.RESERVED);
+        ship.setYearOfManufacture(date);
+
+        VehicleEntity mockedVehicleEntity = VehicleMapper.mapModelToEntity(ship);
+        when(vehicleRepository.save(any(VehicleEntity.class))).thenReturn(mockedVehicleEntity);
+
+        Vehicle actual = vehicleManagementService.addNewVehicle(ship);
+
+        assertEquals(ship, actual);
+        }
 
     @Test
     public void getVehicleById() throws Exception {

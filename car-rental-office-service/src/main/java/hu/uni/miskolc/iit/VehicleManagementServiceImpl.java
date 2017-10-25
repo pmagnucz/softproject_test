@@ -23,6 +23,10 @@ public class VehicleManagementServiceImpl implements VehicleManagementService {
     private VehicleMapper vehicleMapper;
     private VehicleRepository vehicleRepository;
 
+    public VehicleManagementServiceImpl(VehicleRepository vehicleRepository) {
+        this.vehicleRepository = vehicleRepository;
+    }
+
     @Override
     public Vehicle addNewVehicle(Vehicle vehicle) {
         VehicleEntity vehicleEntity = VehicleMapper.mapModelToEntity(vehicle);
