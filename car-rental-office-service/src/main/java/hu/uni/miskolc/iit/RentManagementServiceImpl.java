@@ -32,8 +32,9 @@ public class RentManagementServiceImpl implements RentManagementService {
     @Override
     public Rent addNewRent(Rent rent) throws WrongRentDateException, NegativeValueException {
         validate(rent);
-        this.rentRepository.save(rentMapper.mapModelToEntity(rent));
-        return rent;
+        RentEntity rentEntity = rentMapper.mapModelToEntity(rent);
+        Rent storedRent = rentMapper.mapEntityToModel(this.rentRepository.save(rentEntity));
+        return storedRent;
     }
 
     @Override
@@ -82,9 +83,8 @@ public class RentManagementServiceImpl implements RentManagementService {
         this.rentRepository.findOne(Long.valueOf(rent.getId())).setTotalFee(mappedEntity.getTotalFee());
         this.rentRepository.findOne(Long.valueOf(rent.getId())).setPaid(mappedEntity.getPaid());
 
-        this.rentRepository.save(rentRepository.findOne(Long.valueOf(rent.getId())));
-
-        return rent;
+        Rent updatedRent = rentMapper.mapEntityToModel(this.rentRepository.save(rentRepository.findOne(Long.valueOf(rent.getId()))));
+        return updatedRent;
     }
 
     @Override
