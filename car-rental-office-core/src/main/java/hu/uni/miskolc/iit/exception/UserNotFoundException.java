@@ -14,4 +14,9 @@ public class UserNotFoundException extends Exception {
     public String toString() {
         return message;
     }
+
+    @Override
+    public String getMessage() {
+        return toString();
+    }
 }

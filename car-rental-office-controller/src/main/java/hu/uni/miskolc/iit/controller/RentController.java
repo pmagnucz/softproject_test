@@ -1,7 +1,6 @@
 package hu.uni.miskolc.iit.controller;
 
-import hu.uni.miskolc.iit.exception.NegativeValueException;
-import hu.uni.miskolc.iit.exception.WrongRentDateException;
+import hu.uni.miskolc.iit.exception.*;
 import hu.uni.miskolc.iit.model.Rent;
 import hu.uni.miskolc.iit.model.SearchRentRequest;
 import hu.uni.miskolc.iit.service.RentManagementService;
@@ -29,7 +28,7 @@ public class RentController {
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public ResponseEntity<Rent> createRent(@RequestBody Rent rent) throws WrongRentDateException, NegativeValueException {
+    public ResponseEntity<Rent> createRent(@RequestBody Rent rent) throws WrongRentDateException, NegativeValueException, UserNotFoundException, RentIdAlreadyExistsException, VehicleNotFoundException, RentWrongTotalFeeException {
         return ResponseEntity.ok(rentManagementService.addNewRent(rent));
     }
 
@@ -59,7 +58,7 @@ public class RentController {
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-    public void deleteRent(@RequestBody Rent rent){
+    public void deleteRent(@RequestBody Rent rent) throws NegativeValueException, RentWrongTotalFeeException, WrongRentDateException, UserNotFoundException, VehicleNotFoundException, RentNotFoundException {
         rentManagementService.removeRent(rent);
     }
 }

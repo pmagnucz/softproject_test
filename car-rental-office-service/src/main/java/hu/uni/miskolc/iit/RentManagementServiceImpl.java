@@ -1,12 +1,13 @@
 package hu.uni.miskolc.iit;
 
 import hu.uni.miskolc.iit.entity.RentEntity;
-import hu.uni.miskolc.iit.exception.NegativeValueException;
-import hu.uni.miskolc.iit.exception.WrongRentDateException;
+import hu.uni.miskolc.iit.exception.*;
 import hu.uni.miskolc.iit.mapper.RentMapper;
 import hu.uni.miskolc.iit.model.Rent;
 import hu.uni.miskolc.iit.model.SearchRentRequest;
 import hu.uni.miskolc.iit.repositories.RentRepository;
+import hu.uni.miskolc.iit.repositories.UserRepository;
+import hu.uni.miskolc.iit.repositories.VehicleRepository;
 import hu.uni.miskolc.iit.service.RentManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,15 +23,22 @@ import java.util.List;
 public class RentManagementServiceImpl implements RentManagementService {
 
     private RentRepository rentRepository;
+    private UserRepository userRepository;
+    private VehicleRepository vehicleRepository;
     private RentMapper rentMapper;
 
     @Autowired
-    public RentManagementServiceImpl(RentRepository rentRepository) {
+    public RentManagementServiceImpl(RentRepository rentRepository,UserRepository userRepository,VehicleRepository vehicleRepository) {
         this.rentRepository = rentRepository;
+        this.userRepository = userRepository;
+        this.vehicleRepository = vehicleRepository;
     }
 
     @Override
-    public Rent addNewRent(Rent rent) throws WrongRentDateException, NegativeValueException {
+    public Rent addNewRent(Rent rent) throws WrongRentDateException, NegativeValueException, RentWrongTotalFeeException, RentIdAlreadyExistsException, UserNotFoundException, VehicleNotFoundException {
+        if(rentRepository.exists(Long.valueOf(rent.getId()))) {
+            throw new RentIdAlreadyExistsException(String.valueOf(rent.getId()));
+        }
         validate(rent);
         RentEntity rentEntity = rentMapper.mapModelToEntity(rent);
         Rent storedRent = rentMapper.mapEntityToModel(this.rentRepository.save(rentEntity));
@@ -66,7 +74,11 @@ public class RentManagementServiceImpl implements RentManagementService {
     }
 
     @Override
-    public Rent updateRent(Rent rent) {
+    public Rent updateRent(Rent rent) throws UserNotFoundException, NegativeValueException, WrongRentDateException, RentWrongTotalFeeException, VehicleNotFoundException, RentNotFoundException {
+        if(!rentRepository.exists(Long.valueOf(rent.getId()))){
+            throw new RentNotFoundException(String.valueOf(rent.getId()));
+        }
+        validate(rent);
         RentEntity mappedEntity = rentMapper.mapModelToEntity(rent);
 
         this.rentRepository.findOne(Long.valueOf(rent.getId())).setCustomerId(mappedEntity.getCustomerId());
@@ -88,12 +100,16 @@ public class RentManagementServiceImpl implements RentManagementService {
     }
 
     @Override
-    public void removeRent(Rent rent) {
+    public void removeRent(Rent rent) throws UserNotFoundException, NegativeValueException, WrongRentDateException, RentWrongTotalFeeException, VehicleNotFoundException, RentNotFoundException {
+        if(!rentRepository.exists(Long.valueOf(rent.getId()))) {
+            throw new RentNotFoundException(String.valueOf(rent.getId()));
+        }
+        validate(rent);
         this.rentRepository.delete(Long.valueOf(rent.getId()));
     }
 
     @Override
-    public void validate(Rent rent) throws NegativeValueException, WrongRentDateException {
+    public void validate(Rent rent) throws NegativeValueException, WrongRentDateException, RentWrongTotalFeeException, UserNotFoundException, VehicleNotFoundException {
         String negativeValueExceptionMessage = "";
         boolean negativeValueException = false;
 
@@ -127,7 +143,25 @@ public class RentManagementServiceImpl implements RentManagementService {
         }
 
         if(rent.getStartDate().after(rent.getEndDate())) {
-                throw new WrongRentDateException("EndDate cannot be before startDate.");
+            throw new WrongRentDateException("EndDate cannot be before startDate.");
+        }
+
+        if(rent.getTotalFee() != (rent.getDayFee() + rent.getKmFee() + rent.getOtherFee())) {
+            throw new RentWrongTotalFeeException(String.valueOf(rent.getTotalFee() + ", should be: " + (rent.getDayFee()+rent.getKmFee()+rent.getOtherFee())));
+        }
+
+        if(!userRepository.exists(Long.valueOf(rent.getCustomerId())) && !userRepository.exists(Long.valueOf(rent.getCompanyId()))){
+            if(rent.getCustomerId() > 0) {
+                throw new UserNotFoundException("Customer with Id: " + rent.getCustomerId() + " does not exist.");
+            } else if (rent.getCompanyId() > 0){
+                throw new UserNotFoundException("Company with Id: " + rent.getCompanyId() + " does not exist.");
+            } else {
+                throw new UserNotFoundException("User Ids wrong: Customer - " + rent.getCustomerId() + ",Company - " + rent.getCompanyId() + ".");
+            }
+        }
+
+        if(!vehicleRepository.exists(String.valueOf(rent.getVehicleId()))){
+            throw new VehicleNotFoundException("Vehicle with Id: " + rent.getVehicleId() + " does not exist.");
         }
     }
 }
