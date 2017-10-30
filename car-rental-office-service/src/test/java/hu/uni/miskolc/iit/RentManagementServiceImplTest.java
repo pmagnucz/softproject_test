@@ -1,12 +1,13 @@
 package hu.uni.miskolc.iit;
 
 import hu.uni.miskolc.iit.entity.RentEntity;
-import hu.uni.miskolc.iit.exception.NegativeValueException;
-import hu.uni.miskolc.iit.exception.WrongRentDateException;
+import hu.uni.miskolc.iit.exception.*;
 import hu.uni.miskolc.iit.mapper.RentMapper;
 import hu.uni.miskolc.iit.model.Rent;
 import hu.uni.miskolc.iit.model.SearchRentRequest;
 import hu.uni.miskolc.iit.repositories.RentRepository;
+import hu.uni.miskolc.iit.repositories.UserRepository;
+import hu.uni.miskolc.iit.repositories.VehicleRepository;
 import hu.uni.miskolc.iit.service.RentManagementService;
 import org.junit.After;
 import org.junit.Before;
@@ -31,11 +32,61 @@ public class RentManagementServiceImplTest {
 
     private RentManagementService rentManagementService;
     private RentRepository rentRepository;
+    private UserRepository userRepository;
+    private VehicleRepository vehicleRepository;
+    private Rent rent;
+    private Rent rent2;
 
     @Before
     public void setUp() throws Exception {
         rentRepository = mock(RentRepository.class);
-        rentManagementService = new RentManagementServiceImpl(rentRepository);
+        userRepository = mock(UserRepository.class);
+        vehicleRepository = mock(VehicleRepository.class);
+        rentManagementService = new RentManagementServiceImpl(rentRepository,userRepository,vehicleRepository);
+
+        rent = new Rent();
+
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date startDate = null;
+        Date endDate = null;
+        try {
+            startDate = format.parse("2017-02-01");
+            endDate = format.parse("2017-03-01");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        rent.setId(5);
+        rent.setCustomerId(1);
+        rent.setCompanyId(2);
+        rent.setVehicleId(3);
+        rent.setStartDate(startDate);
+        rent.setEndDate(endDate);
+        rent.setDurationExtendable(true);
+        rent.setExtendedHours(24);
+        rent.setKmUsed(100);
+        rent.setDayFee(150000.0);
+        rent.setKmFee(100000.0);
+        rent.setOtherFee(0.0);
+        rent.setTotalFee(250000.0);
+        rent.setPaid(false);
+
+        rent2 = new Rent();
+
+        rent2.setId(10);
+        rent2.setCustomerId(4);
+        rent2.setCompanyId(5);
+        rent2.setVehicleId(6);
+        rent2.setStartDate(startDate);
+        rent2.setEndDate(endDate);
+        rent2.setDurationExtendable(false);
+        rent2.setExtendedHours(48);
+        rent2.setKmUsed(200);
+        rent2.setDayFee(150000.0);
+        rent2.setKmFee(200000.0);
+        rent2.setOtherFee(0.0);
+        rent2.setTotalFee(350000.0);
+        rent2.setPaid(true);
     }
 
     @After
@@ -44,35 +95,11 @@ public class RentManagementServiceImplTest {
 
     @Test
     public void addNewRent() throws Exception {
-        Rent rent = new Rent();
-
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date startDate = null;
-        Date endDate = null;
-        try {
-            startDate = format.parse("2017-02-01");
-            endDate = format.parse("2017-03-01");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        rent.setId(5);
-        rent.setCustomerId(1);
-        rent.setCompanyId(2);
-        rent.setVehicleId(3);
-        rent.setStartDate(startDate);
-        rent.setEndDate(endDate);
-        rent.setDurationExtendable(true);
-        rent.setExtendedHours(24);
-        rent.setKmUsed(100);
-        rent.setKmFee(100000);
-        rent.setDayFee(150000);
-        rent.setOtherFee(0);
-        rent.setTotalFee(250000);
-        rent.setPaid(false);
-
         RentEntity mockEntity = RentMapper.mapModelToEntity(rent);
         when(rentRepository.save(any(RentEntity.class))).thenReturn(mockEntity);
+
+        when(userRepository.exists(any(Long.class))).thenReturn(true);
+        when(vehicleRepository.exists(any(String.class))).thenReturn(true);
 
         Rent actual = rentManagementService.addNewRent(rent);
         assertEquals(rent,actual);
@@ -80,33 +107,6 @@ public class RentManagementServiceImplTest {
 
     @Test
     public void getRentById() throws Exception {
-        Rent rent = new Rent();
-
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date startDate = null;
-        Date endDate = null;
-        try {
-            startDate = format.parse("2017-02-01");
-            endDate = format.parse("2017-03-01");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        rent.setId(5);
-        rent.setCustomerId(1);
-        rent.setCompanyId(2);
-        rent.setVehicleId(3);
-        rent.setStartDate(startDate);
-        rent.setEndDate(endDate);
-        rent.setDurationExtendable(true);
-        rent.setExtendedHours(24);
-        rent.setKmUsed(100);
-        rent.setKmFee(100000);
-        rent.setDayFee(150000);
-        rent.setOtherFee(0);
-        rent.setTotalFee(250000);
-        rent.setPaid(false);
-
         RentEntity mockEntity = RentMapper.mapModelToEntity(rent);
         when(rentRepository.findOne(any(Long.class))).thenReturn(mockEntity);
 
@@ -116,53 +116,15 @@ public class RentManagementServiceImplTest {
 
     @Test
     public void getRentByFilterOptions() throws Exception {
-        Rent rent = new Rent();
-
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date startDate = null;
-        Date endDate = null;
         Date startDateRequest = null;
         Date endDateRequest = null;
         try {
-            startDate = format.parse("2017-02-01");
             startDateRequest = format.parse("2017-02-02");
-            endDate = format.parse("2017-03-01");
             endDateRequest = format.parse("2017-03-02");
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
-        rent.setId(5);
-        rent.setCustomerId(1);
-        rent.setCompanyId(2);
-        rent.setVehicleId(3);
-        rent.setStartDate(startDate);
-        rent.setEndDate(endDate);
-        rent.setDurationExtendable(true);
-        rent.setExtendedHours(24);
-        rent.setKmUsed(100);
-        rent.setKmFee(100000);
-        rent.setDayFee(150000);
-        rent.setOtherFee(0);
-        rent.setTotalFee(250000);
-        rent.setPaid(false);
-
-        Rent rent2 = new Rent();
-
-        rent2.setId(6);
-        rent2.setCustomerId(2);
-        rent2.setCompanyId(2);
-        rent2.setVehicleId(3);
-        rent2.setStartDate(startDate);
-        rent2.setEndDate(endDate);
-        rent2.setDurationExtendable(true);
-        rent2.setExtendedHours(24);
-        rent2.setKmUsed(100);
-        rent2.setKmFee(100000);
-        rent2.setDayFee(150000);
-        rent2.setOtherFee(0);
-        rent2.setTotalFee(250000);
-        rent2.setPaid(false);
 
         SearchRentRequest searchRentRequest = new SearchRentRequest(1,100,150,startDateRequest,endDateRequest);
 
@@ -182,50 +144,6 @@ public class RentManagementServiceImplTest {
 
     @Test
     public void getRents() throws Exception {
-        Rent rent = new Rent();
-
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date startDate = null;
-        Date endDate = null;
-        try {
-            startDate = format.parse("2017-02-01");
-            endDate = format.parse("2017-03-01");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        rent.setId(5);
-        rent.setCustomerId(1);
-        rent.setCompanyId(2);
-        rent.setVehicleId(3);
-        rent.setStartDate(startDate);
-        rent.setEndDate(endDate);
-        rent.setDurationExtendable(true);
-        rent.setExtendedHours(24);
-        rent.setKmUsed(100);
-        rent.setKmFee(100000);
-        rent.setDayFee(150000);
-        rent.setOtherFee(0);
-        rent.setTotalFee(250000);
-        rent.setPaid(false);
-
-        Rent rent2 = new Rent();
-
-        rent2.setId(6);
-        rent2.setCustomerId(2);
-        rent2.setCompanyId(2);
-        rent2.setVehicleId(3);
-        rent2.setStartDate(startDate);
-        rent2.setEndDate(endDate);
-        rent2.setDurationExtendable(true);
-        rent2.setExtendedHours(24);
-        rent2.setKmUsed(100);
-        rent2.setKmFee(100000);
-        rent2.setDayFee(150000);
-        rent2.setOtherFee(0);
-        rent2.setTotalFee(250000);
-        rent2.setPaid(false);
-
         List<Rent> rents = new ArrayList<>();
         rents.add(rent);
         rents.add(rent2);
@@ -240,70 +158,45 @@ public class RentManagementServiceImplTest {
 
     @Test
     public void updateRent() throws Exception {
-        Rent rent = new Rent();
 
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date startDate = null;
-        Date endDate = null;
         Date startDateExpected = null;
         Date endDateExpected = null;
         try {
-            startDate = format.parse("2017-02-01");
-            endDate = format.parse("2017-03-01");
             startDateExpected = format.parse("2017-05-01");
             endDateExpected = format.parse("2017-07-01");
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        rent.setId(5);
-        rent.setCustomerId(1);
-        rent.setCompanyId(2);
-        rent.setVehicleId(3);
-        rent.setStartDate(startDate);
-        rent.setEndDate(endDate);
-        rent.setDurationExtendable(true);
-        rent.setExtendedHours(24);
-        rent.setKmUsed(100);
-        rent.setKmFee(100000);
-        rent.setDayFee(150000);
-        rent.setOtherFee(0);
-        rent.setTotalFee(250000);
-        rent.setPaid(false);
+        rent2.setId(rent.getId());
+        rent2.setCustomerId(300);
+        rent2.setCompanyId(7);
+        rent2.setVehicleId(9);
+        rent2.setStartDate(startDateExpected);
+        rent2.setEndDate(endDateExpected);
 
-        Rent expected = new Rent();
-
-        expected.setId(5);
-        expected.setCustomerId(2);
-        expected.setCompanyId(7);
-        expected.setVehicleId(9);
-        expected.setStartDate(startDateExpected);
-        expected.setEndDate(endDateExpected);
-        expected.setDurationExtendable(false);
-        expected.setExtendedHours(30);
-        expected.setKmUsed(150);
-        expected.setKmFee(200000);
-        expected.setDayFee(300000);
-        expected.setOtherFee(50000);
-        expected.setTotalFee(550000);
-        expected.setPaid(true);
 
         RentEntity mockEntity = RentMapper.mapModelToEntity(rent);
         when(rentRepository.findOne(any(Long.class))).thenReturn(mockEntity);
         when(rentRepository.save(any(RentEntity.class))).thenReturn(mockEntity);
 
-        rentManagementService.updateRent(expected);
+        when(rentRepository.exists(any(Long.class))).thenReturn(true);
+        when(userRepository.exists(any(Long.class))).thenReturn(true);
+        when(vehicleRepository.exists(any(String.class))).thenReturn(true);
+
+        rentManagementService.updateRent(rent2);
 
         Rent actual = RentMapper.mapEntityToModel(mockEntity);
 
-        assertEquals(expected,actual);
+        assertEquals(rent2,actual);
     }
 
     @Test
     public void removeRent() throws Exception {
-        Rent rent = new Rent();
-
-        rent.setId(5);
+        when(rentRepository.exists(any(Long.class))).thenReturn(true);
+        when(userRepository.exists(any(Long.class))).thenReturn(true);
+        when(vehicleRepository.exists(any(String.class))).thenReturn(true);
 
         rentManagementService.removeRent(rent);
 
@@ -313,9 +206,6 @@ public class RentManagementServiceImplTest {
 
     @Test(expected = NegativeValueException.class)
     public void negativeNumberException() throws Exception {
-
-        Rent rent = new Rent();
-
         rent.setExtendedHours(-1);
         rent.setKmUsed(-1);
         rent.setKmFee(-1);
@@ -329,9 +219,6 @@ public class RentManagementServiceImplTest {
 
     @Test(expected = WrongRentDateException.class)
     public void wrongDateException() throws Exception {
-
-        Rent rent = new Rent();
-
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date startDate = null;
         Date endDate = null;
@@ -345,8 +232,71 @@ public class RentManagementServiceImplTest {
         rent.setStartDate(startDate);
         rent.setEndDate(endDate);
 
+        rentManagementService.addNewRent(rent);
+    }
+
+    @Test(expected = RentIdAlreadyExistsException.class)
+    public void rentIdAlreadyExistsException() throws Exception {
+        rent.setId(1);
+
+        when(rentRepository.exists(1L)).thenReturn(true);
 
         rentManagementService.addNewRent(rent);
+    }
 
+    @Test(expected = RentWrongTotalFeeException.class)
+    public void wrongTotalFeeException() throws Exception {
+        rent.setTotalFee(1);
+
+        rentManagementService.addNewRent(rent);
+    }
+
+    @Test
+    public void userNotFoundException() throws Exception {
+        rent.setCustomerId(0);
+        rent.setCompanyId(0);
+
+        try {
+            rentManagementService.addNewRent(rent);
+        } catch(UserNotFoundException actual) {
+            assertEquals("User Ids wrong: Customer - " + rent.getCustomerId() + ",Company - " + rent.getCompanyId() + ".",actual.getMessage());
+        }
+    }
+
+    @Test
+    public void userCustomerNotFoundException() throws Exception {
+        rent.setCustomerId(15);
+        rent.setCompanyId(0);
+
+        try {
+            rentManagementService.addNewRent(rent);
+        } catch(UserNotFoundException actual) {
+            assertEquals("Customer with Id: " + rent.getCustomerId() + " does not exist.",actual.getMessage());
+        }
+    }
+
+    @Test
+    public void userCompanyNotFoundException() throws Exception {
+        rent.setCustomerId(0);
+        rent.setCompanyId(30);
+        try {
+            rentManagementService.addNewRent(rent);
+        } catch(UserNotFoundException actual) {
+            assertEquals("Company with Id: " + rent.getCompanyId() + " does not exist.",actual.getMessage());
+        }
+    }
+
+    @Test(expected = VehicleNotFoundException.class)
+    public void vehicleNotFoundException() throws Exception {
+        rent.setVehicleId(50);
+
+        when(userRepository.exists(any(Long.class))).thenReturn(true);
+
+        rentManagementService.addNewRent(rent);
+    }
+
+    @Test(expected = RentNotFoundException.class)
+    public void rentNotFoundException() throws Exception {
+        rentManagementService.updateRent(rent);
     }
 }
