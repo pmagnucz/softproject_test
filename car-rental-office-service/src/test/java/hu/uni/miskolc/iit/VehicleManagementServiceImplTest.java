@@ -9,7 +9,6 @@ import hu.uni.miskolc.iit.service.VehicleManagementService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import java.text.ParseException;
 
 import java.text.DateFormat;
@@ -43,10 +42,10 @@ public class VehicleManagementServiceImplTest {
     public void addNewVehicleCar() throws Exception {
         Car car = new Car();
 
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat format = new SimpleDateFormat("yyyy-MM");
         Date date = null;
         try {
-            date = format.parse("2007-08-21");
+            date = format.parse("2007-08");
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -73,10 +72,10 @@ public class VehicleManagementServiceImplTest {
     @Test
     public void addNewVehicleShip() throws Exception {
         Ship ship = new Ship();
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat format = new SimpleDateFormat("yyyy-MM");
         Date date = null;
         try {
-        date = format.parse("2010-07-18");
+        date = format.parse("2010-07");
         } catch (ParseException e) {
         e.printStackTrace();
         }
