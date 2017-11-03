@@ -1,5 +1,6 @@
 package hu.uni.miskolc.iit;
 
+import ch.qos.logback.core.CoreConstants;
 import hu.uni.miskolc.iit.entity.VehicleEntity;
 import hu.uni.miskolc.iit.mapper.CarMapper;
 import hu.uni.miskolc.iit.mapper.VehicleMapper;
@@ -118,6 +119,14 @@ public class VehicleManagementServiceImplTest {
 
     @Test
     public void removeVehicle() throws Exception {
+        Car car = new Car();
+
+        car.setId(1);
+
+        when(vehicleRepository.findOne(any(String.class))).thenReturn(new VehicleEntity());
+        vehicleManagementService.removeVehicle(car);
+
+        verify(vehicleRepository,times(1)).delete(VehicleMapper.mapModelToEntity(car));
     }
 
 }

@@ -13,18 +13,24 @@ import java.util.List;
 public class VehicleMapper {
     public static VehicleEntity mapModelToEntity(Vehicle vehicle) {
         //converting format for Date to String, yearOfManufacture from Vehicle
-        DateFormat format = new SimpleDateFormat("yyyy-MM");
-
         VehicleEntity vehicleEntity = new VehicleEntity();
 
+        /*DateFormat format = new SimpleDateFormat("yyyy-MM");
+        Date date = null;
+        try {
+            date = format;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }*/
+
         vehicleEntity.setVehicleId(String.valueOf(vehicle.getId()));
-        vehicleEntity.setType(vehicle.getType().toString());
+        vehicleEntity.setType(String.valueOf(vehicle.getId()));
         vehicleEntity.setManufacturer(vehicle.getManufacturer());
-        vehicleEntity.setYearOfManufacture(format.format(vehicle.getYearOfManufacture()));
+        vehicleEntity.setYearOfManufacture(String.valueOf(vehicle.getYearOfManufacture()));
         vehicleEntity.setRentCost(String.valueOf(vehicle.getRentCost()));
         vehicleEntity.setPersons(String.valueOf(vehicle.getPersons()));
         vehicleEntity.setPerformance(String.valueOf(vehicle.getPerformance()));
-        vehicleEntity.setVehicleStatus(vehicle.getVehicleStatus().toString());
+        vehicleEntity.setVehicleStatus(String.valueOf(vehicle.getVehicleStatus()));
 
         if(vehicle instanceof Car) {
             Car car = (Car)vehicle;
