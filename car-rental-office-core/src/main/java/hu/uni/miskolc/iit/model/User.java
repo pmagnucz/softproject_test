@@ -1,6 +1,7 @@
 package hu.uni.miskolc.iit.model;
 
 public class User {
+	private Long id;
 	private String userName;
 	private String address;
 	private String phoneNumber;
@@ -8,10 +9,19 @@ public class User {
 	public User() {
 	}
 
-	public User(String userName, String address, String phoneNumber) {
+	public User(Long id, String userName, String address, String phoneNumber) {
+		this.id = id;
 		this.userName = userName;
 		this.address = address;
 		this.phoneNumber = phoneNumber;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Long getId() {
+		return id;
 	}
 
 	public String getPhoneNumber() {
