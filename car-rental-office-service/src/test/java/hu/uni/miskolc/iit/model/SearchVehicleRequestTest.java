@@ -11,14 +11,14 @@ import static org.junit.Assert.*;
 public class SearchVehicleRequestTest {
 
     SearchVehicleRequest searchVehicleRequest;
-    VehichleType vehichleType;
+    VehicleType vehicleType;
     Date date;
 
     @Before
     public void setUp() throws Exception {
         this.date = new Date(2017-10-17);
-        this.vehichleType = VehichleType.CAR;
-        this.searchVehicleRequest = new SearchVehicleRequest(vehichleType, "Opel", date, 2546);
+        this.vehicleType = VehicleType.CAR;
+        this.searchVehicleRequest = new SearchVehicleRequest(vehicleType, "Opel", date, 2546);
     }
 
     @After
@@ -27,8 +27,8 @@ public class SearchVehicleRequestTest {
 
     @Test
     public void getType() throws Exception {
-        VehichleType expected = vehichleType;
-        VehichleType actual = searchVehicleRequest.getType();
+        VehicleType expected = vehicleType;
+        VehicleType actual = searchVehicleRequest.getType();
         assertEquals(expected,actual);
     }
 

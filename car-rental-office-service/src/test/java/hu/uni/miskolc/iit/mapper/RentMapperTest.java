@@ -35,10 +35,10 @@ public class RentMapperTest {
             e.printStackTrace();
         }
 
-        rent.setId(5);
-        rent.setCustomerId(1);
-        rent.setCompanyId(2);
-        rent.setVehicleId(3);
+        rent.setId(5L);
+        rent.setCustomerId(1L);
+        rent.setCompanyId(2L);
+        rent.setVehicleId(3L);
         rent.setStartDate(startDate);
         rent.setEndDate(endDate);
         rent.setDurationExtendable(true);
@@ -52,9 +52,9 @@ public class RentMapperTest {
 
         rentEntity = new RentEntity();
         rentEntity.setId(5L);
-        rentEntity.setCustomerId("1");
-        rentEntity.setCompanyId("2");
-        rentEntity.setVehicleId("3");
+        rentEntity.setCustomerId(1L);
+        rentEntity.setCompanyId(2L);
+        rentEntity.setVehicleId(3L);
         rentEntity.setStartDate("2017-02-01");
         rentEntity.setEndDate("2017-03-01");
         rentEntity.setDurationExtendable("true");

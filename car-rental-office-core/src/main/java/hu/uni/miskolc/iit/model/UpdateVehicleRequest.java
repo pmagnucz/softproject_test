@@ -3,9 +3,9 @@ package hu.uni.miskolc.iit.model;
 import java.util.Date;
 
 /**
- * Created by rozgo on 2017. 10. 18..
+ * Created by pmagnucz on 2017. 11. 03..
  */
-public class CreateVehicleRequest {
+public class UpdateVehicleRequest {
     private Long id;
     private VehicleType type;
     private String manufacturer;
@@ -15,10 +15,12 @@ public class CreateVehicleRequest {
     private double performance;
     private VehicleStatusType vehicleStatus;
 
+    private boolean car;
     private String plateNumber;
     private String vehicleIdentificationNumber;
     private boolean drawBar;
 
+    private boolean ship;
     private String shipId;
     private double length;
     private boolean withTrailer;
@@ -133,5 +135,21 @@ public class CreateVehicleRequest {
 
     public void setWithTrailer(boolean withTrailer) {
         this.withTrailer = withTrailer;
+    }
+
+    public boolean isCar() {
+        return car;
+    }
+
+    public void setCar(boolean car) {
+        this.car = car;
+    }
+
+    public boolean isShip() {
+        return ship;
+    }
+
+    public void setShip(boolean ship) {
+        this.ship = ship;
     }
 }

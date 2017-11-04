@@ -5,7 +5,7 @@ package hu.uni.miskolc.iit.model;
  */
 public class SearchUserRequest {
     private String userName;
-    private long phoneNumber;
+    private String phoneNumber;
     private String address;
     private String drivingLicenceNumber;
 
@@ -17,11 +17,11 @@ public class SearchUserRequest {
         this.userName = userName;
     }
 
-    public long getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(long phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
@@ -41,7 +41,7 @@ public class SearchUserRequest {
         this.drivingLicenceNumber = drivingLicenceNumber;
     }
 
-    public SearchUserRequest(String userName, long phoneNumber, String address, String drivingLicenceNumber) {
+    public SearchUserRequest(String userName, String phoneNumber, String address, String drivingLicenceNumber) {
         this.userName = userName;
         this.phoneNumber = phoneNumber;
         this.address = address;

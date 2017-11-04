@@ -56,10 +56,10 @@ public class RentManagementServiceImplTest {
             e.printStackTrace();
         }
 
-        rent.setId(5);
-        rent.setCustomerId(1);
-        rent.setCompanyId(2);
-        rent.setVehicleId(3);
+        rent.setId(5L);
+        rent.setCustomerId(1L);
+        rent.setCompanyId(2L);
+        rent.setVehicleId(3L);
         rent.setStartDate(startDate);
         rent.setEndDate(endDate);
         rent.setDurationExtendable(true);
@@ -73,10 +73,10 @@ public class RentManagementServiceImplTest {
 
         rent2 = new Rent();
 
-        rent2.setId(10);
-        rent2.setCustomerId(4);
-        rent2.setCompanyId(5);
-        rent2.setVehicleId(6);
+        rent2.setId(10L);
+        rent2.setCustomerId(4L);
+        rent2.setCompanyId(5L);
+        rent2.setVehicleId(6L);
         rent2.setStartDate(startDate);
         rent2.setEndDate(endDate);
         rent2.setDurationExtendable(false);
@@ -99,7 +99,7 @@ public class RentManagementServiceImplTest {
         when(rentRepository.save(any(RentEntity.class))).thenReturn(mockEntity);
 
         when(userRepository.exists(any(Long.class))).thenReturn(true);
-        when(vehicleRepository.exists(any(String.class))).thenReturn(true);
+        when(vehicleRepository.exists(any(Long.class))).thenReturn(true);
 
         Rent actual = rentManagementService.addNewRent(rent);
         assertEquals(rent,actual);
@@ -170,9 +170,9 @@ public class RentManagementServiceImplTest {
         }
 
         rent2.setId(rent.getId());
-        rent2.setCustomerId(300);
-        rent2.setCompanyId(7);
-        rent2.setVehicleId(9);
+        rent2.setCustomerId(300L);
+        rent2.setCompanyId(7L);
+        rent2.setVehicleId(9L);
         rent2.setStartDate(startDateExpected);
         rent2.setEndDate(endDateExpected);
 
@@ -183,7 +183,7 @@ public class RentManagementServiceImplTest {
 
         when(rentRepository.exists(any(Long.class))).thenReturn(true);
         when(userRepository.exists(any(Long.class))).thenReturn(true);
-        when(vehicleRepository.exists(any(String.class))).thenReturn(true);
+        when(vehicleRepository.exists(any(Long.class))).thenReturn(true);
 
         rentManagementService.updateRent(rent2);
 
@@ -196,7 +196,7 @@ public class RentManagementServiceImplTest {
     public void removeRent() throws Exception {
         when(rentRepository.exists(any(Long.class))).thenReturn(true);
         when(userRepository.exists(any(Long.class))).thenReturn(true);
-        when(vehicleRepository.exists(any(String.class))).thenReturn(true);
+        when(vehicleRepository.exists(any(Long.class))).thenReturn(true);
 
         rentManagementService.removeRent(rent);
 
@@ -237,7 +237,7 @@ public class RentManagementServiceImplTest {
 
     @Test(expected = RentIdAlreadyExistsException.class)
     public void rentIdAlreadyExistsException() throws Exception {
-        rent.setId(1);
+        rent.setId(1L);
 
         when(rentRepository.exists(1L)).thenReturn(true);
 
@@ -253,8 +253,8 @@ public class RentManagementServiceImplTest {
 
     @Test
     public void userNotFoundException() throws Exception {
-        rent.setCustomerId(0);
-        rent.setCompanyId(0);
+        rent.setCustomerId(0L);
+        rent.setCompanyId(0L);
 
         try {
             rentManagementService.addNewRent(rent);
@@ -265,8 +265,8 @@ public class RentManagementServiceImplTest {
 
     @Test
     public void userCustomerNotFoundException() throws Exception {
-        rent.setCustomerId(15);
-        rent.setCompanyId(0);
+        rent.setCustomerId(15L);
+        rent.setCompanyId(0L);
 
         try {
             rentManagementService.addNewRent(rent);
@@ -277,8 +277,8 @@ public class RentManagementServiceImplTest {
 
     @Test
     public void userCompanyNotFoundException() throws Exception {
-        rent.setCustomerId(0);
-        rent.setCompanyId(30);
+        rent.setCustomerId(0L);
+        rent.setCompanyId(30L);
         try {
             rentManagementService.addNewRent(rent);
         } catch(UserNotFoundException actual) {
@@ -288,7 +288,7 @@ public class RentManagementServiceImplTest {
 
     @Test(expected = VehicleNotFoundException.class)
     public void vehicleNotFoundException() throws Exception {
-        rent.setVehicleId(50);
+        rent.setVehicleId(50L);
 
         when(userRepository.exists(any(Long.class))).thenReturn(true);
 

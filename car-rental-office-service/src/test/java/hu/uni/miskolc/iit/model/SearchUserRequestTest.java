@@ -12,7 +12,7 @@ public class SearchUserRequestTest {
 
     @Before
     public void setUp() throws Exception {
-        this.searchUserRequest = new SearchUserRequest("Valaki Valahol", 132123,"3546 Bélafalva, Rövid út 33", "3828791");
+        this.searchUserRequest = new SearchUserRequest("Valaki Valahol", "132123","3546 Bélafalva, Rövid út 33", "3828791");
     }
 
     @After
@@ -28,8 +28,8 @@ public class SearchUserRequestTest {
 
     @Test
     public void getPhoneNumber() throws Exception {
-        long expected = 132123;
-        long actual = searchUserRequest.getPhoneNumber();
+        String expected = "132123";
+        String actual = searchUserRequest.getPhoneNumber();
         assertEquals(expected,actual);
     }
 
