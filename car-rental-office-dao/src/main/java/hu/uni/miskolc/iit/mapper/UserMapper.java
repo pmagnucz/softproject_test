@@ -49,6 +49,7 @@ public class UserMapper {
         {
             // If customerId exist the entity is Customer
             Customer customer = new Customer();
+            customer.setId(userEntity.getId());
             customer.setPhoneNumber(userEntity.getPhoneNumber());
             customer.setUserName(userEntity.getUserName());
             customer.setAddress(userEntity.getAddress());
@@ -60,6 +61,7 @@ public class UserMapper {
         {
             // If companyId exist the entity is Company
             Company company = new Company();
+            company.setId(userEntity.getId());
             company.setPhoneNumber(userEntity.getPhoneNumber());
             company.setUserName(userEntity.getUserName());
             company.setAddress(userEntity.getAddress());
@@ -71,6 +73,7 @@ public class UserMapper {
             return company;
         } else {
             User user = new User();
+            user.setId(userEntity.getId());
             user.setPhoneNumber(userEntity.getPhoneNumber());
             user.setUserName(userEntity.getUserName());
             user.setAddress(userEntity.getAddress());

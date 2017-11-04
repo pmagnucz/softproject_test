@@ -20,10 +20,10 @@ public class RentMapper {
 
         RentEntity rentEntity = new RentEntity();
 
-        rentEntity.setId(Long.valueOf(rent.getId()));
-        rentEntity.setCustomerId(String.valueOf(rent.getCustomerId()));
-        rentEntity.setCompanyId(String.valueOf(rent.getCompanyId()));
-        rentEntity.setVehicleId(String.valueOf(rent.getVehicleId()));
+        rentEntity.setId(rent.getId());
+        rentEntity.setCustomerId(rent.getCustomerId());
+        rentEntity.setCompanyId(rent.getCompanyId());
+        rentEntity.setVehicleId(rent.getVehicleId());
         rentEntity.setStartDate(format.format(rent.getStartDate()));
         rentEntity.setEndDate(format.format(rent.getEndDate()));
         rentEntity.setDurationExtendable(String.valueOf(rent.isDurationExtendable()));
@@ -62,10 +62,10 @@ public class RentMapper {
             e.printStackTrace();
         }
 
-        rent.setId(Math.toIntExact(rentEntity.getId()));
-        rent.setCustomerId(Integer.parseInt(rentEntity.getCustomerId()));
-        rent.setCompanyId(Integer.parseInt(rentEntity.getCompanyId()));
-        rent.setVehicleId(Integer.parseInt(rentEntity.getVehicleId()));
+        rent.setId(rentEntity.getId());
+        rent.setCustomerId(rentEntity.getCustomerId());
+        rent.setCompanyId(rentEntity.getCompanyId());
+        rent.setVehicleId(rentEntity.getVehicleId());
         rent.setStartDate(startDate);
         rent.setEndDate(endDate);
         rent.setDurationExtendable(Boolean.valueOf(rentEntity.getDurationExtendable()));

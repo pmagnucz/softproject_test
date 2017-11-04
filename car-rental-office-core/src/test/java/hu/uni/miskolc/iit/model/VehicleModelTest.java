@@ -19,7 +19,7 @@ public class VehicleModelTest {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM");
         String dateString =  "2001-09";
         Date yearOfManufactureDate = dateFormat.parse(dateString);
-        this.vehicle = new Vehicle(1, VehichleType.CAR, "Volkswagen", yearOfManufactureDate, 15000, 5, 178, VehicleStatusType.FREE);
+        this.vehicle = new Vehicle(1L, VehicleType.CAR, "Volkswagen", yearOfManufactureDate, 15000, 5, 178, VehicleStatusType.FREE);
     }
 
     @After
@@ -28,14 +28,14 @@ public class VehicleModelTest {
 
     @Test
     public void getId() throws Exception {
-        int expected = 1;
-        int actual = vehicle.getId();
+        Long expected = 1L;
+        Long actual = vehicle.getId();
         assertEquals(expected, actual);
     }
 
     @Test
     public void getType() throws Exception {
-        String expected = VehichleType.CAR.name();
+        String expected = VehicleType.CAR.name();
         String actual = vehicle.getType().name();
         assertEquals(expected, actual);
     }

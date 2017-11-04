@@ -1,5 +1,6 @@
 package hu.uni.miskolc.iit.service;
 
+import hu.uni.miskolc.iit.exception.*;
 import hu.uni.miskolc.iit.model.Rent;
 import hu.uni.miskolc.iit.model.SearchRentRequest;
 
@@ -12,7 +13,7 @@ public interface RentManagementService {
      * @param rent
      * @return Rent object
      * */
-    Rent addNewRent(Rent rent);
+    Rent addNewRent(Rent rent) throws WrongRentDateException, NegativeValueException, RentWrongTotalFeeException, RentIdAlreadyExistsException, UserNotFoundException, VehicleNotFoundException;
 
     /**
      * A paraméterben adott azonosítójú kölcsön objektummal tér vissza
@@ -39,11 +40,16 @@ public interface RentManagementService {
      * @param rent object
      * @return Rent object
      * */
-    Rent updateRent(Rent rent);
+    Rent updateRent(Rent rent) throws UserNotFoundException, NegativeValueException, WrongRentDateException, RentWrongTotalFeeException, VehicleNotFoundException, RentNotFoundException;
 
     /**Törli a paraméterben kapott kölcsönt.
      * @param rent
      */
-    void removeRent(Rent rent);
+    void removeRent(Rent rent) throws UserNotFoundException, NegativeValueException, WrongRentDateException, RentWrongTotalFeeException, VehicleNotFoundException, RentNotFoundException;
+
+    /**Testing a Rent for Exceptions
+     * @param rent
+     */
+    void validate(Rent rent) throws NegativeValueException, WrongRentDateException, RentWrongTotalFeeException, UserNotFoundException, VehicleNotFoundException;
 }
 

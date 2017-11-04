@@ -68,8 +68,8 @@ public class VehicleMapper {
         if(vehicleEntity.getPlateNumber() != null && !vehicleEntity.getPlateNumber().isEmpty()) {
             //vehicle has a PlateNumber means its a Car
             Car car = new Car();
-            car.setId(Integer.parseInt(vehicleEntity.getVehicleId()));
-            car.setType(VehichleType.CAR);
+            car.setId(vehicleEntity.getId());
+            car.setType(VehicleType.CAR);
             car.setManufacturer(vehicleEntity.getManufacturer());
             car.setYearOfManufacture(yearOfManufactureDate);
             car.setRentCost(Double.parseDouble(vehicleEntity.getRentCost()));
@@ -83,8 +83,8 @@ public class VehicleMapper {
         } else if(vehicleEntity.getShipId() != null && !vehicleEntity.getShipId().isEmpty()) {
             //vehicle has a ShipId means its a Ship
             Ship ship = new Ship();
-            ship.setId(Integer.parseInt(vehicleEntity.getVehicleId()));
-            ship.setType(VehichleType.SHIP);
+            ship.setId(vehicleEntity.getId());
+            ship.setType(VehicleType.SHIP);
             ship.setManufacturer(vehicleEntity.getManufacturer());
             ship.setYearOfManufacture(yearOfManufactureDate);
             ship.setRentCost(Double.parseDouble(vehicleEntity.getRentCost()));
@@ -97,8 +97,8 @@ public class VehicleMapper {
             return ship;
         } else {
             Vehicle vehicle = new Vehicle();
-            vehicle.setId(Integer.parseInt(vehicleEntity.getVehicleId()));
-            vehicle.setType(VehichleType.OTHER);
+            vehicle.setId(vehicleEntity.getId());
+            vehicle.setType(VehicleType.OTHER);
             vehicle.setManufacturer(vehicleEntity.getManufacturer());
             vehicle.setYearOfManufacture(yearOfManufactureDate);
             vehicle.setRentCost(Double.parseDouble(vehicleEntity.getRentCost()));

@@ -6,8 +6,8 @@ import java.util.Date;
  * Created by pmagnucz on 2017. 09. 25..
  */
 public class Vehicle {
-    private int id;
-    private VehichleType type;
+    private Long id;
+    private VehicleType type;
     private String manufacturer;
     private Date yearOfManufacture;
     private double rentCost;
@@ -15,19 +15,19 @@ public class Vehicle {
     private double performance;
     private VehicleStatusType vehicleStatus;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public VehichleType getType() {
+    public VehicleType getType() {
         return type;
     }
 
-    public void setType(VehichleType type) {
+    public void setType(VehicleType type) {
         this.type = type;
     }
 
@@ -83,7 +83,7 @@ public class Vehicle {
 
     }
 
-    public Vehicle(int id, VehichleType type, String manufacturer, Date yearOfManufacture, double rentCost, int persons, double performance, VehicleStatusType vehicleStatus) {
+    public Vehicle(Long id, VehicleType type, String manufacturer, Date yearOfManufacture, double rentCost, int persons, double performance, VehicleStatusType vehicleStatus) {
         this.id = id;
         this.type = type;
         this.manufacturer = manufacturer;
@@ -117,16 +117,16 @@ public class Vehicle {
     public int hashCode() {
         int result;
         long temp;
-        result = id;
-        result = 31 * result + (type != null ? type.hashCode() : 0);
-        result = 31 * result + (manufacturer != null ? manufacturer.hashCode() : 0);
-        result = 31 * result + (yearOfManufacture != null ? yearOfManufacture.hashCode() : 0);
-        temp = Double.doubleToLongBits(rentCost);
+        result = getId() != null ? getId().hashCode() : 0;
+        result = 31 * result + (getType() != null ? getType().hashCode() : 0);
+        result = 31 * result + (getManufacturer() != null ? getManufacturer().hashCode() : 0);
+        result = 31 * result + (getYearOfManufacture() != null ? getYearOfManufacture().hashCode() : 0);
+        temp = Double.doubleToLongBits(getRentCost());
         result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + persons;
-        temp = Double.doubleToLongBits(performance);
+        result = 31 * result + getPersons();
+        temp = Double.doubleToLongBits(getPerformance());
         result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + (vehicleStatus != null ? vehicleStatus.hashCode() : 0);
+        result = 31 * result + (getVehicleStatus() != null ? getVehicleStatus().hashCode() : 0);
         return result;
     }
 

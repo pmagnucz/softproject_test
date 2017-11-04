@@ -8,10 +8,11 @@ public class UserTest {
 
     @org.junit.Before
     public void setUp() throws Exception {
+        Long id = 1L;
         String name="Kis Józsi";
         String address="1234 Budapest Alma u. 30";
         String phoneNumber="06301234567";
-        this.user = new User(name,address,phoneNumber);
+        this.user = new User(id, name,address,phoneNumber);
     }
 
     @org.junit.After

@@ -29,11 +29,11 @@ public class RentEntity {
     private Long id;
 
     @Column(name = CUSTOMER_ID)
-    private String customerId;
+    private Long customerId;
     @Column(name = COMPANY_ID)
-    private String companyId;
+    private Long companyId;
     @Column(name = VEHICLE_ID)
-    private String vehicleId;
+    private Long vehicleId;
 
     @Column(name = START_DATE)
     private String startDate;
@@ -69,27 +69,27 @@ public class RentEntity {
         this.id = id;
     }
 
-    public String getCustomerId() {
+    public Long getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(String customerId) {
+    public void setCustomerId(Long customerId) {
         this.customerId = customerId;
     }
 
-    public String getCompanyId() {
+    public Long getCompanyId() {
         return companyId;
     }
 
-    public void setCompanyId(String companyId) {
+    public void setCompanyId(Long companyId) {
         this.companyId = companyId;
     }
 
-    public String getVehicleId() {
+    public Long getVehicleId() {
         return vehicleId;
     }
 
-    public void setVehicleId(String vehicleId) {
+    public void setVehicleId(Long vehicleId) {
         this.vehicleId = vehicleId;
     }
 
