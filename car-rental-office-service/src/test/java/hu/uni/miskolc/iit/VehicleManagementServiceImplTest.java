@@ -2,7 +2,6 @@ package hu.uni.miskolc.iit;
 
 import ch.qos.logback.core.CoreConstants;
 import hu.uni.miskolc.iit.entity.VehicleEntity;
-import hu.uni.miskolc.iit.mapper.CarMapper;
 import hu.uni.miskolc.iit.mapper.VehicleMapper;
 import hu.uni.miskolc.iit.model.*;
 import hu.uni.miskolc.iit.repositories.VehicleRepository;
@@ -46,13 +45,13 @@ public class VehicleManagementServiceImplTest {
         DateFormat format = new SimpleDateFormat("yyyy-MM");
         Date date = null;
         try {
-            date = format.parse("2007-08");
+            date = format.parse("2017-08");
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        car.setId(1);
-        car.setType(VehichleType.CAR);
+        car.setId(Long.valueOf(1));
+        car.setType(VehicleType.CAR);
         car.setManufacturer("Ford");
         car.setYearOfManufacture(date);
         car.setRentCost(15000);
@@ -81,10 +80,10 @@ public class VehicleManagementServiceImplTest {
         e.printStackTrace();
         }
 
-        ship.setId(2);
+        ship.setId(2L);
         ship.setLength(2000.0);
         ship.setWithTrailer(true);
-        ship.setType(VehichleType.SHIP);
+        ship.setType(VehicleType.SHIP);
         ship.setShipId("M");
         ship.setManufacturer("Lambo");
         ship.setPerformance(120);
@@ -95,10 +94,12 @@ public class VehicleManagementServiceImplTest {
 
         VehicleEntity mockedVehicleEntity = VehicleMapper.mapModelToEntity(ship);
         when(vehicleRepository.save(any(VehicleEntity.class))).thenReturn(mockedVehicleEntity);
+        when(vehicleRepository.exists(any(Long.class))).thenReturn(true);
 
         Vehicle actual = vehicleManagementService.addNewVehicle(ship);
 
         assertEquals(ship, actual);
+
         }
 
     @Test
@@ -120,25 +121,26 @@ public class VehicleManagementServiceImplTest {
     @Test
     public void removeVehicleCar() throws Exception {
         Car car = new Car();
+        car.setId(2L);
 
-        car.setId(1);
+        when(vehicleRepository.exists(any(Long.class))).thenReturn(true);
 
-        when(vehicleRepository.findOne(any(String.class))).thenReturn(new VehicleEntity());
         vehicleManagementService.removeVehicle(car);
 
-        verify(vehicleRepository,times(1)).delete(VehicleMapper.mapModelToEntity(car));
+        verify(vehicleRepository,times(1)).delete(car.getId());
     }
 
     @Test
     public void removeVehicleShip() throws Exception {
+
         Ship ship = new Ship();
+        ship.setId(1L);
 
-        ship.setId(4);
+        when(vehicleRepository.exists(any(Long.class))).thenReturn(true);
 
-        when(vehicleRepository.findOne(any(String.class))).thenReturn(new VehicleEntity());
         vehicleManagementService.removeVehicle(ship);
 
-        verify(vehicleRepository,times(1)).delete(VehicleMapper.mapModelToEntity(ship));
+        verify(vehicleRepository,times(1)).delete(ship.getId());
     }
 
 }

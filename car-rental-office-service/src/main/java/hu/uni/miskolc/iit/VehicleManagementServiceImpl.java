@@ -2,6 +2,7 @@ package hu.uni.miskolc.iit;
 
 import hu.uni.miskolc.iit.entity.VehicleEntity;
 import hu.uni.miskolc.iit.exception.NotSupportedVehicleTypeException;
+import hu.uni.miskolc.iit.exception.NotValidPlateNumberFormatException;
 import hu.uni.miskolc.iit.exception.VehicleNotFoundException;
 import hu.uni.miskolc.iit.mapper.VehicleMapper;
 import hu.uni.miskolc.iit.model.*;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Created by pmagnucz on 2017. 09. 26..
@@ -21,8 +23,12 @@ import java.util.List;
 public class VehicleManagementServiceImpl implements VehicleManagementService {
     private VehicleRepository vehicleRepository;
 
+    public VehicleManagementServiceImpl(VehicleRepository vehicleRepository) {
+        this.vehicleRepository = vehicleRepository;
+    }
+
     @Autowired
-    public void setVehicleRepository(VehicleRepository vehicleRepository) {
+    public void VehicleRepository(VehicleRepository vehicleRepository) {
         this.vehicleRepository = vehicleRepository;
     }
 
@@ -30,11 +36,11 @@ public class VehicleManagementServiceImpl implements VehicleManagementService {
     public Vehicle addNewVehicle(Vehicle vehicle) {
         VehicleEntity vehicleEntity = VehicleMapper.mapModelToEntity(vehicle);
         // Common check, all required field has value, the value fit to the regex
-        if (vehicle instanceof Car) {
+        if (vehicle.getType() == VehicleType.CAR) {
             Vehicle storedCar = VehicleMapper.mapEntityToModel(vehicleRepository.save(vehicleEntity));
             return storedCar;
             // CAR
-        } else if (vehicle instanceof Ship) {
+        } else if (vehicle.getType() == VehicleType.SHIP) {
             Vehicle storedShip = VehicleMapper.mapEntityToModel(vehicleRepository.save(vehicleEntity));
             return storedShip;
             // SHIP
@@ -57,7 +63,7 @@ public class VehicleManagementServiceImpl implements VehicleManagementService {
 
     @Override
     public List<Vehicle> getVehicleByFilterOptions(SearchVehicleRequest searchVehicleRequest) {
-        List<Vehicle> vehicleList = vehicleMapper.mapVehicleEntityListToModelList(((List)this.vehicleRepository.findAll()));
+        List<Vehicle> vehicleList = VehicleMapper.mapEntityListToModelList(((List)this.vehicleRepository.findAll()));
         List<Vehicle> requestedVehicles = new ArrayList<Vehicle>();
 
         for(Vehicle vehicle : vehicleList) {

@@ -4,6 +4,7 @@ import hu.uni.miskolc.iit.exception.ExistingVehiclePlateNumber;
 import hu.uni.miskolc.iit.exception.NotSupportedVehicleTypeException;
 import hu.uni.miskolc.iit.exception.NotValidPlateNumberFormatException;
 import hu.uni.miskolc.iit.exception.VehicleNotFoundException;
+import hu.uni.miskolc.iit.model.Car;
 import hu.uni.miskolc.iit.model.SearchVehicleRequest;
 import hu.uni.miskolc.iit.model.UpdateVehicleRequest;
 import hu.uni.miskolc.iit.model.Vehicle;

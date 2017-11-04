@@ -30,7 +30,7 @@ public class VehicleController {
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public ResponseEntity<Vehicle> addNewVehice(@RequestBody CreateVehicleRequest createVehicleRequest) {
+    public ResponseEntity<Vehicle> addNewVehicle(@RequestBody CreateVehicleRequest createVehicleRequest) {
         if (createVehicleRequest.getType() == VehicleType.CAR) {
             Car car = new Car();
             car.setPlateNumber(createVehicleRequest.getPlateNumber());
