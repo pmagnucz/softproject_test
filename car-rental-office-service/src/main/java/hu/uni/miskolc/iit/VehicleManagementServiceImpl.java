@@ -12,6 +12,7 @@ import hu.uni.miskolc.iit.service.VehicleManagementService;
 import hu.uni.miskolc.iit.entity.VehicleEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -60,15 +61,11 @@ public class VehicleManagementServiceImpl implements VehicleManagementService {
         List<Vehicle> requestedVehicles = new ArrayList<Vehicle>();
 
         for(Vehicle vehicle : vehicleList) {
-            if(vehicle.getId() == searchVehicleRequest.getId()
-                    || vehicle.getType() == searchVehicleRequest.getType()
+            if(vehicle.getType() == searchVehicleRequest.getType()
                     || vehicle.getManufacturer() == searchVehicleRequest.getManufacturer()
                     || vehicle.getYearOfManufacture() == searchVehicleRequest.getYearOfManufacture()
-                    || vehicle.getRentCost() == searchVehicleRequest.getRentCost()
-                    || vehicle.getPersons() == searchVehicleRequest.getPersons()
-                    || vehicle.getPerformance() == searchVehicleRequest.getPerformance()
-                    || vehicle.getVehicleStatus() == searchVehicleRequest.getVehicleStatus()) {
-                requestedVehicles.add(rent);
+                    || vehicle.getRentCost() == searchVehicleRequest.getRentCost()) {
+                requestedVehicles.add(vehicle);
             }
         }
 
