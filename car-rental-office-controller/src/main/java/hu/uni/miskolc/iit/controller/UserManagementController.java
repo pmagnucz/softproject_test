@@ -63,10 +63,10 @@ public class UserManagementController {
         }
     }
 
-    @RequestMapping(value = "/getById", method = RequestMethod.POST)
-    public ResponseEntity<User> getUserById(@RequestBody long id) {
+    @RequestMapping(value = "/getUser/{userId}", method = RequestMethod.GET)
+    public ResponseEntity<User> getUserById(@PathVariable Long userId) {
         try {
-            User user = userManagementService.getUserById(id);
+            User user = userManagementService.getUserById(userId);
             return ResponseEntity.ok(user);
         } catch (UserNotFoundException e) {
             LOGGER.error("UserNotFoundException raised at getUserById", e);
