@@ -118,7 +118,7 @@ public class VehicleManagementServiceImplTest {
     }
 
     @Test
-    public void removeVehicle() throws Exception {
+    public void removeVehicleCar() throws Exception {
         Car car = new Car();
 
         car.setId(1);
@@ -127,6 +127,18 @@ public class VehicleManagementServiceImplTest {
         vehicleManagementService.removeVehicle(car);
 
         verify(vehicleRepository,times(1)).delete(VehicleMapper.mapModelToEntity(car));
+    }
+
+    @Test
+    public void removeVehicleShip() throws Exception {
+        Ship ship = new Ship();
+
+        ship.setId(4);
+
+        when(vehicleRepository.findOne(any(String.class))).thenReturn(new VehicleEntity());
+        vehicleManagementService.removeVehicle(ship);
+
+        verify(vehicleRepository,times(1)).delete(VehicleMapper.mapModelToEntity(ship));
     }
 
 }
