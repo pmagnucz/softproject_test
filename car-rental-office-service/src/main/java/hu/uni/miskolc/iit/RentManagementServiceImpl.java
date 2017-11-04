@@ -160,7 +160,7 @@ public class RentManagementServiceImpl implements RentManagementService {
             }
         }
 
-        if(!vehicleRepository.exists(String.valueOf(rent.getVehicleId()))){
+        if(!vehicleRepository.exists(rent.getId())){
             throw new VehicleNotFoundException("Vehicle with Id: " + rent.getVehicleId() + " does not exist.");
         }
     }

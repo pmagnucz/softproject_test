@@ -4,11 +4,11 @@ import java.util.Date;
 
 public class Rent {
 
-	private int id;
+	private Long id;
 
-	private int customerId;
-	private int companyId;
-	private int vehicleId;
+	private Long customerId;
+	private Long companyId;
+	private Long vehicleId;
 
 	private Date startDate;
 	private Date endDate;
@@ -29,7 +29,7 @@ public class Rent {
 
 	}
 
-	public Rent(int id, int customerId, int companyId, int vehicleId, Date startDate, Date endDate, boolean durationExtendable, int extendedHours, int kmUsed, double dayFee, double kmFee, double otherFee, double totalFee, boolean paid) {
+	public Rent(Long id, Long customerId, Long companyId, Long vehicleId, Date startDate, Date endDate, boolean durationExtendable, int extendedHours, int kmUsed, double dayFee, double kmFee, double otherFee, double totalFee, boolean paid) {
 		this.id = id;
 		this.customerId = customerId;
 		this.companyId = companyId;
@@ -46,35 +46,35 @@ public class Rent {
 		this.paid = paid;
 	}
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public int getCustomerId() {
+	public Long getCustomerId() {
 		return customerId;
 	}
 
-	public void setCustomerId(int customerId) {
+	public void setCustomerId(Long customerId) {
 		this.customerId = customerId;
 	}
 
-	public int getCompanyId() {
+	public Long getCompanyId() {
 		return companyId;
 	}
 
-	public void setCompanyId(int companyId) {
+	public void setCompanyId(Long companyId) {
 		this.companyId = companyId;
 	}
 
-	public int getVehicleId() {
+	public Long getVehicleId() {
 		return vehicleId;
 	}
 
-	public void setVehicleId(int vehicleId) {
+	public void setVehicleId(Long vehicleId) {
 		this.vehicleId = vehicleId;
 	}
 

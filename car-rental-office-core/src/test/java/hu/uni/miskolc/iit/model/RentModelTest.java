@@ -19,7 +19,7 @@ public class RentModelTest {
         Date startDate = dateFormat.parse(startDateString);
         String endDateString =  "2017-10-01";
         Date endDate = dateFormat.parse(endDateString);
-        this.rent = new Rent(1,5,6,7,startDate,endDate,true,56,300,
+        this.rent = new Rent(1L,5L,6L,7L,startDate,endDate,true,56,300,
                 100000,50000,0,150000,false);
     }
 
@@ -29,30 +29,30 @@ public class RentModelTest {
 
     @Test
     public void getId() throws Exception {
-        int expected = 1;
-        int actual = rent.getId();
+        Long expected = 1L;
+        Long actual = rent.getId();
         assertEquals(expected,actual);
     }
 
     @Test
     public void getCustomerId() throws Exception {
-        int expected = 5;
-        int actual = rent.getCustomerId();
+        Long expected = 5L;
+        Long actual = rent.getCustomerId();
         assertEquals(expected,actual);
 
     }
 
     @Test
     public void getCompanyId() throws Exception {
-        int expected = 6;
-        int actual = rent.getCompanyId();
+        Long expected = 6L;
+        Long actual = rent.getCompanyId();
         assertEquals(expected,actual);
     }
 
     @Test
     public void getVehicleId() throws Exception {
-        int expected = 7;
-        int actual = rent.getVehicleId();
+        Long expected = 7L;
+        Long actual = rent.getVehicleId();
         assertEquals(expected,actual);
     }
 

@@ -6,16 +6,16 @@ import java.util.Date;
  * Created by pmagnucz on 2017. 09. 26..
  */
 public class SearchVehicleRequest {
-    private VehichleType type;
+    private VehicleType type;
     private String manufacturer;
     private Date yearOfManufacture;
     private double rentCost;
 
-    public VehichleType getType() {
+    public VehicleType getType() {
         return type;
     }
 
-    public void setType(VehichleType type) {
+    public void setType(VehicleType type) {
         this.type = type;
     }
 
@@ -43,7 +43,7 @@ public class SearchVehicleRequest {
         this.rentCost = rentCost;
     }
 
-    public SearchVehicleRequest(VehichleType type, String manufacturer, Date yearOfManufacture, double rentCost) {
+    public SearchVehicleRequest(VehicleType type, String manufacturer, Date yearOfManufacture, double rentCost) {
         this.type = type;
         this.manufacturer = manufacturer;
         this.yearOfManufacture = yearOfManufacture;
