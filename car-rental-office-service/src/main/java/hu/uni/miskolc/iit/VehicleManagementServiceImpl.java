@@ -56,7 +56,23 @@ public class VehicleManagementServiceImpl implements VehicleManagementService {
 
     @Override
     public List<Vehicle> getVehicleByFilterOptions(SearchVehicleRequest searchVehicleRequest) {
-        return null;
+        List<Vehicle> vehicleList = vehicleMapper.mapVehicleEntityListToModelList(((List)this.vehicleRepository.findAll()));
+        List<Vehicle> requestedVehicles = new ArrayList<Vehicle>();
+
+        for(Vehicle vehicle : vehicleList) {
+            if(vehicle.getId() == searchVehicleRequest.getId()
+                    || vehicle.getType() == searchVehicleRequest.getType()
+                    || vehicle.getManufacturer() == searchVehicleRequest.getManufacturer()
+                    || vehicle.getYearOfManufacture() == searchVehicleRequest.getYearOfManufacture()
+                    || vehicle.getRentCost() == searchVehicleRequest.getRentCost()
+                    || vehicle.getPersons() == searchVehicleRequest.getPersons()
+                    || vehicle.getPerformance() == searchVehicleRequest.getPerformance()
+                    || vehicle.getVehicleStatus() == searchVehicleRequest.getVehicleStatus()) {
+                requestedVehicles.add(rent);
+            }
+        }
+
+        return requestedVehicles;
     }
 
     @Override
