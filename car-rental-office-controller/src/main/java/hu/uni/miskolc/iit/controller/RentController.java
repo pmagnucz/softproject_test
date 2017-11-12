@@ -64,7 +64,7 @@ public class RentController {
     }
 
     @RequestMapping(value = "/count", method = RequestMethod.GET)
-    public ResponseEntity<Integer> getRentById(){
+    public ResponseEntity<Integer> getRentCount(){
         return ResponseEntity.ok(rentManagementService.rentCount());
     }
 }
