@@ -5,6 +5,7 @@ import hu.uni.miskolc.iit.model.Rent;
 import hu.uni.miskolc.iit.model.SearchRentRequest;
 import hu.uni.miskolc.iit.service.RentManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,7 +43,7 @@ public class RentController {
         return null;
     }
 
-    @RequestMapping(value = "/getAll", method = RequestMethod.GET)
+    @RequestMapping(value = "/getAll", method = RequestMethod.GET,produces= MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Rent>> getAllRent(){
         return ResponseEntity.ok(rentManagementService.getRents());
     }
@@ -60,5 +61,10 @@ public class RentController {
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
     public void deleteRent(@RequestBody Rent rent) throws NegativeValueException, RentWrongTotalFeeException, WrongRentDateException, UserNotFoundException, VehicleNotFoundException, RentNotFoundException {
         rentManagementService.removeRent(rent);
+    }
+
+    @RequestMapping(value = "/count", method = RequestMethod.GET)
+    public ResponseEntity<Integer> getRentById(){
+        return ResponseEntity.ok(rentManagementService.rentCount());
     }
 }

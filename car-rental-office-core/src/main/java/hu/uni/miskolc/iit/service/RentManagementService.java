@@ -47,6 +47,13 @@ public interface RentManagementService {
      */
     void removeRent(Rent rent) throws UserNotFoundException, NegativeValueException, WrongRentDateException, RentWrongTotalFeeException, VehicleNotFoundException, RentNotFoundException;
 
+
+    /**
+     * Returns the number of rents
+     * @return int
+     */
+    int rentCount();
+
     /**Testing a Rent for Exceptions
      * @param rent
      */
