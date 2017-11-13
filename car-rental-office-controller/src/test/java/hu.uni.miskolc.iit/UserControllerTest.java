@@ -1,10 +1,12 @@
 package hu.uni.miskolc.iit;
 
+import org.junit.*;
+
 /**
  * Created by rozgonyi on 2017.11.13..
  */
 
-public class RentControllerTest {
+public class UserControllerTest {
     @Before
     public void setUp() throws Exception {
 
