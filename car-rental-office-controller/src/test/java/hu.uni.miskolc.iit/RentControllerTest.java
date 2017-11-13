@@ -30,7 +30,6 @@ public class RentControllerTest {
 
     private Rent rent;
     private Rent rent2;
-    private Rent rent3;
 
     @Before
     public void setUp() throws Exception {
@@ -46,7 +45,8 @@ public class RentControllerTest {
             e.printStackTrace();
         }
 
-        rent.setId(6L);
+        //rent.setId(6L);
+        rent.setId(null);
         rent.setCustomerId(1L);
         rent.setCompanyId(0L);
         rent.setVehicleId(1L);
@@ -63,7 +63,7 @@ public class RentControllerTest {
 
         rent2 = new Rent();
 
-        rent2.setId(2L);
+        //rent2.setId(2L);
         rent2.setCustomerId(1L);
         rent2.setCompanyId(0L);
         rent2.setVehicleId(1L);
@@ -77,23 +77,6 @@ public class RentControllerTest {
         rent2.setOtherFee(0.0);
         rent2.setTotalFee(350000.0);
         rent2.setPaid(true);
-
-        rent3 = new Rent();
-
-        rent3.setId(3L);
-        rent3.setCustomerId(1L);
-        rent3.setCompanyId(0L);
-        rent3.setVehicleId(1L);
-        rent3.setStartDate(startDate);
-        rent3.setEndDate(endDate);
-        rent3.setDurationExtendable(true);
-        rent3.setExtendedHours(24);
-        rent3.setKmUsed(100);
-        rent3.setDayFee(150000.0);
-        rent3.setKmFee(100000.0);
-        rent3.setOtherFee(0.0);
-        rent3.setTotalFee(250000.0);
-        rent3.setPaid(false);
 
     }
 
@@ -109,17 +92,26 @@ public class RentControllerTest {
         ResponseEntity<Rent> response = restTemplate.exchange(
                 "http://localhost:8080/rent/create", HttpMethod.POST, entity, Rent.class);
 
+        rent.setId(response.getBody().getId());
+
         assertEquals(rent,response.getBody());
     }
 
     @Test
     public void getRentById() throws Exception {
-        HttpEntity<Long> entity = new HttpEntity<Long>(rent2.getId(),headers);
+        HttpEntity<Rent> entityCreate = new HttpEntity<Rent>(rent,headers);
 
-        ResponseEntity<Rent> response = restTemplate.exchange(
-                "http://localhost:8080/rent/getById", HttpMethod.POST, entity, Rent.class);
+        ResponseEntity<Rent> responseCreate = restTemplate.exchange(
+                "http://localhost:8080/rent/create", HttpMethod.POST, entityCreate, Rent.class);
 
-        assertEquals(rent2,response.getBody());
+        HttpEntity<Long> entityFindOne = new HttpEntity<Long>(responseCreate.getBody().getId(),headers);
+
+        ResponseEntity<Rent> responseFindOne = restTemplate.exchange(
+                "http://localhost:8080/rent/getById", HttpMethod.POST, entityFindOne, Rent.class);
+
+        rent.setId(responseCreate.getBody().getId());
+
+        assertEquals(rent,responseFindOne.getBody());
     }
 
     @Test
@@ -158,19 +150,33 @@ public class RentControllerTest {
 
     @Test
     public void updateRent() throws Exception {
-        HttpEntity<Rent> entity = new HttpEntity<Rent>(rent2,headers);
+        HttpEntity<Rent> entityCreate = new HttpEntity<Rent>(rent,headers);
 
-        ResponseEntity<Rent> response = restTemplate.exchange(
-                "http://localhost:8080/rent/update", HttpMethod.POST, entity, Rent.class);
+        ResponseEntity<Rent> responseCreate = restTemplate.exchange(
+                "http://localhost:8080/rent/create", HttpMethod.POST, entityCreate, Rent.class);
 
-        assertEquals(rent2,response.getBody());
+        rent2.setId(responseCreate.getBody().getId());
+
+        HttpEntity<Rent> entityUpdate = new HttpEntity<Rent>(rent2,headers);
+
+        ResponseEntity<Rent> responseUpdate = restTemplate.exchange(
+                "http://localhost:8080/rent/update", HttpMethod.POST, entityUpdate, Rent.class);
+
+        assertEquals(rent2,responseUpdate.getBody());
     }
 
     @Test
     public void deleteRent() throws Exception {
 
-        HttpEntity<Rent> deleteEntity = new HttpEntity<Rent>(rent3,headers);
-        HttpEntity<Long> findOneEntity = new HttpEntity<Long>(rent3.getId(),headers);
+        HttpEntity<Rent> entityCreate = new HttpEntity<Rent>(rent,headers);
+
+        ResponseEntity<Rent> responseCreate = restTemplate.exchange(
+                "http://localhost:8080/rent/create", HttpMethod.POST, entityCreate, Rent.class);
+
+        rent.setId(responseCreate.getBody().getId());
+
+        HttpEntity<Rent> deleteEntity = new HttpEntity<Rent>(rent,headers);
+        HttpEntity<Long> findOneEntity = new HttpEntity<Long>(rent.getId(),headers);
 
         ResponseEntity<Rent> findOneResponse = restTemplate.exchange(
                 "http://localhost:8080/rent/getById", HttpMethod.POST, findOneEntity, Rent.class);
