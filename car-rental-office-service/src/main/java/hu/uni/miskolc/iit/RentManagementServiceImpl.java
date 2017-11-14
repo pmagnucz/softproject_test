@@ -35,10 +35,14 @@ public class RentManagementServiceImpl implements RentManagementService {
     }
 
     @Override
-    public Rent addNewRent(Rent rent) throws WrongRentDateException, NegativeValueException, RentWrongTotalFeeException, RentIdAlreadyExistsException, UserNotFoundException, VehicleNotFoundException {
-        if(rentRepository.exists(Long.valueOf(rent.getId()))) {
-            throw new RentIdAlreadyExistsException(String.valueOf(rent.getId()));
+    public Rent addNewRent(Rent rent) throws WrongRentDateException, NegativeValueException, RentWrongTotalFeeException,
+            RentIdAlreadyExistsException, UserNotFoundException, VehicleNotFoundException {
+        if(rent.getId() != null) {
+            if(rentRepository.exists(rent.getId())) {
+                throw new RentIdAlreadyExistsException(String.valueOf(rent.getId()));
+            }
         }
+
         validate(rent);
         RentEntity rentEntity = rentMapper.mapModelToEntity(rent);
         Rent storedRent = rentMapper.mapEntityToModel(this.rentRepository.save(rentEntity));
@@ -109,6 +113,11 @@ public class RentManagementServiceImpl implements RentManagementService {
     }
 
     @Override
+    public int rentCount() {
+        return Math.toIntExact(rentRepository.count());
+    }
+
+    @Override
     public void validate(Rent rent) throws NegativeValueException, WrongRentDateException, RentWrongTotalFeeException, UserNotFoundException, VehicleNotFoundException {
         String negativeValueExceptionMessage = "";
         boolean negativeValueException = false;
@@ -160,7 +169,7 @@ public class RentManagementServiceImpl implements RentManagementService {
             }
         }
 
-        if(!vehicleRepository.exists(rent.getId())){
+        if(!vehicleRepository.exists(rent.getVehicleId())){
             throw new VehicleNotFoundException("Vehicle with Id: " + rent.getVehicleId() + " does not exist.");
         }
     }

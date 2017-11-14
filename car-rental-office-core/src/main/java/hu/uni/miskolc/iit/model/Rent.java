@@ -1,5 +1,7 @@
 package hu.uni.miskolc.iit.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class Rent {
@@ -10,7 +12,10 @@ public class Rent {
 	private Long companyId;
 	private Long vehicleId;
 
+	@JsonFormat(pattern="yyyy-MM-dd", timezone = "Europe/Budapest")
 	private Date startDate;
+
+	@JsonFormat(pattern="yyyy-MM-dd", timezone = "Europe/Budapest")
 	private Date endDate;
 
 	private boolean durationExtendable;
