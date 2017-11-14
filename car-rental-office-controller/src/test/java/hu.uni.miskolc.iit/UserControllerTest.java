@@ -1,5 +1,6 @@
 package hu.uni.miskolc.iit;
-
+import hu.uni.miskolc.iit.model.CreateUserRequest;
+import hu.uni.miskolc.iit.model.User;
 import org.junit.*;
 
 /**
@@ -7,8 +8,25 @@ import org.junit.*;
  */
 
 public class UserControllerTest {
+    private static final String USER_NAME = "Teszt Elek";
+    private static final String ADDRESS = "3525 Miskolc, Szentpáli utca 12.";
+    private static final String PHONENUMBER = "+36302587913";
+
+    private User user;
+
+    private CreateUserRequest userRequest;
+
     @Before
     public void setUp() throws Exception {
+        user = new User(1L, USER_NAME, ADDRESS, PHONENUMBER);
+
+        userRequest = new CreateUserRequest();
+        userRequest.setUserName(USER_NAME);
+        userRequest.setAddress(ADDRESS);
+        userRequest.setPhoneNumber(PHONENUMBER);
+        userRequest.setUserId("1");
+        userRequest.setYearOfBirth(1996);
+        userRequest.setDrivingLicenceNumber("105213851412");
 
     }
 
