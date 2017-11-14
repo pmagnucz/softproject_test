@@ -78,7 +78,10 @@ public class UserControllerTest {
 
     @Test
     public void updateUser() throws Exception {
+        HttpEntity<User> entity = new HttpEntity<User>(user, headers);
+        ResponseEntity<User> response = restTemplate.exchange("http://localhost:8080/user/update", HttpMethod.POST, entity, User.class);
 
+        assertEquals(user, response.getBody());
     }
 
     @Test
