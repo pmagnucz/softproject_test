@@ -86,7 +86,13 @@ public class UserControllerTest {
 
     @Test
     public void deleteUser() throws Exception {
+        HttpEntity<CreateUserRequest> entity = new HttpEntity<CreateUserRequest>(userRequest2, headers);
+        ResponseEntity<User> response = restTemplate.exchange("http://localhost:8080/user/create", HttpMethod.POST, entity, User.class);
 
+        HttpEntity<User> userHttpEntity = new HttpEntity<User>(response.getBody(), headers);
+
+        ResponseEntity<HttpStatus> responseEntity = restTemplate.exchange("http://localhost:8080/user/delete", HttpMethod.DELETE, userHttpEntity, HttpStatus.class);
+        assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
     }
 
     @Test
