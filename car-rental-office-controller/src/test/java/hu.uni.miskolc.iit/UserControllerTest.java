@@ -1,7 +1,12 @@
 package hu.uni.miskolc.iit;
+
 import hu.uni.miskolc.iit.model.CreateUserRequest;
 import hu.uni.miskolc.iit.model.User;
 import org.junit.*;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.*;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by rozgonyi on 2017.11.13..
@@ -15,6 +20,9 @@ public class UserControllerTest {
     private User user;
 
     private CreateUserRequest userRequest;
+
+    TestRestTemplate restTemplate = new TestRestTemplate();
+    HttpHeaders headers = new HttpHeaders();
 
     @Before
     public void setUp() throws Exception {
@@ -37,7 +45,10 @@ public class UserControllerTest {
 
     @Test
     public void createUser() throws Exception {
+        HttpEntity<CreateUserRequest> entity = new HttpEntity<CreateUserRequest>(userRequest, headers);
+        ResponseEntity<User> response = restTemplate.exchange("http://localhost:8080/user/create", HttpMethod.POST, entity, User.class);
 
+        assertEquals(user, response.getBody());
     }
 
     @Test
