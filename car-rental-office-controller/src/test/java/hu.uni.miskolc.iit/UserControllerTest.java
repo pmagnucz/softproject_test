@@ -7,6 +7,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -53,7 +54,6 @@ public class UserControllerTest {
         userRequest2.setUserId("2");
         userRequest2.setYearOfBirth(1986);
         userRequest2.setDrivingLicenceNumber("25687452");
-
     }
 
     @After
@@ -71,9 +71,27 @@ public class UserControllerTest {
 
     @Test
     public void getAllUser() throws Exception {
-        ParameterizedTypeReference<List<User>> responseType = new ParameterizedTypeReference<List<User>>(){};
+        List<User> expectedUsers = new ArrayList<User>();
 
-        ResponseEntity<List<User>> entity = restTemplate.exchange("http://localhost:8080/user/getAll", HttpMethod.GET, null, responseType);
+        ResponseEntity<Integer> responseCount = restTemplate.exchange("http://localhost:8080/user/count", HttpMethod.GET, null, Integer.class);
+
+        int id = 0;
+        while(expectedUsers.size() != responseCount.getBody()){
+            HttpEntity<Long> entity = new HttpEntity<Long>(Long.valueOf(id), headers);
+            ResponseEntity<User> responseFindOne = restTemplate.exchange("http://localhost:8080/user/getUser/", HttpMethod.GET, entity, User.class);
+
+            if(responseFindOne.getBody().getId() != null) {
+                expectedUsers.add(responseFindOne.getBody());
+            }
+
+            id++;
+        }
+
+        ParameterizedTypeReference<List<User>> responseType = new ParameterizedTypeReference<List<User>>() {};
+
+        ResponseEntity<List<User>> responseGetAll  = restTemplate.exchange("http://localhost:8080/user/getAll",HttpMethod.GET,null, responseType);
+
+        assertEquals(expectedUsers, responseGetAll.getBody());
     }
 
     @Test
