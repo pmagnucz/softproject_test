@@ -127,4 +127,9 @@ public class UserManagementServiceImpl implements UserManagementService {
     public void deleteUser(User user) {
         userRepository.delete(user.getId());
     }
+
+    @Override
+    public int countUser() {
+        return Math.toIntExact(userRepository.count());
+    }
 }
