@@ -1,6 +1,7 @@
 package hu.uni.miskolc.iit;
 
 import hu.uni.miskolc.iit.model.CreateUserRequest;
+import hu.uni.miskolc.iit.model.SearchUserRequest;
 import hu.uni.miskolc.iit.model.User;
 import org.junit.*;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -31,6 +32,8 @@ public class UserControllerTest {
     private CreateUserRequest userRequest;
     private CreateUserRequest userRequest2;
 
+    private SearchUserRequest searchUserRequest;
+
     TestRestTemplate restTemplate = new TestRestTemplate();
     HttpHeaders headers = new HttpHeaders();
 
@@ -54,6 +57,9 @@ public class UserControllerTest {
         userRequest2.setUserId("2");
         userRequest2.setYearOfBirth(1986);
         userRequest2.setDrivingLicenceNumber("25687452");
+
+        searchUserRequest = new SearchUserRequest();
+        searchUserRequest.setUserName(USER_NAME);
     }
 
     @After
@@ -123,6 +129,14 @@ public class UserControllerTest {
 
     @Test
     public void getUserByFilterOptions() throws Exception {
+        List<User> expectedList = new ArrayList<User>();
+        expectedList.add(user);
 
+        HttpEntity<SearchUserRequest> entity = new HttpEntity<SearchUserRequest>(searchUserRequest, headers);
+
+        ParameterizedTypeReference<List<User>> responseType = new ParameterizedTypeReference<List<User>>() {};
+        ResponseEntity<List<User>> response = restTemplate.exchange("http://localhost:8080/user/search/", HttpMethod.POST, entity, responseType);
+
+        assertEquals(expectedList, response.getBody());
     }
 }
