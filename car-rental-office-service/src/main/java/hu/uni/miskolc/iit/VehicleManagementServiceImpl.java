@@ -51,14 +51,7 @@ public class VehicleManagementServiceImpl implements VehicleManagementService {
 
     @Override
     public Vehicle getVehicleById(Long id) {
-        List<VehicleEntity> elements = (List<VehicleEntity>) vehicleRepository.findAll();
-        Vehicle vehicle = null;
-        for (int i = 0; i < elements.size(); i++) {
-            if (id == elements.get(i).getId()) {
-                vehicle = VehicleMapper.mapEntityToModel(elements.get(i));
-            }
-        }
-        return vehicle;
+                return VehicleMapper.mapEntityToModel(vehicleRepository.findOne(id));
     }
 
     @Override
