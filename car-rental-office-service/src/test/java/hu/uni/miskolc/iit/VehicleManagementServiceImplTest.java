@@ -1,6 +1,5 @@
 package hu.uni.miskolc.iit;
 
-import ch.qos.logback.core.CoreConstants;
 import hu.uni.miskolc.iit.entity.VehicleEntity;
 import hu.uni.miskolc.iit.mapper.VehicleMapper;
 import hu.uni.miskolc.iit.model.*;
@@ -10,10 +9,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import java.text.ParseException;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.*;
@@ -26,21 +26,16 @@ public class VehicleManagementServiceImplTest {
 
     private VehicleManagementService vehicleManagementService;
     private VehicleRepository vehicleRepository ;
+    private Vehicle vehicle;
+    private Ship ship;
+    private Car car;
 
     @Before
     public void setUp() throws Exception {
         vehicleRepository = mock(VehicleRepository.class);
         vehicleManagementService = new VehicleManagementServiceImpl(vehicleRepository);
-
-    }
-
-    @After
-    public void tearDown() throws Exception {
-    }
-
-    @Test
-    public void addNewVehicleCar() throws Exception {
-        Car car = new Car();
+        vehicle = new Vehicle();
+        car = new Car();
 
         DateFormat format = new SimpleDateFormat("yyyy-MM");
         Date date = null;
@@ -50,7 +45,46 @@ public class VehicleManagementServiceImplTest {
             e.printStackTrace();
         }
 
-        car.setId(Long.valueOf(1));
+        vehicle.setId(1L);
+        vehicle.setType(VehicleType.CAR);
+        vehicle.setManufacturer("Ford");
+        vehicle.setYearOfManufacture(date);
+        vehicle.setRentCost(15000);
+        vehicle.setPersons(5);
+        vehicle.setPerformance(1500.24);
+        vehicle.setVehicleStatus(VehicleStatusType.FREE);
+
+
+        car.setId(1L);
+        car.setType(VehicleType.CAR);
+        car.setManufacturer("Ford");
+        car.setYearOfManufacture(date);
+        car.setRentCost(15000);
+        car.setPersons(5);
+        car.setPerformance(1500.24);
+        car.setVehicleStatus(VehicleStatusType.FREE);
+        car.setPlateNumber("AAA-111");
+        car.setVehicleIdentificationNumber("245354sd");
+        car.setDrawBar(true);
+    }
+
+    @After
+    public void tearDown() throws Exception {
+    }
+
+    @Test
+    public void addNewVehicleCar() throws Exception {
+        car = new Car();
+
+        DateFormat format = new SimpleDateFormat("yyyy-MM");
+        Date date = null;
+        try {
+            date = format.parse("2017-08");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        car.setId(1L);
         car.setType(VehicleType.CAR);
         car.setManufacturer("Ford");
         car.setYearOfManufacture(date);
@@ -71,7 +105,7 @@ public class VehicleManagementServiceImplTest {
 
     @Test
     public void addNewVehicleShip() throws Exception {
-        Ship ship = new Ship();
+        ship = new Ship();
         DateFormat format = new SimpleDateFormat("yyyy-MM");
         Date date = null;
         try {
@@ -104,6 +138,11 @@ public class VehicleManagementServiceImplTest {
 
     @Test
     public void getVehicleById() throws Exception {
+        VehicleEntity mockEntity = VehicleMapper.mapModelToEntity(car);
+        when(vehicleRepository.findOne(any(Long.class))).thenReturn(mockEntity);
+
+        Vehicle actual = vehicleManagementService.getVehicleById(5L);
+        assertEquals(car,actual);
     }
 
     @Test
@@ -112,6 +151,14 @@ public class VehicleManagementServiceImplTest {
 
     @Test
     public void getVehicles() throws Exception {
+        List<Vehicle> vehicles = new ArrayList<>();
+        vehicles.add(car);
+
+        List<VehicleEntity> expectedEntities = VehicleMapper.mapModelListToEntityList(vehicles);
+        when(vehicleRepository.findAll()).thenReturn(expectedEntities);
+
+        List<Vehicle> actual = vehicleManagementService.getVehicles();
+        assertEquals(vehicles, actual);
     }
 
     @Test
@@ -120,9 +167,6 @@ public class VehicleManagementServiceImplTest {
 
     @Test
     public void removeVehicleCar() throws Exception {
-        Car car = new Car();
-        car.setId(2L);
-
         when(vehicleRepository.exists(any(Long.class))).thenReturn(true);
 
         vehicleManagementService.removeVehicle(car);
@@ -132,8 +176,7 @@ public class VehicleManagementServiceImplTest {
 
     @Test
     public void removeVehicleShip() throws Exception {
-
-        Ship ship = new Ship();
+        ship = new Ship();
         ship.setId(1L);
 
         when(vehicleRepository.exists(any(Long.class))).thenReturn(true);

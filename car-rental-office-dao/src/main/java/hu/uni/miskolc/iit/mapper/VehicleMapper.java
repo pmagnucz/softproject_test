@@ -13,20 +13,22 @@ import java.util.List;
 public class VehicleMapper {
     public static VehicleEntity mapModelToEntity(Vehicle vehicle) {
         //converting format for Date to String, yearOfManufacture from Vehicle
+
         VehicleEntity vehicleEntity = new VehicleEntity();
 
-        /*DateFormat format = new SimpleDateFormat("yyyy-MM");
-        Date date = null;
+        DateFormat format = new SimpleDateFormat("yyyy-MM");
+        /*String date = null;
         try {
-            date = format;
+            date = format.format(vehicle.getYearOfManufacture());
         } catch (ParseException e) {
             e.printStackTrace();
         }*/
 
+        vehicleEntity.setId(vehicle.getId());
         vehicleEntity.setVehicleId(String.valueOf(vehicle.getId()));
-        vehicleEntity.setType(String.valueOf(vehicle.getId()));
+        vehicleEntity.setType(String.valueOf(vehicle.getType()));
         vehicleEntity.setManufacturer(vehicle.getManufacturer());
-        vehicleEntity.setYearOfManufacture(String.valueOf(vehicle.getYearOfManufacture()));
+        vehicleEntity.setYearOfManufacture(format.format(vehicle.getYearOfManufacture()));
         vehicleEntity.setRentCost(String.valueOf(vehicle.getRentCost()));
         vehicleEntity.setPersons(String.valueOf(vehicle.getPersons()));
         vehicleEntity.setPerformance(String.valueOf(vehicle.getPerformance()));
