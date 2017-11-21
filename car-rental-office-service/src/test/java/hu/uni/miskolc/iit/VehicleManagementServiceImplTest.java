@@ -8,6 +8,8 @@ import hu.uni.miskolc.iit.service.VehicleManagementService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
+
 import java.text.ParseException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -15,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static javafx.beans.binding.Bindings.when;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.*;
 import static org.mockito.Matchers.any;
@@ -254,5 +255,6 @@ public class VehicleManagementServiceImplTest {
 
         verify(vehicleRepository,times(1)).delete(ship.getId());
     }
+
 
 }

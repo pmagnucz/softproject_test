@@ -11,6 +11,8 @@ import hu.uni.miskolc.iit.service.VehicleManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ArrayList;
@@ -23,12 +25,8 @@ import java.util.ArrayList;
 public class VehicleManagementServiceImpl implements VehicleManagementService {
     private VehicleRepository vehicleRepository;
 
-    public VehicleManagementServiceImpl(VehicleRepository vehicleRepository) {
-        this.vehicleRepository = vehicleRepository;
-    }
-
     @Autowired
-    public void VehicleRepository(VehicleRepository vehicleRepository) {
+    public VehicleManagementServiceImpl(VehicleRepository vehicleRepository) {
         this.vehicleRepository = vehicleRepository;
     }
 
