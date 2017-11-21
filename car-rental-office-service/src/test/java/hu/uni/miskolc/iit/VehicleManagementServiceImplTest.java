@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static javafx.beans.binding.Bindings.when;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.*;
 import static org.mockito.Matchers.any;
@@ -147,6 +148,42 @@ public class VehicleManagementServiceImplTest {
 
     @Test
     public void getVehicleByFilterOptions() throws Exception {
+        DateFormat format = new SimpleDateFormat("yyyy-MM");
+        Date yearOfManufactureRequest = null;
+        try {
+            yearOfManufactureRequest = format.parse("1950-02");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Ship shipModel = new Ship();
+        shipModel.setId(5L);
+        shipModel.setLength(1000.0);
+        shipModel.setWithTrailer(true);
+        shipModel.setType(VehicleType.SHIP);
+        shipModel.setShipId("AAA");
+        shipModel.setManufacturer("manufacturer");
+        shipModel.setPerformance(300);
+        shipModel.setPersons(4);
+        shipModel.setRentCost(20000.0);
+        shipModel.setVehicleStatus(VehicleStatusType.FREE);
+        shipModel.setYearOfManufacture(yearOfManufactureRequest);
+
+        SearchVehicleRequest searchVehicleRequest =
+                new SearchVehicleRequest(VehicleType.SHIP,"manufacturer2",yearOfManufactureRequest,100000.0);
+
+        List<Vehicle> vehicles = new ArrayList<>();
+        vehicles.add(car);
+        vehicles.add(shipModel);
+
+        List<VehicleEntity> expectedEntities = VehicleMapper.mapModelListToEntityList(vehicles);
+        when(vehicleRepository.findAll()).thenReturn(expectedEntities);
+
+        List<Vehicle> expected = new ArrayList<>();
+        expected.add(shipModel);
+        List<Vehicle> actual = vehicleManagementService.getVehicleByFilterOptions(searchVehicleRequest);
+
+        assertEquals(expected,actual);
     }
 
     @Test
@@ -163,6 +200,38 @@ public class VehicleManagementServiceImplTest {
 
     @Test
     public void updateVehicle() throws Exception {
+        DateFormat format = new SimpleDateFormat("yyyy-MM");
+        Date date = null;
+        try {
+            date = format.parse("2017-08");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        VehicleEntity mockEntity = VehicleMapper.mapModelToEntity(car);
+        when(vehicleRepository.findOne(any(Long.class))).thenReturn(mockEntity);
+        when(vehicleRepository.save(any(VehicleEntity.class))).thenReturn(mockEntity);
+
+        UpdateVehicleRequest updateVehicleRequest = new UpdateVehicleRequest();
+
+        updateVehicleRequest.setId(1L);
+        updateVehicleRequest.setType(VehicleType.CAR);
+        updateVehicleRequest.setManufacturer("Ford2222");
+        updateVehicleRequest.setYearOfManufacture(date);
+        updateVehicleRequest.setRentCost(25000);
+        updateVehicleRequest.setPersons(2);
+        updateVehicleRequest.setCar(true);
+        updateVehicleRequest.setPerformance(2500.24);
+        updateVehicleRequest.setVehicleStatus(VehicleStatusType.FREE);
+        updateVehicleRequest.setPlateNumber("AAA-222");
+        updateVehicleRequest.setVehicleIdentificationNumber("222222sd");
+        updateVehicleRequest.setDrawBar(true);
+
+        vehicleManagementService.updateVehicle(updateVehicleRequest);
+
+        Vehicle actual = VehicleMapper.mapEntityToModel(mockEntity);
+
+        assertNotEquals(car,actual);
     }
 
     @Test
