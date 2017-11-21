@@ -79,36 +79,37 @@ public class VehicleManagementServiceImpl implements VehicleManagementService {
     @Override
     public Vehicle updateVehicle(UpdateVehicleRequest updateVehicleRequest) throws VehicleNotFoundException{
         VehicleEntity vehicleEntity = vehicleRepository.findOne(updateVehicleRequest.getId());
-            if (updateVehicleRequest.isCar()) {
-                //Car
-                vehicleEntity.setPlateNumber(updateVehicleRequest.getPlateNumber());
-                vehicleEntity.setVehicleIdentificationNumber(updateVehicleRequest.getVehicleIdentificationNumber());
-                vehicleEntity.setManufacturer(updateVehicleRequest.getManufacturer());
-                vehicleEntity.setPerformance(Double.toString(updateVehicleRequest.getPerformance()));
-                vehicleEntity.setPersons(Integer.toString(updateVehicleRequest.getPersons()));
-                vehicleEntity.setRentCost(Double.toString(updateVehicleRequest.getRentCost()));
-                vehicleEntity.setType(updateVehicleRequest.getType().toString());
-                vehicleEntity.setVehicleStatus(updateVehicleRequest.getVehicleStatus().toString());
-                vehicleEntity.setYearOfManufacture(updateVehicleRequest.getYearOfManufacture().toString());
-                vehicleEntity.setDrawBar(Boolean.toString(updateVehicleRequest.isDrawBar()));
+        DateFormat format = new SimpleDateFormat("yyyy-MM");
+        if (updateVehicleRequest.isCar()) {
+            //Car
+            vehicleEntity.setPlateNumber(updateVehicleRequest.getPlateNumber());
+            vehicleEntity.setVehicleIdentificationNumber(updateVehicleRequest.getVehicleIdentificationNumber());
+            vehicleEntity.setManufacturer(updateVehicleRequest.getManufacturer());
+            vehicleEntity.setPerformance(Double.toString(updateVehicleRequest.getPerformance()));
+            vehicleEntity.setPersons(Integer.toString(updateVehicleRequest.getPersons()));
+            vehicleEntity.setRentCost(Double.toString(updateVehicleRequest.getRentCost()));
+            vehicleEntity.setType(updateVehicleRequest.getType().toString());
+            vehicleEntity.setVehicleStatus(updateVehicleRequest.getVehicleStatus().toString());
+            vehicleEntity.setYearOfManufacture(format.format(updateVehicleRequest.getYearOfManufacture()));
+            vehicleEntity.setDrawBar(Boolean.toString(updateVehicleRequest.isDrawBar()));
 
-                VehicleEntity updatedVehicleCar = vehicleRepository.save(vehicleEntity);
-                return VehicleMapper.mapEntityToModel(updatedVehicleCar);
-            } else if (updateVehicleRequest.isShip()) {
-                //Ship
-                vehicleEntity.setLength(Double.toString(updateVehicleRequest.getLength()));
-                vehicleEntity.setWithTrailer(Boolean.toString(updateVehicleRequest.isWithTrailer()));
-                vehicleEntity.setManufacturer(updateVehicleRequest.getManufacturer());
-                vehicleEntity.setPerformance(Double.toString(updateVehicleRequest.getPerformance()));
-                vehicleEntity.setPersons(Integer.toString(updateVehicleRequest.getPersons()));
-                vehicleEntity.setRentCost(Double.toString(updateVehicleRequest.getRentCost()));
-                vehicleEntity.setType(updateVehicleRequest.getType().toString());
-                vehicleEntity.setVehicleStatus(updateVehicleRequest.getVehicleStatus().toString());
-                vehicleEntity.setYearOfManufacture(updateVehicleRequest.getYearOfManufacture().toString());
+            VehicleEntity updatedVehicleCar = vehicleRepository.save(vehicleEntity);
+            return VehicleMapper.mapEntityToModel(updatedVehicleCar);
+        } else if (updateVehicleRequest.isShip()) {
+            //Ship
+            vehicleEntity.setLength(Double.toString(updateVehicleRequest.getLength()));
+            vehicleEntity.setWithTrailer(Boolean.toString(updateVehicleRequest.isWithTrailer()));
+            vehicleEntity.setManufacturer(updateVehicleRequest.getManufacturer());
+            vehicleEntity.setPerformance(Double.toString(updateVehicleRequest.getPerformance()));
+            vehicleEntity.setPersons(Integer.toString(updateVehicleRequest.getPersons()));
+            vehicleEntity.setRentCost(Double.toString(updateVehicleRequest.getRentCost()));
+            vehicleEntity.setType(updateVehicleRequest.getType().toString());
+            vehicleEntity.setVehicleStatus(updateVehicleRequest.getVehicleStatus().toString());
+            vehicleEntity.setYearOfManufacture(format.format(updateVehicleRequest.getYearOfManufacture()));
 
-                VehicleEntity updatedVehicleShip = vehicleRepository.save(vehicleEntity);
-                return VehicleMapper.mapEntityToModel(updatedVehicleShip);
-            }
+            VehicleEntity updatedVehicleShip = vehicleRepository.save(vehicleEntity);
+            return VehicleMapper.mapEntityToModel(updatedVehicleShip);
+        }
         throw new VehicleNotFoundException("Vehicle not found with the given parameters! ID = " + updateVehicleRequest.getId());
     }
 
