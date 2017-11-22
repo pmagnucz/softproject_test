@@ -83,4 +83,9 @@ public class UserManagementController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @RequestMapping(value = "/count", method = RequestMethod.GET)
+    public ResponseEntity<Integer> getUserCount() {
+        return ResponseEntity.ok(userManagementService.countUser());
+    }
 }

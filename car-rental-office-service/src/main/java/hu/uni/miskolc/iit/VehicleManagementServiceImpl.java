@@ -11,6 +11,8 @@ import hu.uni.miskolc.iit.service.VehicleManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ArrayList;
@@ -23,12 +25,8 @@ import java.util.ArrayList;
 public class VehicleManagementServiceImpl implements VehicleManagementService {
     private VehicleRepository vehicleRepository;
 
-    public VehicleManagementServiceImpl(VehicleRepository vehicleRepository) {
-        this.vehicleRepository = vehicleRepository;
-    }
-
     @Autowired
-    public void VehicleRepository(VehicleRepository vehicleRepository) {
+    public VehicleManagementServiceImpl(VehicleRepository vehicleRepository) {
         this.vehicleRepository = vehicleRepository;
     }
 
@@ -51,14 +49,7 @@ public class VehicleManagementServiceImpl implements VehicleManagementService {
 
     @Override
     public Vehicle getVehicleById(Long id) {
-        List<VehicleEntity> elements = (List<VehicleEntity>) vehicleRepository.findAll();
-        Vehicle vehicle = null;
-        for (int i = 0; i < elements.size(); i++) {
-            if (id == elements.get(i).getId()) {
-                vehicle = VehicleMapper.mapEntityToModel(elements.get(i));
-            }
-        }
-        return vehicle;
+                return VehicleMapper.mapEntityToModel(vehicleRepository.findOne(id));
     }
 
     @Override
@@ -86,36 +77,37 @@ public class VehicleManagementServiceImpl implements VehicleManagementService {
     @Override
     public Vehicle updateVehicle(UpdateVehicleRequest updateVehicleRequest) throws VehicleNotFoundException{
         VehicleEntity vehicleEntity = vehicleRepository.findOne(updateVehicleRequest.getId());
-            if (updateVehicleRequest.isCar()) {
-                //Car
-                vehicleEntity.setPlateNumber(updateVehicleRequest.getPlateNumber());
-                vehicleEntity.setVehicleIdentificationNumber(updateVehicleRequest.getVehicleIdentificationNumber());
-                vehicleEntity.setManufacturer(updateVehicleRequest.getManufacturer());
-                vehicleEntity.setPerformance(Double.toString(updateVehicleRequest.getPerformance()));
-                vehicleEntity.setPersons(Integer.toString(updateVehicleRequest.getPersons()));
-                vehicleEntity.setRentCost(Double.toString(updateVehicleRequest.getRentCost()));
-                vehicleEntity.setType(updateVehicleRequest.getType().toString());
-                vehicleEntity.setVehicleStatus(updateVehicleRequest.getVehicleStatus().toString());
-                vehicleEntity.setYearOfManufacture(updateVehicleRequest.getYearOfManufacture().toString());
-                vehicleEntity.setDrawBar(Boolean.toString(updateVehicleRequest.isDrawBar()));
+        DateFormat format = new SimpleDateFormat("yyyy-MM");
+        if (updateVehicleRequest.isCar()) {
+            //Car
+            vehicleEntity.setPlateNumber(updateVehicleRequest.getPlateNumber());
+            vehicleEntity.setVehicleIdentificationNumber(updateVehicleRequest.getVehicleIdentificationNumber());
+            vehicleEntity.setManufacturer(updateVehicleRequest.getManufacturer());
+            vehicleEntity.setPerformance(Double.toString(updateVehicleRequest.getPerformance()));
+            vehicleEntity.setPersons(Integer.toString(updateVehicleRequest.getPersons()));
+            vehicleEntity.setRentCost(Double.toString(updateVehicleRequest.getRentCost()));
+            vehicleEntity.setType(updateVehicleRequest.getType().toString());
+            vehicleEntity.setVehicleStatus(updateVehicleRequest.getVehicleStatus().toString());
+            vehicleEntity.setYearOfManufacture(format.format(updateVehicleRequest.getYearOfManufacture()));
+            vehicleEntity.setDrawBar(Boolean.toString(updateVehicleRequest.isDrawBar()));
 
-                VehicleEntity updatedVehicleCar = vehicleRepository.save(vehicleEntity);
-                return VehicleMapper.mapEntityToModel(updatedVehicleCar);
-            } else if (updateVehicleRequest.isShip()) {
-                //Ship
-                vehicleEntity.setLength(Double.toString(updateVehicleRequest.getLength()));
-                vehicleEntity.setWithTrailer(Boolean.toString(updateVehicleRequest.isWithTrailer()));
-                vehicleEntity.setManufacturer(updateVehicleRequest.getManufacturer());
-                vehicleEntity.setPerformance(Double.toString(updateVehicleRequest.getPerformance()));
-                vehicleEntity.setPersons(Integer.toString(updateVehicleRequest.getPersons()));
-                vehicleEntity.setRentCost(Double.toString(updateVehicleRequest.getRentCost()));
-                vehicleEntity.setType(updateVehicleRequest.getType().toString());
-                vehicleEntity.setVehicleStatus(updateVehicleRequest.getVehicleStatus().toString());
-                vehicleEntity.setYearOfManufacture(updateVehicleRequest.getYearOfManufacture().toString());
+            VehicleEntity updatedVehicleCar = vehicleRepository.save(vehicleEntity);
+            return VehicleMapper.mapEntityToModel(updatedVehicleCar);
+        } else if (updateVehicleRequest.isShip()) {
+            //Ship
+            vehicleEntity.setLength(Double.toString(updateVehicleRequest.getLength()));
+            vehicleEntity.setWithTrailer(Boolean.toString(updateVehicleRequest.isWithTrailer()));
+            vehicleEntity.setManufacturer(updateVehicleRequest.getManufacturer());
+            vehicleEntity.setPerformance(Double.toString(updateVehicleRequest.getPerformance()));
+            vehicleEntity.setPersons(Integer.toString(updateVehicleRequest.getPersons()));
+            vehicleEntity.setRentCost(Double.toString(updateVehicleRequest.getRentCost()));
+            vehicleEntity.setType(updateVehicleRequest.getType().toString());
+            vehicleEntity.setVehicleStatus(updateVehicleRequest.getVehicleStatus().toString());
+            vehicleEntity.setYearOfManufacture(format.format(updateVehicleRequest.getYearOfManufacture()));
 
-                VehicleEntity updatedVehicleShip = vehicleRepository.save(vehicleEntity);
-                return VehicleMapper.mapEntityToModel(updatedVehicleShip);
-            }
+            VehicleEntity updatedVehicleShip = vehicleRepository.save(vehicleEntity);
+            return VehicleMapper.mapEntityToModel(updatedVehicleShip);
+        }
         throw new VehicleNotFoundException("Vehicle not found with the given parameters! ID = " + updateVehicleRequest.getId());
     }
 

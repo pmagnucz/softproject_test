@@ -28,7 +28,7 @@ public class UserNotFoundException extends Exception {
 
     @Override
     public String getMessage() {
-        return toString();
+        return this.message;
     }
 
 }

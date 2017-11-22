@@ -87,4 +87,19 @@ public class CreateUserRequest {
     public void setRepresentative(Customer representative) {
         this.representative = representative;
     }
+
+    @Override
+    public String toString() {
+        return "CreateUserRequest{" +
+                "userName='" + userName + '\'' +
+                ", address='" + address + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", userId='" + userId + '\'' +
+                ", yearOfBirth=" + yearOfBirth +
+                ", drivingLicenceNumber='" + drivingLicenceNumber + '\'' +
+                ", companyId='" + companyId + '\'' +
+                ", billingAddress='" + billingAddress + '\'' +
+                ", representative=" + representative +
+                '}';
+    }
 }

@@ -51,4 +51,10 @@ public interface UserManagementService {
      * @param user
      */
     void deleteUser(User user) throws UserNotFoundException;
+
+    /**
+     * A felhasaználók számát adja vissza.
+     * @return int
+     * */
+    int countUser();
 }
