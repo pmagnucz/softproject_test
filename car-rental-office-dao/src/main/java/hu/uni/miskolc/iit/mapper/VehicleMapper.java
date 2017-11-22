@@ -16,6 +16,7 @@ public class VehicleMapper {
 
         VehicleEntity vehicleEntity = new VehicleEntity();
 
+        // TODO: Dátum kezelést java 8-tól változott. LocalDate-et kell használni.
         DateFormat format = new SimpleDateFormat("yyyy-MM");
         /*String date = null;
         try {

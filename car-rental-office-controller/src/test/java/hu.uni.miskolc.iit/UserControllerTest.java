@@ -4,7 +4,6 @@ import hu.uni.miskolc.iit.model.CreateUserRequest;
 import hu.uni.miskolc.iit.model.SearchUserRequest;
 import hu.uni.miskolc.iit.model.User;
 import org.junit.*;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 
@@ -18,6 +17,8 @@ import static org.junit.Assert.assertEquals;
  */
 
 public class UserControllerTest {
+    //TODO: Át kell írni. Lásd application modulban az IT tesztet
+
     private static final String USER_NAME = "Teszt Elek";
     private static final String ADDRESS = "3525 Miskolc, Szentpáli utca 12.";
     private static final String PHONENUMBER = "+36302587913";
@@ -34,6 +35,7 @@ public class UserControllerTest {
 
     private SearchUserRequest searchUserRequest;
 
+/*
     TestRestTemplate restTemplate = new TestRestTemplate();
     HttpHeaders headers = new HttpHeaders();
 
@@ -139,4 +141,5 @@ public class UserControllerTest {
 
         assertEquals(expectedList, response.getBody());
     }
+*/
 }

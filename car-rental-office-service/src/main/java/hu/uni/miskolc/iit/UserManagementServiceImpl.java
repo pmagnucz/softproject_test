@@ -51,6 +51,7 @@ public class UserManagementServiceImpl implements UserManagementService {
             UserEntity userEntity = UserMapper.mapModelToEntity(company);
             return UserMapper.mapUserEntityToModel(userRepository.save(userEntity));
         } else {
+            LOGGER.debug("UserTypeDoesNotExistException raised: " + createUserRequest.toString());
             throw new UserTypeDoesNotExistException("Only Customer and Company user types are allowed.");
         }
     }
@@ -83,6 +84,7 @@ public class UserManagementServiceImpl implements UserManagementService {
         }
 
         if (result.isEmpty()) {
+            LOGGER.debug("UserNotFoundException raised: " + searchUserRequest.toString());
             throw new UserNotFoundException("User not found to fit with a given criteria.", searchUserRequest);
         } else {
             return UserMapper.mapUserEntitiesToModelList(result);

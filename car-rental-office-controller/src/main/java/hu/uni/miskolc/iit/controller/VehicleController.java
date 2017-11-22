@@ -25,10 +25,11 @@ public class VehicleController {
     private VehicleManagementService vehicleManagementService;
 
     @Autowired
-    public void setVehicleManagementService(VehicleManagementService vehicleManagementService) {
+    public VehicleController(VehicleManagementService vehicleManagementService) {
         this.vehicleManagementService = vehicleManagementService;
     }
 
+    // TODO ki kell szervezni az ismétlődő kódot vagy a három eset három private metódus legyen és itt csak a megfelelőt kell hívni
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public ResponseEntity<Vehicle> addNewVehicle(@RequestBody CreateVehicleRequest createVehicleRequest) {
         if (createVehicleRequest.getType() == VehicleType.CAR) {
@@ -49,10 +50,10 @@ public class VehicleController {
                 return ResponseEntity.ok(vehicleManagementService.addNewVehicle(car));
             } catch (ExistingVehiclePlateNumber existingVehiclePlateNumber) {
                 LOGGER.error(existingVehiclePlateNumber);
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.badRequest().body(null);
             } catch (NotValidPlateNumberFormatException e) {
                 LOGGER.error(e);
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.badRequest().body(null);
             }
         } else if (createVehicleRequest.getType() == VehicleType.SHIP) {
             Ship ship = new Ship();
@@ -72,10 +73,10 @@ public class VehicleController {
                 return ResponseEntity.ok(vehicleManagementService.addNewVehicle(ship));
             } catch (ExistingVehiclePlateNumber existingVehiclePlateNumber) {
                 LOGGER.error(existingVehiclePlateNumber);
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.badRequest().body(null);
             } catch (NotValidPlateNumberFormatException e) {
                 LOGGER.error(e);
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.badRequest().body(null);
             }
         } else {
             Vehicle other = new Vehicle();
@@ -93,10 +94,10 @@ public class VehicleController {
                 return ResponseEntity.ok(vehicleManagementService.addNewVehicle(other));
             } catch (ExistingVehiclePlateNumber existingVehiclePlateNumber) {
                 LOGGER.error(existingVehiclePlateNumber);
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.badRequest().body(null);
             } catch (NotValidPlateNumberFormatException e) {
                 LOGGER.error(e);
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.badRequest().body(null);
             }
         }
     }
@@ -107,7 +108,7 @@ public class VehicleController {
             return ResponseEntity.ok(vehicleManagementService.getVehicleById(vehicleId));
         } catch (VehicleNotFoundException e) {
             LOGGER.error(e);
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(null);
         }
     }
 
@@ -117,7 +118,7 @@ public class VehicleController {
             return ResponseEntity.ok(vehicleManagementService.getVehicleByFilterOptions(searchVehicleRequest));
         } catch (NotValidPlateNumberFormatException e) {
             LOGGER.error(e);
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(null);
         }
     }
 
@@ -133,10 +134,10 @@ public class VehicleController {
             return ResponseEntity.ok(vehicleManagementService.updateVehicle(updateVehicleRequest));
         } catch (VehicleNotFoundException e) {
             LOGGER.error(e);
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(null);
         } catch (NotValidPlateNumberFormatException e) {
             LOGGER.error(e);
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(null);
         }
     }
 

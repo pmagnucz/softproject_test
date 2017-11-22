@@ -24,7 +24,7 @@ public class UserManagementController {
     private UserManagementService userManagementService;
 
     @Autowired
-    public void setUserManagementService(UserManagementService userManagementService) {
+    public UserManagementController(UserManagementService userManagementService) {
         this.userManagementService = userManagementService;
     }
 
@@ -34,7 +34,7 @@ public class UserManagementController {
             return ResponseEntity.ok(userManagementService.createNewUser(createUserRequest));
         } catch (UserTypeDoesNotExistException e) {
             LOGGER.error("UserTypeNotExistException raised at createUser", e);
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(null);
         }
     }
 
@@ -50,7 +50,7 @@ public class UserManagementController {
             return ResponseEntity.ok(result);
         } catch (UserNotFoundException e){
             LOGGER.error("UserNotFoundException raised at updateUser", e);
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(null);
         }
     }
 
@@ -70,7 +70,7 @@ public class UserManagementController {
             return ResponseEntity.ok(user);
         } catch (UserNotFoundException e) {
             LOGGER.error("UserNotFoundException raised at getUserById", e);
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(null);
         }
     }
 
@@ -80,7 +80,7 @@ public class UserManagementController {
             return ResponseEntity.ok(userManagementService.getUserByFilterOptions(searchUserRequest));
         } catch (UserNotFoundException e) {
             LOGGER.error("UserNotFoundException raised at getUserBySearchRequest", e);
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(null);
         }
     }
 

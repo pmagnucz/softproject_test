@@ -24,7 +24,7 @@ public class RentController {
     private RentManagementService rentManagementService;
 
     @Autowired
-    public void setRentManagementService(RentManagementService rentManagementService) {
+    public RentController(RentManagementService rentManagementService) {
         this.rentManagementService = rentManagementService;
     }
 
