@@ -40,7 +40,7 @@ public class RentController {
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity<List<Rent>> getRentByFilterOptions(@RequestBody SearchRentRequest searchRentRequest){
-        return null;
+        return ResponseEntity.ok(rentManagementService.getRentByFilterOptions(searchRentRequest));
     }
 
     @RequestMapping(value = "/getAll", method = RequestMethod.GET,produces= MediaType.APPLICATION_JSON_VALUE)
