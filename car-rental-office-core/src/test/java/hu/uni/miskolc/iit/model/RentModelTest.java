@@ -4,6 +4,7 @@ import org.junit.*;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 
 import static org.junit.Assert.*;
@@ -14,12 +15,7 @@ public class RentModelTest {
 
     @Before
     public void setUp() throws Exception {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String startDateString =  "2017-09-01";
-        Date startDate = dateFormat.parse(startDateString);
-        String endDateString =  "2017-10-01";
-        Date endDate = dateFormat.parse(endDateString);
-        this.rent = new Rent(1L,5L,6L,7L,startDate,endDate,true,56,300,
+        this.rent = new Rent(1L,5L,6L,7L, LocalDate.parse("2017-09-01"),LocalDate.parse("2017-10-01"),true,56,300,
                 100000,50000,0,150000,false);
     }
 
@@ -58,19 +54,15 @@ public class RentModelTest {
 
     @Test
     public void getStartDate() throws Exception {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String startDateString =  "2017-09-01";
-        Date expected = dateFormat.parse(startDateString);
-        Date actual = rent.getStartDate();
+        LocalDate expected = LocalDate.parse("2017-09-01");
+        LocalDate actual = rent.getStartDate();
         assertEquals(expected,actual);
     }
 
     @Test
     public void getEndDate() throws Exception {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String endDateString =  "2017-10-01";
-        Date expected = dateFormat.parse(endDateString);
-        Date actual = rent.getEndDate();
+        LocalDate expected = LocalDate.parse("2017-10-01");
+        LocalDate actual = rent.getEndDate();
         assertEquals(expected,actual);
     }
 

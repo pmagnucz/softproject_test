@@ -150,7 +150,7 @@ public class RentManagementServiceImpl implements RentManagementService {
                 throw new NegativeValueException(negativeValueExceptionMessage);
         }
 
-        if(rent.getStartDate().after(rent.getEndDate())) {
+        if(rent.getStartDate().isAfter(rent.getEndDate())) {
             throw new WrongRentDateException("EndDate cannot be before startDate.");
         }
 

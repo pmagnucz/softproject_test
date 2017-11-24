@@ -21,6 +21,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -66,12 +67,12 @@ public class RentManagementIT {
             e.printStackTrace();
         }
 
-        rent.setId(null);
+        rent.setId(1L);
         rent.setCustomerId(1L);
         rent.setCompanyId(0L);
         rent.setVehicleId(1L);
-        rent.setStartDate(startDate);
-        rent.setEndDate(endDate);
+        rent.setStartDate(LocalDate.parse("2017-02-01"));
+        rent.setEndDate(LocalDate.parse("2017-03-01"));
         rent.setDurationExtendable(true);
         rent.setExtendedHours(24);
         rent.setKmUsed(100);
@@ -111,12 +112,13 @@ public class RentManagementIT {
 
             userAndVehicleAdded = true;
         }
-
     }
 
     @After
     public void tearDown() throws Exception {
+        rentRepository.deleteAll();
     }
+
 
     @Test
     public void createRent() throws Exception {
@@ -124,7 +126,7 @@ public class RentManagementIT {
         Rent actual = rentController.createRent(rent).getBody();
         expected.setId(actual.getId());
 
-        Assert.assertEquals(expected,actual);
+        Assert.assertEquals(rent,actual);
     }
 
     @Test
