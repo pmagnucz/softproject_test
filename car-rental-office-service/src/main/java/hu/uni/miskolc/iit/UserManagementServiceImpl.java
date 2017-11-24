@@ -66,7 +66,10 @@ public class UserManagementServiceImpl implements UserManagementService {
                 user = UserMapper.mapUserEntityToModel(elements.get(i));
             }
         }
-
+        if (user == null)
+        {
+            throw new UserNotFoundException("User: " + user.toString() + "not found!");
+        }
         return user;
     }
 
@@ -126,7 +129,11 @@ public class UserManagementServiceImpl implements UserManagementService {
     }
 
     @Override
-    public void deleteUser(User user) {
+    public void deleteUser(User user) throws UserNotFoundException {
+        if (userRepository.findOne(user.getId()) == null)
+        {
+            throw new UserNotFoundException("User: " + user.toString() + "not found!");
+        }
         userRepository.delete(user.getId());
     }
 

@@ -29,12 +29,12 @@ public class UserManagementController {
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public ResponseEntity<User> createUser(@RequestBody CreateUserRequest createUserRequest) {
+    public ResponseEntity<User> createUser(@RequestBody CreateUserRequest createUserRequest) throws UserTypeDoesNotExistException{
         try {
             return ResponseEntity.ok(userManagementService.createNewUser(createUserRequest));
         } catch (UserTypeDoesNotExistException e) {
             LOGGER.error("UserTypeNotExistException raised at createUser", e);
-            return ResponseEntity.badRequest().body(null);
+            throw e;
         }
     }
 
@@ -55,32 +55,33 @@ public class UserManagementController {
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-    public void deleteUser(@RequestBody User user) {
+    public void deleteUser(@RequestBody User user) throws UserNotFoundException {
         try {
             userManagementService.deleteUser(user);
         } catch (UserNotFoundException e) {
             LOGGER.error("UserNotFoundException raised at deleteUser", e);
+            throw e;
         }
     }
 
     @RequestMapping(value = "/getUser/{userId}", method = RequestMethod.GET)
-    public ResponseEntity<User> getUserById(@PathVariable Long userId) {
+    public ResponseEntity<User> getUserById(@PathVariable Long userId) throws UserNotFoundException{
         try {
             User user = userManagementService.getUserById(userId);
             return ResponseEntity.ok(user);
         } catch (UserNotFoundException e) {
             LOGGER.error("UserNotFoundException raised at getUserById", e);
-            return ResponseEntity.badRequest().body(null);
+            throw e;
         }
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
-    public ResponseEntity<List<User>> getUserByFilterOptions(@RequestBody SearchUserRequest searchUserRequest) {
+    public ResponseEntity<List<User>> getUserByFilterOptions(@RequestBody SearchUserRequest searchUserRequest) throws UserNotFoundException {
         try {
             return ResponseEntity.ok(userManagementService.getUserByFilterOptions(searchUserRequest));
         } catch (UserNotFoundException e) {
             LOGGER.error("UserNotFoundException raised at getUserBySearchRequest", e);
-            return ResponseEntity.badRequest().body(null);
+            throw e;
         }
     }
 
