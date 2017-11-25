@@ -4,6 +4,7 @@ import hu.uni.miskolc.iit.controller.VehicleController;
 import hu.uni.miskolc.iit.exception.ExistingVehiclePlateNumber;
 import hu.uni.miskolc.iit.exception.NotSupportedVehicleTypeException;
 import hu.uni.miskolc.iit.exception.NotValidPlateNumberFormatException;
+import hu.uni.miskolc.iit.exception.VehicleNotFoundException;
 import hu.uni.miskolc.iit.model.*;
 import hu.uni.miskolc.iit.repositories.VehicleRepository;
 import hu.uni.miskolc.iit.service.VehicleManagementService;
@@ -127,7 +128,31 @@ public class VehicleManagementIT {
 
     public void updateVehicleTestExceptionalFlow(){}
 
-    public void deleteVehicleTest(){}
+    @Test
+    public void deleteVehicleTest() throws VehicleNotFoundException {
+        DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM").parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter();
+        LocalDate date = LocalDate.parse("2001-11", dateTimeFormatter);
+
+        CreateVehicleRequest vehicleRequest = new CreateVehicleRequest();
+        vehicleRequest.setId(1L);
+        vehicleRequest.setType(VehicleType.CAR);
+        vehicleRequest.setManufacturer("Volkswagen");
+        vehicleRequest.setYearOfManufacture(date);
+        vehicleRequest.setRentCost(12000);
+        vehicleRequest.setPersons(5);
+        vehicleRequest.setPerformance(175);
+        vehicleRequest.setVehicleStatus(VehicleStatusType.FREE);
+        vehicleRequest.setPlateNumber("LOT-749");
+        vehicleRequest.setVehicleIdentificationNumber("32432423423432");
+        vehicleRequest.setDrawBar(true);
+
+        Vehicle actual = controller.addNewVehicle(vehicleRequest).getBody();
+
+        controller.removeVehicle(actual);
+
+        int usersSize = controller.getVehicles().getBody().size();
+        Assert.assertEquals(0, usersSize);
+    }
 
     public void deleteVehicleTestExceptionalFlow(){}
 
