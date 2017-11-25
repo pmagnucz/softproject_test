@@ -160,7 +160,11 @@ public class VehicleManagementIT {
 
     public void getVehicleByIdTestExceptionalFlow(){}
 
-    public void getVehicleByFilterOptionsTest(){}
+    @Test
+    public void getVehicleByFilterOptionsTest(){
+        SearchVehicleRequest searchVehicleRequest = new SearchVehicleRequest();
+        controller.getVehicleByFilterOptions(searchVehicleRequest);
+    }
 
     public void getVehicleByFilterOptionsExceptionalFlow(){}
 
