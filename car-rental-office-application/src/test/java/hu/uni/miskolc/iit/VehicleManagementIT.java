@@ -178,9 +178,49 @@ public class VehicleManagementIT {
         controller.removeVehicle(vehicle);
     }
 
-    public void getVehicleByIdTest(){}
+    @Test
+    public void getVehicleByIdTest(){
+        DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM").parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter();
+        LocalDate date = LocalDate.parse("2001-11", dateTimeFormatter);
 
-    public void getVehicleByIdTestExceptionalFlow(){}
+        CreateVehicleRequest vehicleRequest = new CreateVehicleRequest();
+        vehicleRequest.setId(1L);
+        vehicleRequest.setType(VehicleType.CAR);
+        vehicleRequest.setManufacturer("Volkswagen");
+        vehicleRequest.setYearOfManufacture(date);
+        vehicleRequest.setRentCost(12000);
+        vehicleRequest.setPersons(5);
+        vehicleRequest.setPerformance(175);
+        vehicleRequest.setVehicleStatus(VehicleStatusType.FREE);
+        vehicleRequest.setPlateNumber("LOT-749");
+        vehicleRequest.setVehicleIdentificationNumber("32432423423432");
+        vehicleRequest.setDrawBar(true);
+
+        Vehicle actual = controller.addNewVehicle(vehicleRequest).getBody();
+        controller.getVehicleById(1L);
+    }
+
+    @Test
+    public void getVehicleByIdTestExceptionalFlow(){
+        DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM").parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter();
+        LocalDate date = LocalDate.parse("2001-11", dateTimeFormatter);
+
+        CreateVehicleRequest vehicleRequest = new CreateVehicleRequest();
+        vehicleRequest.setId(1L);
+        vehicleRequest.setType(VehicleType.CAR);
+        vehicleRequest.setManufacturer("Volkswagen");
+        vehicleRequest.setYearOfManufacture(date);
+        vehicleRequest.setRentCost(12000);
+        vehicleRequest.setPersons(5);
+        vehicleRequest.setPerformance(175);
+        vehicleRequest.setVehicleStatus(VehicleStatusType.FREE);
+        vehicleRequest.setPlateNumber("LOT-749");
+        vehicleRequest.setVehicleIdentificationNumber("32432423423432");
+        vehicleRequest.setDrawBar(true);
+
+        Vehicle actual = controller.addNewVehicle(vehicleRequest).getBody();
+        controller.getVehicleById(1L);
+    }
 
     @Test
     public void getVehicleByFilterOptionsTest(){
