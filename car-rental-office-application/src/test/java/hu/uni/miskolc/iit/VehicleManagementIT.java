@@ -37,7 +37,28 @@ public class VehicleManagementIT {
     }
 
     @Test
-    public void createVehicleTest() {
+    public void createCarTest() {}
 
-    }
+    public void createShipTest(){}
+
+    public void createVehicleTestExceptionalFlow(){}
+
+    public void getAllVehiclesTest(){}
+
+    public void updateVehicleTest(){}
+
+    public void updateVehicleTestExceptionalFlow(){}
+
+    public void deleteVehicleTest(){}
+
+    public void deleteVehicleTestExceptionalFlow(){}
+
+    public void getVehicleByIdTest(){}
+
+    public void getVehicleByIdTestExceptionalFlow(){}
+
+    public void getVehicleByFilterOptionsTest(){}
+
+    public void getVehicleByFilterOptionsExceptionalFlow(){}
+
 }
