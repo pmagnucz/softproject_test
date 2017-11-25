@@ -1,5 +1,6 @@
 package hu.uni.miskolc.iit.model;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -8,7 +9,7 @@ import java.util.Date;
 public class SearchVehicleRequest {
     private VehicleType type;
     private String manufacturer;
-    private Date yearOfManufacture;
+    private LocalDate yearOfManufacture;
     private double rentCost;
 
     public VehicleType getType() {
@@ -27,11 +28,11 @@ public class SearchVehicleRequest {
         this.manufacturer = manufacturer;
     }
 
-    public Date getYearOfManufacture() {
+    public LocalDate getYearOfManufacture() {
         return yearOfManufacture;
     }
 
-    public void setYearOfManufacture(Date yearOfManufacture) {
+    public void setYearOfManufacture(LocalDate yearOfManufacture) {
         this.yearOfManufacture = yearOfManufacture;
     }
 
@@ -43,13 +44,14 @@ public class SearchVehicleRequest {
         this.rentCost = rentCost;
     }
 
-    public SearchVehicleRequest(VehicleType type, String manufacturer, Date yearOfManufacture, double rentCost) {
+    public SearchVehicleRequest(){
+
+    }
+
+    public SearchVehicleRequest(VehicleType type, String manufacturer, LocalDate yearOfManufacture, double rentCost) {
         this.type = type;
         this.manufacturer = manufacturer;
         this.yearOfManufacture = yearOfManufacture;
         this.rentCost = rentCost;
-    }
-
-    public SearchVehicleRequest() {
     }
 }

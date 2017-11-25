@@ -4,6 +4,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.util.Date;
 
 import static org.junit.Assert.*;
@@ -12,11 +16,12 @@ public class SearchVehicleRequestTest {
 
     SearchVehicleRequest searchVehicleRequest;
     VehicleType vehicleType;
-    Date date;
+    LocalDate date;
 
     @Before
     public void setUp() throws Exception {
-        this.date = new Date(2017-10-17);
+        DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM").parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter();
+        this.date = LocalDate.parse("2017-10", dateTimeFormatter);
         this.vehicleType = VehicleType.CAR;
         this.searchVehicleRequest = new SearchVehicleRequest(vehicleType, "Opel", date, 2546);
     }
@@ -41,8 +46,8 @@ public class SearchVehicleRequestTest {
 
     @Test
     public void getYearOfManufacture() throws Exception {
-        Date expected = date;
-        Date actual = searchVehicleRequest.getYearOfManufacture();
+        LocalDate expected = date;
+        LocalDate actual = searchVehicleRequest.getYearOfManufacture();
         assertEquals(expected,actual);
     }
 

@@ -14,6 +14,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.util.Date;
 
 import static org.junit.Assert.*;
@@ -66,13 +70,8 @@ public class RentServiceImplCT {
 
         car = new Car();
 
-        DateFormat formatYearOfManufacture = new SimpleDateFormat("yyyy-MM");
-        Date dateOfManufacture = null;
-        try {
-            dateOfManufacture = formatYearOfManufacture.parse("2017-08");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM").parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter();
+        LocalDate dateOfManufacture = LocalDate.parse("2017-08", dateTimeFormatter);
 
         car.setId(1L);
         car.setType(VehicleType.CAR);

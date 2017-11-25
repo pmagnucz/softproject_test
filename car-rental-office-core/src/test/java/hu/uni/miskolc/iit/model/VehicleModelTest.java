@@ -5,6 +5,10 @@ import static org.junit.Assert.*;
 import org.junit.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.util.Date;
 
 /**
@@ -16,10 +20,9 @@ public class VehicleModelTest {
 
     @Before
     public void setUp() throws Exception{
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM");
-        String dateString =  "2001-09";
-        Date yearOfManufactureDate = dateFormat.parse(dateString);
-        this.vehicle = new Vehicle(1L, VehicleType.CAR, "Volkswagen", yearOfManufactureDate, 15000, 5, 178, VehicleStatusType.FREE);
+        DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM").parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter();
+        LocalDate date = LocalDate.parse("2001-09", dateTimeFormatter);
+        this.vehicle = new Vehicle(1L, VehicleType.CAR, "Volkswagen", date, 15000, 5, 178, VehicleStatusType.FREE);
     }
 
     @After
@@ -49,10 +52,9 @@ public class VehicleModelTest {
 
     @Test
     public void getYearOfManufacture() throws Exception {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM");
-        String dateString =  "2001-09";
-        Date expected = dateFormat.parse(dateString);
-        Date actual = vehicle.getYearOfManufacture();
+        DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM").parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter();
+        LocalDate expected = LocalDate.parse("2001-09", dateTimeFormatter);
+        LocalDate actual = vehicle.getYearOfManufacture();
         assertEquals(expected, actual);
     }
 

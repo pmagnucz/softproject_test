@@ -12,6 +12,10 @@ import org.junit.Test;
 import java.text.ParseException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -37,14 +41,8 @@ public class VehicleManagementServiceImplTest {
         vehicle = new Vehicle();
         car = new Car();
 
-        // TODO: Dátum kezelés LocalDate. java 8 docs-ba van rá példa
-        DateFormat format = new SimpleDateFormat("yyyy-MM");
-        Date date = null;
-        try {
-            date = format.parse("2017-08");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM").parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter();
+        LocalDate date = LocalDate.parse("2017-08", dateTimeFormatter);
 
         vehicle.setId(1L);
         vehicle.setType(VehicleType.CAR);
@@ -54,7 +52,6 @@ public class VehicleManagementServiceImplTest {
         vehicle.setPersons(5);
         vehicle.setPerformance(1500.24);
         vehicle.setVehicleStatus(VehicleStatusType.FREE);
-
 
         car.setId(1L);
         car.setType(VehicleType.CAR);
@@ -77,13 +74,8 @@ public class VehicleManagementServiceImplTest {
     public void addNewVehicleCar() throws Exception {
         car = new Car();
 
-        DateFormat format = new SimpleDateFormat("yyyy-MM");
-        Date date = null;
-        try {
-            date = format.parse("2017-08");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM").parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter();
+        LocalDate date = LocalDate.parse("2017-08", dateTimeFormatter);
 
         car.setId(1L);
         car.setType(VehicleType.CAR);
@@ -109,13 +101,9 @@ public class VehicleManagementServiceImplTest {
     @Test
     public void addNewVehicleShip() throws Exception {
         ship = new Ship();
-        DateFormat format = new SimpleDateFormat("yyyy-MM");
-        Date date = null;
-        try {
-        date = format.parse("2010-07");
-        } catch (ParseException e) {
-        e.printStackTrace();
-        }
+
+        DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM").parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter();
+        LocalDate date = LocalDate.parse("2010-07", dateTimeFormatter);
 
         ship.setId(2L);
         ship.setLength(2000.0);
@@ -152,13 +140,8 @@ public class VehicleManagementServiceImplTest {
 
     @Test
     public void getVehicleByFilterOptions() throws Exception {
-        DateFormat format = new SimpleDateFormat("yyyy-MM");
-        Date yearOfManufactureRequest = null;
-        try {
-            yearOfManufactureRequest = format.parse("1950-02");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM").parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter();
+        LocalDate yearOfManufactureRequest = LocalDate.parse("2001-09", dateTimeFormatter);
 
         Ship shipModel = new Ship();
         shipModel.setId(5L);
@@ -208,13 +191,8 @@ public class VehicleManagementServiceImplTest {
 
     @Test
     public void updateVehicle() throws Exception {
-        DateFormat format = new SimpleDateFormat("yyyy-MM");
-        Date date = null;
-        try {
-            date = format.parse("2017-08");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM").parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter();
+        LocalDate date = LocalDate.parse("2017-08", dateTimeFormatter);
 
         VehicleEntity mockEntity = VehicleMapper.mapModelToEntity(car);
        /* when(vehicleRepository.findOne(any(Long.class))).thenReturn(mockEntity);

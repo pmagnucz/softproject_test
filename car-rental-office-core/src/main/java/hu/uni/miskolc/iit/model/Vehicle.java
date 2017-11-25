@@ -1,5 +1,6 @@
 package hu.uni.miskolc.iit.model;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -9,7 +10,7 @@ public class Vehicle {
     private Long id;
     private VehicleType type;
     private String manufacturer;
-    private Date yearOfManufacture;
+    private LocalDate yearOfManufacture;
     private double rentCost;
     private int persons;
     private double performance;
@@ -39,11 +40,11 @@ public class Vehicle {
         this.manufacturer = manufacturer;
     }
 
-    public Date getYearOfManufacture() {
+    public LocalDate getYearOfManufacture() {
         return yearOfManufacture;
     }
 
-    public void setYearOfManufacture(Date yearOfManufacture) {
+    public void setYearOfManufacture(LocalDate yearOfManufacture) {
         this.yearOfManufacture = yearOfManufacture;
     }
 
@@ -83,7 +84,7 @@ public class Vehicle {
 
     }
 
-    public Vehicle(Long id, VehicleType type, String manufacturer, Date yearOfManufacture, double rentCost, int persons, double performance, VehicleStatusType vehicleStatus) {
+    public Vehicle(Long id, VehicleType type, String manufacturer, LocalDate yearOfManufacture, double rentCost, int persons, double performance, VehicleStatusType vehicleStatus) {
         this.id = id;
         this.type = type;
         this.manufacturer = manufacturer;
@@ -101,10 +102,10 @@ public class Vehicle {
 
         Vehicle vehicle = (Vehicle) o;
 
-        if (id != vehicle.id) return false;
         if (Double.compare(vehicle.rentCost, rentCost) != 0) return false;
         if (persons != vehicle.persons) return false;
         if (Double.compare(vehicle.performance, performance) != 0) return false;
+        if (id != null ? !id.equals(vehicle.id) : vehicle.id != null) return false;
         if (type != vehicle.type) return false;
         if (manufacturer != null ? !manufacturer.equals(vehicle.manufacturer) : vehicle.manufacturer != null)
             return false;
@@ -117,16 +118,16 @@ public class Vehicle {
     public int hashCode() {
         int result;
         long temp;
-        result = getId() != null ? getId().hashCode() : 0;
-        result = 31 * result + (getType() != null ? getType().hashCode() : 0);
-        result = 31 * result + (getManufacturer() != null ? getManufacturer().hashCode() : 0);
-        result = 31 * result + (getYearOfManufacture() != null ? getYearOfManufacture().hashCode() : 0);
-        temp = Double.doubleToLongBits(getRentCost());
+        result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (manufacturer != null ? manufacturer.hashCode() : 0);
+        result = 31 * result + (yearOfManufacture != null ? yearOfManufacture.hashCode() : 0);
+        temp = Double.doubleToLongBits(rentCost);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + getPersons();
-        temp = Double.doubleToLongBits(getPerformance());
+        result = 31 * result + persons;
+        temp = Double.doubleToLongBits(performance);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + (getVehicleStatus() != null ? getVehicleStatus().hashCode() : 0);
+        result = 31 * result + (vehicleStatus != null ? vehicleStatus.hashCode() : 0);
         return result;
     }
 

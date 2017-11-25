@@ -6,6 +6,10 @@ import hu.uni.miskolc.iit.model.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,20 +20,13 @@ public class VehicleMapper {
 
         VehicleEntity vehicleEntity = new VehicleEntity();
 
-        // TODO: Dátum kezelést java 8-tól változott. LocalDate-et kell használni.
-        DateFormat format = new SimpleDateFormat("yyyy-MM");
-        /*String date = null;
-        try {
-            date = format.format(vehicle.getYearOfManufacture());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }*/
+        DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM").parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter();
 
         vehicleEntity.setId(vehicle.getId());
         vehicleEntity.setVehicleId(String.valueOf(vehicle.getId()));
         vehicleEntity.setType(String.valueOf(vehicle.getType()));
         vehicleEntity.setManufacturer(vehicle.getManufacturer());
-        vehicleEntity.setYearOfManufacture(format.format(vehicle.getYearOfManufacture()));
+        vehicleEntity.setYearOfManufacture(vehicle.getYearOfManufacture().format(dateTimeFormatter));
         vehicleEntity.setRentCost(String.valueOf(vehicle.getRentCost()));
         vehicleEntity.setPersons(String.valueOf(vehicle.getPersons()));
         vehicleEntity.setPerformance(String.valueOf(vehicle.getPerformance()));
@@ -60,13 +57,8 @@ public class VehicleMapper {
 
     public static Vehicle mapEntityToModel(VehicleEntity vehicleEntity) {
         //converting String to Date, yearOfManufacture from VehicleEntity
-        DateFormat format = new SimpleDateFormat("yyyy-MM");
-        Date yearOfManufactureDate = null;
-        try {
-            yearOfManufactureDate = format.parse(vehicleEntity.getYearOfManufacture());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM").parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter();
+        LocalDate yearOfManufactureDate = LocalDate.parse(vehicleEntity.getYearOfManufacture(), dateTimeFormatter);
 
         if(vehicleEntity.getPlateNumber() != null && !vehicleEntity.getPlateNumber().isEmpty()) {
             //vehicle has a PlateNumber means its a Car

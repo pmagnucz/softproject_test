@@ -1,5 +1,6 @@
 package hu.uni.miskolc.iit.model;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -9,7 +10,7 @@ public class UpdateVehicleRequest {
     private Long id;
     private VehicleType type;
     private String manufacturer;
-    private Date yearOfManufacture;
+    private LocalDate yearOfManufacture;
     private double rentCost;
     private int persons;
     private double performance;
@@ -49,11 +50,11 @@ public class UpdateVehicleRequest {
         this.manufacturer = manufacturer;
     }
 
-    public Date getYearOfManufacture() {
+    public LocalDate getYearOfManufacture() {
         return yearOfManufacture;
     }
 
-    public void setYearOfManufacture(Date yearOfManufacture) {
+    public void setYearOfManufacture(LocalDate yearOfManufacture) {
         this.yearOfManufacture = yearOfManufacture;
     }
 
@@ -89,6 +90,14 @@ public class UpdateVehicleRequest {
         this.vehicleStatus = vehicleStatus;
     }
 
+    public boolean isCar() {
+        return car;
+    }
+
+    public void setCar(boolean car) {
+        this.car = car;
+    }
+
     public String getPlateNumber() {
         return plateNumber;
     }
@@ -113,6 +122,14 @@ public class UpdateVehicleRequest {
         this.drawBar = drawBar;
     }
 
+    public boolean isShip() {
+        return ship;
+    }
+
+    public void setShip(boolean ship) {
+        this.ship = ship;
+    }
+
     public String getShipId() {
         return shipId;
     }
@@ -135,21 +152,5 @@ public class UpdateVehicleRequest {
 
     public void setWithTrailer(boolean withTrailer) {
         this.withTrailer = withTrailer;
-    }
-
-    public boolean isCar() {
-        return car;
-    }
-
-    public void setCar(boolean car) {
-        this.car = car;
-    }
-
-    public boolean isShip() {
-        return ship;
-    }
-
-    public void setShip(boolean ship) {
-        this.ship = ship;
     }
 }
