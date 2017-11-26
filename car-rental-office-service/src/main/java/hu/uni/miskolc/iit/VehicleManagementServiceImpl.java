@@ -54,7 +54,11 @@ public class VehicleManagementServiceImpl implements VehicleManagementService {
 
     @Override
     public Vehicle getVehicleById(Long id) throws VehicleNotFoundException {
-                return VehicleMapper.mapEntityToModel(vehicleRepository.findOne(id));
+        if (vehicleRepository.exists(id) == false)
+        {
+            throw new VehicleNotFoundException("User: " + id + "not found!");
+        }
+        return VehicleMapper.mapEntityToModel(vehicleRepository.findOne(id));
     }
 
     @Override
@@ -118,6 +122,10 @@ public class VehicleManagementServiceImpl implements VehicleManagementService {
 
     @Override
     public void removeVehicle(Vehicle vehicle) throws VehicleNotFoundException {
+        if (vehicleRepository.exists(vehicle.getId()) == false)
+        {
+            throw new VehicleNotFoundException("Vehicle: " + vehicle.toString() + "not found!");
+        }
         vehicleRepository.delete(vehicle.getId());
     }
 }
