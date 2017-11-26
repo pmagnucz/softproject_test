@@ -62,8 +62,8 @@ public class RentManagementServiceImpl implements RentManagementService {
             if(rent.getCustomerId() == searchRentRequest.getCustomerId()
                     || rent.getCompanyId() == searchRentRequest.getCompanyId()
                     || rent.getVehicleId() == searchRentRequest.getVehicleId()
-                    || rent.getStartDate() == searchRentRequest.getStartDate()
-                    || rent.getEndDate() == searchRentRequest.getEndDate()) {
+                    || rent.getStartDate().equals(searchRentRequest.getStartDate())
+                    || rent.getEndDate().equals(searchRentRequest.getEndDate())) {
                 requestedRents.add(rent);
             }
         }
