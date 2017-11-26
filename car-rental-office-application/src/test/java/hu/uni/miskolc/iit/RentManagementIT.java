@@ -131,10 +131,20 @@ public class RentManagementIT {
 
     @Test
     public void getRentById() throws Exception {
+        Rent expected = rent;
+        Rent actual = rentController.getRentById(rent).getBody();
+        expected.setId(actual.getId());
+
+        Assert.assertEquals(rent,actual);
     }
 
     @Test
     public void getRentByFilterOptions() throws Exception {
+        Rent expected = rent;
+        Rent actual = rentController.getRentByFilterOptions(rent).getBody();
+        expected.setId(actual.getId());
+
+        Assert.assertEquals(rent,actual);
     }
 
     @Test
