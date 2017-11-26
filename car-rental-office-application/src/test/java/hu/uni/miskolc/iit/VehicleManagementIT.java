@@ -146,6 +146,19 @@ public class VehicleManagementIT {
         vehicleRequest.setVehicleIdentificationNumber("32432423423432");
         vehicleRequest.setDrawBar(true);
 
+        Car expected = new Car();
+        expected.setId(1L);
+        expected.setType(VehicleType.CAR);
+        expected.setManufacturer("Volkswagen");
+        expected.setYearOfManufacture(date);
+        expected.setRentCost(12000);
+        expected.setPersons(5);
+        expected.setPerformance(175);
+        expected.setVehicleStatus(VehicleStatusType.FREE);
+        expected.setPlateNumber("LOT-749");
+        expected.setVehicleIdentificationNumber("32432423423432");
+        expected.setDrawBar(true);
+
         Vehicle actual = controller.addNewVehicle(vehicleRequest).getBody();
 
         controller.removeVehicle(actual);
@@ -154,7 +167,7 @@ public class VehicleManagementIT {
         Assert.assertEquals(0, usersSize);
     }
 
-     @Test
+    @Test
     public void deleteVehicleTestExceptionalFlow()throws VehicleNotFoundException {
         DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM").parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter();
         LocalDate date = LocalDate.parse("2001-11", dateTimeFormatter);
@@ -172,10 +185,26 @@ public class VehicleManagementIT {
         vehicleRequest.setVehicleIdentificationNumber("32432423423432");
         vehicleRequest.setDrawBar(true);
 
+        Car expected = new Car();
+        expected.setId(1L);
+        expected.setType(VehicleType.CAR);
+        expected.setManufacturer("Volkswagen");
+        expected.setYearOfManufacture(date);
+        expected.setRentCost(12000);
+        expected.setPersons(5);
+        expected.setPerformance(175);
+        expected.setVehicleStatus(VehicleStatusType.FREE);
+        expected.setPlateNumber("LOT-749");
+        expected.setVehicleIdentificationNumber("32432423423432");
+        expected.setDrawBar(true);
+
         Vehicle actual = controller.addNewVehicle(vehicleRequest).getBody();
         Vehicle vehicle = new Vehicle();
         vehicle.setId(1L);
+
         controller.removeVehicle(vehicle);
+
+        Assert.assertEquals(expected, actual);
     }
 
     @Test
@@ -196,8 +225,23 @@ public class VehicleManagementIT {
         vehicleRequest.setVehicleIdentificationNumber("32432423423432");
         vehicleRequest.setDrawBar(true);
 
+        Car expected = new Car();
+        expected.setId(1L);
+        expected.setType(VehicleType.CAR);
+        expected.setManufacturer("Volkswagen");
+        expected.setYearOfManufacture(date);
+        expected.setRentCost(12000);
+        expected.setPersons(5);
+        expected.setPerformance(175);
+        expected.setVehicleStatus(VehicleStatusType.FREE);
+        expected.setPlateNumber("LOT-749");
+        expected.setVehicleIdentificationNumber("32432423423432");
+        expected.setDrawBar(true);
+
         Vehicle actual = controller.addNewVehicle(vehicleRequest).getBody();
         controller.getVehicleById(1L);
+
+        Assert.assertEquals(expected, actual);
     }
 
     @Test
@@ -218,8 +262,23 @@ public class VehicleManagementIT {
         vehicleRequest.setVehicleIdentificationNumber("32432423423432");
         vehicleRequest.setDrawBar(true);
 
+        Car expected = new Car();
+        expected.setId(1L);
+        expected.setType(VehicleType.CAR);
+        expected.setManufacturer("Volkswagen");
+        expected.setYearOfManufacture(date);
+        expected.setRentCost(12000);
+        expected.setPersons(5);
+        expected.setPerformance(175);
+        expected.setVehicleStatus(VehicleStatusType.FREE);
+        expected.setPlateNumber("LOT-749");
+        expected.setVehicleIdentificationNumber("32432423423432");
+        expected.setDrawBar(true);
+
         Vehicle actual = controller.addNewVehicle(vehicleRequest).getBody();
         controller.getVehicleById(1L);
+
+        Assert.assertEquals(expected, actual);
     }
 
     @Test
