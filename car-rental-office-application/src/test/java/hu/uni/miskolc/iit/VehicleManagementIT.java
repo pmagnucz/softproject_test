@@ -283,8 +283,46 @@ public class VehicleManagementIT {
 
     @Test
     public void getVehicleByFilterOptionsTest(){
+        DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM").parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter();
+        LocalDate date = LocalDate.parse("2001-11", dateTimeFormatter);
+
         SearchVehicleRequest searchVehicleRequest = new SearchVehicleRequest();
         controller.getVehicleByFilterOptions(searchVehicleRequest);
+        searchVehicleRequest.setType(VehicleType.CAR);
+
+        Car expected = new Car();
+        expected.setId(1L);
+        expected.setType(VehicleType.CAR);
+        expected.setManufacturer("Volkswagen");
+        expected.setYearOfManufacture(date);
+        expected.setRentCost(12000);
+        expected.setPersons(5);
+        expected.setPerformance(175);
+        expected.setVehicleStatus(VehicleStatusType.FREE);
+        expected.setPlateNumber("LOT-749");
+        expected.setVehicleIdentificationNumber("32432423423432");
+        expected.setDrawBar(true);
+
+        List<Car> carList=new ArrayList<>();
+        carList.add(expected);
+
+        CreateVehicleRequest vehicleRequest = new CreateVehicleRequest();
+        vehicleRequest.setId(1L);
+        vehicleRequest.setType(VehicleType.CAR);
+        vehicleRequest.setManufacturer("Volkswagen");
+        vehicleRequest.setYearOfManufacture(date);
+        vehicleRequest.setRentCost(12000);
+        vehicleRequest.setPersons(5);
+        vehicleRequest.setPerformance(175);
+        vehicleRequest.setVehicleStatus(VehicleStatusType.FREE);
+        vehicleRequest.setPlateNumber("LOT-749");
+        vehicleRequest.setVehicleIdentificationNumber("32432423423432");
+        vehicleRequest.setDrawBar(true);
+        controller.addNewVehicle(vehicleRequest);
+
+        List<Vehicle> actual = controller.getVehicleByFilterOptions(searchVehicleRequest).getBody();
+
+        Assert.assertEquals(carList, actual);
     }
 
     public void getVehicleByFilterOptionsExceptionalFlow(){}
