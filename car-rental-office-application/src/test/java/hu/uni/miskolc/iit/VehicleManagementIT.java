@@ -144,13 +144,48 @@ public class VehicleManagementIT {
     }
 
     @Test
-    public void getAllVehiclesTest(){
-
+    public void getAllUsersTest_EmptyRepository(){
+        List<Vehicle> vehicles = controller.getVehicles().getBody();
+        Assert.assertEquals(0, vehicles.size());
     }
 
     @Test
     public void updateVehicleTest() throws VehicleNotFoundException, NotValidPlateNumberFormatException, ExistingVehiclePlateNumber {
+        DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM").parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter();
+        LocalDate date = LocalDate.parse("2001-11", dateTimeFormatter);
 
+        CreateVehicleRequest vehicleRequest = new CreateVehicleRequest();
+        vehicleRequest.setType(VehicleType.CAR);
+        vehicleRequest.setManufacturer("Volkswagen");
+        vehicleRequest.setYearOfManufacture(date);
+        vehicleRequest.setRentCost(12000);
+        vehicleRequest.setPersons(5);
+        vehicleRequest.setPerformance(175);
+        vehicleRequest.setVehicleStatus(VehicleStatusType.FREE);
+        vehicleRequest.setPlateNumber("LOT-749");
+        vehicleRequest.setVehicleIdentificationNumber("32432423423432");
+        vehicleRequest.setDrawBar(true);
+
+        Car actual = (Car)controller.addNewVehicle(vehicleRequest).getBody();
+
+        UpdateVehicleRequest updateVehicleRequest = new UpdateVehicleRequest();
+        updateVehicleRequest.setId(actual.getId());
+        updateVehicleRequest.setType(actual.getType());
+        updateVehicleRequest.setManufacturer(actual.getManufacturer());
+        updateVehicleRequest.setYearOfManufacture(actual.getYearOfManufacture());
+        updateVehicleRequest.setRentCost(actual.getRentCost());
+        updateVehicleRequest.setPersons(actual.getPersons());
+        updateVehicleRequest.setPerformance(actual.getPerformance());
+        updateVehicleRequest.setVehicleStatus(actual.getVehicleStatus());
+        updateVehicleRequest.setPlateNumber(actual.getPlateNumber());
+        updateVehicleRequest.setVehicleIdentificationNumber(actual.getVehicleIdentificationNumber());
+        updateVehicleRequest.setDrawBar(false);
+
+        actual.setDrawBar(false);
+
+        Car updated = (Car)controller.updateVehicle(updateVehicleRequest).getBody();
+
+        Assert.assertEquals(updated, actual);
     }
 
     @Test(expected = VehicleNotFoundException.class)
