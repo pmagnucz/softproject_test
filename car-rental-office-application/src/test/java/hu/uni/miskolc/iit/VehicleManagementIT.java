@@ -196,47 +196,15 @@ public class VehicleManagementIT {
         controller.removeVehicle(actual);
 
         int usersSize = controller.getVehicles().getBody().size();
-        Assert.assertEquals(0, usersSize);
+        Assert.assertEquals(expected, actual);
     }
 
-    @Test
+    @Test(expected = VehicleNotFoundException.class)
     public void deleteVehicleTestExceptionalFlow() throws VehicleNotFoundException, ExistingVehiclePlateNumber, NotValidPlateNumberFormatException {
-        DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM").parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter();
-        LocalDate date = LocalDate.parse("2001-11", dateTimeFormatter);
-
-        CreateVehicleRequest vehicleRequest = new CreateVehicleRequest();
-        vehicleRequest.setId(1L);
-        vehicleRequest.setType(VehicleType.CAR);
-        vehicleRequest.setManufacturer("Volkswagen");
-        vehicleRequest.setYearOfManufacture(date);
-        vehicleRequest.setRentCost(12000);
-        vehicleRequest.setPersons(5);
-        vehicleRequest.setPerformance(175);
-        vehicleRequest.setVehicleStatus(VehicleStatusType.FREE);
-        vehicleRequest.setPlateNumber("LOT-749");
-        vehicleRequest.setVehicleIdentificationNumber("32432423423432");
-        vehicleRequest.setDrawBar(true);
-
-        Car expected = new Car();
-        expected.setId(1L);
-        expected.setType(VehicleType.CAR);
-        expected.setManufacturer("Volkswagen");
-        expected.setYearOfManufacture(date);
-        expected.setRentCost(12000);
-        expected.setPersons(5);
-        expected.setPerformance(175);
-        expected.setVehicleStatus(VehicleStatusType.FREE);
-        expected.setPlateNumber("LOT-749");
-        expected.setVehicleIdentificationNumber("32432423423432");
-        expected.setDrawBar(true);
-
-        Vehicle actual = controller.addNewVehicle(vehicleRequest).getBody();
         Vehicle vehicle = new Vehicle();
-        vehicle.setId(1L);
+        vehicle.setId(0L);
 
         controller.removeVehicle(vehicle);
-
-        Assert.assertEquals(expected, actual);
     }
 
     @Test
@@ -276,23 +244,21 @@ public class VehicleManagementIT {
         Assert.assertEquals(expected, actual);
     }
 
-    @Test
+    @Test(expected = VehicleNotFoundException.class)
     public void getVehicleByIdTestExceptionalFlow() throws ExistingVehiclePlateNumber, NotValidPlateNumberFormatException, VehicleNotFoundException {
+        Vehicle vehicle = new Vehicle();
+        vehicle.setId(0L);
+
+        controller.getVehicleById(1L);
+    }
+
+    @Test
+    public void getVehicleByFilterOptionsTest() throws NotValidPlateNumberFormatException, ExistingVehiclePlateNumber {
         DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM").parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter();
         LocalDate date = LocalDate.parse("2001-11", dateTimeFormatter);
 
-        CreateVehicleRequest vehicleRequest = new CreateVehicleRequest();
-        vehicleRequest.setId(1L);
-        vehicleRequest.setType(VehicleType.CAR);
-        vehicleRequest.setManufacturer("Volkswagen");
-        vehicleRequest.setYearOfManufacture(date);
-        vehicleRequest.setRentCost(12000);
-        vehicleRequest.setPersons(5);
-        vehicleRequest.setPerformance(175);
-        vehicleRequest.setVehicleStatus(VehicleStatusType.FREE);
-        vehicleRequest.setPlateNumber("LOT-749");
-        vehicleRequest.setVehicleIdentificationNumber("32432423423432");
-        vehicleRequest.setDrawBar(true);
+        SearchVehicleRequest searchVehicleRequest = new SearchVehicleRequest();
+        searchVehicleRequest.setType(VehicleType.CAR);
 
         Car expected = new Car();
         expected.setId(1L);
@@ -307,19 +273,26 @@ public class VehicleManagementIT {
         expected.setVehicleIdentificationNumber("32432423423432");
         expected.setDrawBar(true);
 
-        Vehicle actual = controller.addNewVehicle(vehicleRequest).getBody();
-        controller.getVehicleById(1L);
+        List<Car> carList=new ArrayList<>();
+        carList.add(expected);
 
-        Assert.assertEquals(expected, actual);
-    }
+        CreateVehicleRequest vehicleRequest = new CreateVehicleRequest();
+        vehicleRequest.setId(1L);
+        vehicleRequest.setType(VehicleType.CAR);
+        vehicleRequest.setManufacturer("Volkswagen");
+        vehicleRequest.setYearOfManufacture(date);
+        vehicleRequest.setRentCost(12000);
+        vehicleRequest.setPersons(5);
+        vehicleRequest.setPerformance(175);
+        vehicleRequest.setVehicleStatus(VehicleStatusType.FREE);
+        vehicleRequest.setPlateNumber("LOT-749");
+        vehicleRequest.setVehicleIdentificationNumber("32432423423432");
+        vehicleRequest.setDrawBar(true);
+        controller.addNewVehicle(vehicleRequest);
 
-    @Test
-    public void getVehicleByFilterOptionsTest() throws NotValidPlateNumberFormatException {
-        DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM").parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter();
-        LocalDate date = LocalDate.parse("2001-11", dateTimeFormatter);
+        List<Vehicle> actual = controller.getVehicleByFilterOptions(searchVehicleRequest).getBody();
 
-        SearchVehicleRequest searchVehicleRequest = new SearchVehicleRequest();
-        controller.getVehicleByFilterOptions(searchVehicleRequest);
+        Assert.assertEquals(carList, actual);
     }
 
     public void getVehicleByFilterOptionsExceptionalFlow(){}
