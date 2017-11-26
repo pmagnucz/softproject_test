@@ -24,6 +24,9 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 
+import java.util.List;
+import java.util.ArrayList;
+
 /**
  * Created by zsoltme on 2017.11.23..
  */
@@ -36,6 +39,7 @@ public class RentManagementIT {
     private RentController rentController;
 
     private Rent rent;
+    private Rent rent2;
     private boolean userAndVehicleAdded = false;
 
     @Autowired
@@ -139,6 +143,38 @@ public class RentManagementIT {
 
     @Test
     public void getRentByFilterOptions() throws Exception {
+            rent2 = new Rent();
+
+            rent2.setId(2L);
+            rent2.setCustomerId(1L);
+            rent2.setCompanyId(0L);
+            rent2.setVehicleId(1L);
+            rent2.setStartDate(LocalDate.parse("2017-05-01"));
+            rent2.setEndDate(LocalDate.parse("2017-06-01"));
+            rent2.setDurationExtendable(true);
+            rent2.setExtendedHours(24);
+            rent2.setKmUsed(100);
+            rent2.setDayFee(150000.0);
+            rent2.setKmFee(100000.0);
+            rent2.setOtherFee(0.0);
+            rent2.setTotalFee(250000.0);
+            rent2.setPaid(false);
+
+            rent = rentController.createRent(rent).getBody();
+            rent2 = rentController.createRent(rent2).getBody();
+
+            System.out.println("------------------ads" + rent2.getId());
+
+            SearchRentRequest searchRentRequest = new SearchRentRequest
+                    (10,10,10,rent.getStartDate(),rent.getEndDate());
+
+            List<Rent> expectedList = new ArrayList();
+
+            expectedList.add(rent);
+
+            List<Rent> actualList = rentController.getRentByFilterOptions(searchRentRequest).getBody();
+
+            Assert.assertEquals(expectedList,actualList);
     }
 
     @Test
