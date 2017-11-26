@@ -1,6 +1,7 @@
 package hu.uni.miskolc.iit;
 
 import hu.uni.miskolc.iit.entity.VehicleEntity;
+import hu.uni.miskolc.iit.exception.ExistingVehiclePlateNumber;
 import hu.uni.miskolc.iit.exception.NotSupportedVehicleTypeException;
 import hu.uni.miskolc.iit.exception.NotValidPlateNumberFormatException;
 import hu.uni.miskolc.iit.exception.VehicleNotFoundException;
@@ -31,9 +32,13 @@ public class VehicleManagementServiceImpl implements VehicleManagementService {
     }
 
     @Override
-    public Vehicle addNewVehicle(Vehicle vehicle) {
+    public Vehicle addNewVehicle(Vehicle vehicle) throws ExistingVehiclePlateNumber, NotSupportedVehicleTypeException, NotValidPlateNumberFormatException{
         VehicleEntity vehicleEntity = VehicleMapper.mapModelToEntity(vehicle);
         // Common check, all required field has value, the value fit to the regex
+        if (vehicle.getType() == null){
+            throw new NotSupportedVehicleTypeException("null");
+        }
+
         if (vehicle.getType() == VehicleType.CAR) {
             Vehicle storedCar = VehicleMapper.mapEntityToModel(vehicleRepository.save(vehicleEntity));
             return storedCar;
@@ -48,12 +53,12 @@ public class VehicleManagementServiceImpl implements VehicleManagementService {
     }
 
     @Override
-    public Vehicle getVehicleById(Long id) {
+    public Vehicle getVehicleById(Long id) throws VehicleNotFoundException {
                 return VehicleMapper.mapEntityToModel(vehicleRepository.findOne(id));
     }
 
     @Override
-    public List<Vehicle> getVehicleByFilterOptions(SearchVehicleRequest searchVehicleRequest) {
+    public List<Vehicle> getVehicleByFilterOptions(SearchVehicleRequest searchVehicleRequest) throws NotSupportedVehicleTypeException, NotValidPlateNumberFormatException{
         List<Vehicle> vehicleList = VehicleMapper.mapEntityListToModelList(((List)this.vehicleRepository.findAll()));
         List<Vehicle> requestedVehicles = new ArrayList<Vehicle>();
 
@@ -75,7 +80,7 @@ public class VehicleManagementServiceImpl implements VehicleManagementService {
     }
 
     @Override
-    public Vehicle updateVehicle(UpdateVehicleRequest updateVehicleRequest) throws VehicleNotFoundException{
+    public Vehicle updateVehicle(UpdateVehicleRequest updateVehicleRequest) throws VehicleNotFoundException, NotSupportedVehicleTypeException, NotValidPlateNumberFormatException{
         VehicleEntity vehicleEntity = vehicleRepository.findOne(updateVehicleRequest.getId());
         DateFormat format = new SimpleDateFormat("yyyy-MM");
         if (updateVehicleRequest.isCar()) {
@@ -112,7 +117,7 @@ public class VehicleManagementServiceImpl implements VehicleManagementService {
     }
 
     @Override
-    public void removeVehicle(Vehicle vehicle) {
+    public void removeVehicle(Vehicle vehicle) throws VehicleNotFoundException {
         vehicleRepository.delete(vehicle.getId());
     }
 }
