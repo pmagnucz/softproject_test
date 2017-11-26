@@ -144,7 +144,7 @@ public class VehicleManagementIT {
     }
 
     @Test
-    public void getAllUsersTest_EmptyRepository(){
+    public void getAllVehiclesTest_EmptyRepository(){
         List<Vehicle> vehicles = controller.getVehicles().getBody();
         Assert.assertEquals(0, vehicles.size());
     }
