@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>1.5.7.RELEASE</version>
+    <version>1.3.5.RELEASE</version>
     <relativePath /> <!-- lookup parent from config -->
   </parent>
 
@@ -15,10 +15,18 @@
 
   <name>car-rental-office</name>
 
+  <properties>
+    <junit.version>4.12</junit.version>
+    <easymock.version>3.4</easymock.version>
+    <hibernate-core.version>4.1.4.Final</hibernate-core.version>
+    <hibernate-entitymanager.version>5.2.3.Final</hibernate-entitymanager.version>
+  </properties>
+
   <modules>
     <module>car-rental-office-core</module>
     <module>car-rental-office-service</module>
     <module>car-rental-office-dao</module>
     <module>car-rental-office-controller</module>
+    <module>car-rental-office-application</module>
   </modules>
 </project>

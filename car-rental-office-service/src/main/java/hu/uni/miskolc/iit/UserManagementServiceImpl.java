@@ -51,22 +51,14 @@ public class UserManagementServiceImpl implements UserManagementService {
             UserEntity userEntity = UserMapper.mapModelToEntity(company);
             return UserMapper.mapUserEntityToModel(userRepository.save(userEntity));
         } else {
+            LOGGER.debug("UserTypeDoesNotExistException raised: " + createUserRequest.toString());
             throw new UserTypeDoesNotExistException("Only Customer and Company user types are allowed.");
         }
     }
 
     @Override
     public User getUserById(long id) throws UserNotFoundException {
-        List<UserEntity> elements = (List<UserEntity>) userRepository.findAll();
-        User user = null;
-
-        for (int i = 0; i < elements.size(); i++) {
-            if (id == elements.get(i).getId()) {
-                user = UserMapper.mapUserEntityToModel(elements.get(i));
-            }
-        }
-
-        return user;
+        return UserMapper.mapUserEntityToModel(userRepository.findOne(id));
     }
 
     @Override
@@ -83,6 +75,7 @@ public class UserManagementServiceImpl implements UserManagementService {
         }
 
         if (result.isEmpty()) {
+            LOGGER.debug("UserNotFoundException raised: " + searchUserRequest.toString());
             throw new UserNotFoundException("User not found to fit with a given criteria.", searchUserRequest);
         } else {
             return UserMapper.mapUserEntitiesToModelList(result);

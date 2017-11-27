@@ -1,16 +1,23 @@
 package hu.uni.miskolc.iit;
 
-import hu.uni.miskolc.iit.model.CreateUserRequest;
-import hu.uni.miskolc.iit.model.SearchUserRequest;
-import hu.uni.miskolc.iit.model.User;
-import org.junit.*;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.*;
-
+import hu.uni.miskolc.iit.controller.UserManagementController;
+import hu.uni.miskolc.iit.entity.UserEntity;
+import hu.uni.miskolc.iit.exception.*;
+import hu.uni.miskolc.iit.mapper.UserMapper;
+import hu.uni.miskolc.iit.model.*;
+import hu.uni.miskolc.iit.model.UpdateUserRequest;
+import hu.uni.miskolc.iit.repositories.UserRepository;
+import hu.uni.miskolc.iit.service.UserManagementService;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.easymock.EasyMock.mock;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -18,6 +25,170 @@ import static org.junit.Assert.assertEquals;
  */
 
 public class UserControllerTest {
+
+    private UserManagementController userController;
+    private UserManagementService userService;
+    private UserRepository userRepository;
+
+    private Customer user;
+    private Customer user2;
+
+    private CreateUserRequest userRequest;
+
+    private UpdateUserRequest updateUserRequest;
+
+    @Before
+    public void setUp() {
+        userRepository = mock(UserRepository.class);
+
+        userService = new UserManagementServiceImpl(userRepository);
+        userController = new UserManagementController(userService);
+
+        user = new Customer();
+
+        user.setId(1L);
+        user.setUserName("Teszt Elek");
+        user.setPhoneNumber("+36302587913");
+        user.setAddress("3525 Miskolc, Szentpáli utca 12.");
+        user.setYearOfBirth(1990);
+        user.setUserId("1");
+        user.setDrivingLicenceNumber("test1");
+
+        user2 = new Customer();
+
+        user2.setId(2L);
+        user2.setUserName("Gipsz Jakab");
+        user2.setPhoneNumber("06205896324");
+        user2.setAddress("1011 Budapest, Tesztelés utca 3.");
+        user2.setYearOfBirth(1991);
+        user2.setUserId("2");
+        user2.setDrivingLicenceNumber("test2");
+
+        userRequest = new CreateUserRequest();
+        userRequest.setUserName(user.getUserName());
+        userRequest.setAddress(user.getAddress());
+        userRequest.setPhoneNumber(user.getPhoneNumber());
+        userRequest.setUserId(user.getUserId());
+        userRequest.setYearOfBirth(user.getYearOfBirth());
+        userRequest.setDrivingLicenceNumber(user.getDrivingLicenceNumber());
+
+        updateUserRequest = new UpdateUserRequest();
+        updateUserRequest.setId(1L);
+        updateUserRequest.setUserName(user.getUserName());
+        updateUserRequest.setAddress(user2.getAddress());
+        updateUserRequest.setPhoneNumber(user2.getPhoneNumber());
+        updateUserRequest.setCompany(false);
+        updateUserRequest.setCustomer(true);
+        updateUserRequest.setUserId("1");
+        updateUserRequest.setYearOfBirth(user2.getYearOfBirth());
+        updateUserRequest.setDrivingLicenceNumber(user2.getDrivingLicenceNumber());
+    }
+
+    @After
+    public void tearDown() {
+    }
+
+    @Test
+    public void createUser() throws NegativeValueException, UserNotFoundException {
+        User expected = user;
+        UserEntity mockEntity = UserMapper.mapModelToEntity(user);
+        expect(userRepository.save(mockEntity)).andReturn(mockEntity);
+
+        replay(userRepository);
+
+        User actual = userController.createUser(userRequest).getBody();
+
+        assertEquals(expected,actual);
+
+    }
+    @Test
+    public void updateUser() {
+        user2.setId(user.getId());
+        user2.setUserName(user.getUserName());
+        user2.setUserId(user.getUserId());
+
+        UserEntity mockEntity = UserMapper.mapModelToEntity(user);
+
+        expect(userRepository.findOne(anyLong())).andReturn(mockEntity);
+        expect(userRepository.save(anyObject(UserEntity.class))).andReturn(mockEntity);
+
+        replay(userRepository);
+
+        userController.updateUser(updateUserRequest);
+
+        User actual = UserMapper.mapUserEntityToModel(mockEntity);
+
+        assertEquals(user2,actual);
+    }
+
+    @Test
+    public void deleteUser() throws NegativeValueException, UserNotFoundException {
+        userRepository.delete(user.getId());
+        expectLastCall();
+
+        replay(userRepository);
+
+        userController.deleteUser(user);
+    }
+
+    @Test
+    public void getUserById() {
+        UserEntity mockEntity = UserMapper.mapModelToEntity(user);
+
+        expect(userRepository.findOne(anyLong())).andReturn(mockEntity);
+
+        replay(userRepository);
+
+        User actual = userController.getUserById(user.getId()).getBody();
+        assertEquals(user,actual);
+    }
+
+    @Test
+    public void getAllUser() {
+        List<User> users = new ArrayList<>();
+        users.add(user);
+        users.add(user2);
+
+        List<UserEntity> expectedEntities = UserMapper.mapUserListToUserEntityList(users);
+
+        expect(userRepository.findAll()).andReturn(expectedEntities);
+
+        replay(userRepository);
+
+        List<User> actual = userController.getAllUser().getBody();
+        assertEquals(users, actual);
+
+    }
+
+    @Test
+    public void getUsersByFilterOptions() {
+        SearchUserRequest searchUserRequest = new SearchUserRequest();
+
+        searchUserRequest.setAddress("3525 Miskolc, Szentpáli utca 12.");
+        searchUserRequest.setDrivingLicenceNumber("test1");
+        searchUserRequest.setPhoneNumber("+36302587913");
+        searchUserRequest.setUserName("Teszt Elek");
+
+        List<User> users = new ArrayList<>();
+        users.add(user);
+        users.add(user2);
+
+        List<UserEntity> expectedEntities = UserMapper.mapUserListToUserEntityList(users);
+
+        expect(userRepository.findAll()).andReturn(expectedEntities);
+
+        replay(userRepository);
+
+        List<User> expected = new ArrayList<>();
+        expected.add(user);
+
+        List<User> actual = userController.getUserByFilterOptions(searchUserRequest).getBody();
+
+        assertEquals(expected,actual);
+
+    }
+
+    /*
     private static final String USER_NAME = "Teszt Elek";
     private static final String ADDRESS = "3525 Miskolc, Szentpáli utca 12.";
     private static final String PHONENUMBER = "+36302587913";
@@ -33,7 +204,8 @@ public class UserControllerTest {
     private CreateUserRequest userRequest2;
 
     private SearchUserRequest searchUserRequest;
-
+*/
+/*
     TestRestTemplate restTemplate = new TestRestTemplate();
     HttpHeaders headers = new HttpHeaders();
 
@@ -139,4 +311,5 @@ public class UserControllerTest {
 
         assertEquals(expectedList, response.getBody());
     }
+*/
 }

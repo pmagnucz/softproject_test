@@ -25,7 +25,6 @@ public class RentManagementServiceImpl implements RentManagementService {
     private RentRepository rentRepository;
     private UserRepository userRepository;
     private VehicleRepository vehicleRepository;
-    private RentMapper rentMapper;
 
     @Autowired
     public RentManagementServiceImpl(RentRepository rentRepository,UserRepository userRepository,VehicleRepository vehicleRepository) {
@@ -44,19 +43,19 @@ public class RentManagementServiceImpl implements RentManagementService {
         }
 
         validate(rent);
-        RentEntity rentEntity = rentMapper.mapModelToEntity(rent);
-        Rent storedRent = rentMapper.mapEntityToModel(this.rentRepository.save(rentEntity));
+        RentEntity rentEntity = RentMapper.mapModelToEntity(rent);
+        Rent storedRent = RentMapper.mapEntityToModel(this.rentRepository.save(rentEntity));
         return storedRent;
     }
 
     @Override
     public Rent getRentById(int id) {
-        return rentMapper.mapEntityToModel(rentRepository.findOne(Long.valueOf(id)));
+        return RentMapper.mapEntityToModel(rentRepository.findOne(Long.valueOf(id)));
     }
 
     @Override
     public List<Rent> getRentByFilterOptions(SearchRentRequest searchRentRequest) {
-        List<Rent> rentList = rentMapper.mapRentEntityListToModelList(((List)this.rentRepository.findAll()));
+        List<Rent> rentList = RentMapper.mapRentEntityListToModelList(((List)this.rentRepository.findAll()));
         List<Rent> requestedRents = new ArrayList<Rent>();
 
         for(Rent rent : rentList) {
@@ -83,7 +82,7 @@ public class RentManagementServiceImpl implements RentManagementService {
             throw new RentNotFoundException(String.valueOf(rent.getId()));
         }
         validate(rent);
-        RentEntity mappedEntity = rentMapper.mapModelToEntity(rent);
+        RentEntity mappedEntity = RentMapper.mapModelToEntity(rent);
 
         this.rentRepository.findOne(Long.valueOf(rent.getId())).setCustomerId(mappedEntity.getCustomerId());
         this.rentRepository.findOne(Long.valueOf(rent.getId())).setCompanyId(mappedEntity.getCompanyId());
@@ -99,7 +98,7 @@ public class RentManagementServiceImpl implements RentManagementService {
         this.rentRepository.findOne(Long.valueOf(rent.getId())).setTotalFee(mappedEntity.getTotalFee());
         this.rentRepository.findOne(Long.valueOf(rent.getId())).setPaid(mappedEntity.getPaid());
 
-        Rent updatedRent = rentMapper.mapEntityToModel(this.rentRepository.save(rentRepository.findOne(Long.valueOf(rent.getId()))));
+        Rent updatedRent = RentMapper.mapEntityToModel(this.rentRepository.save(rentRepository.findOne(Long.valueOf(rent.getId()))));
         return updatedRent;
     }
 

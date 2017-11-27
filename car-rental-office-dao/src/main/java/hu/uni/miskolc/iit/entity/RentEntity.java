@@ -1,7 +1,6 @@
 package hu.uni.miskolc.iit.entity;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @Table(name = RentEntity.TABLE_NAME)

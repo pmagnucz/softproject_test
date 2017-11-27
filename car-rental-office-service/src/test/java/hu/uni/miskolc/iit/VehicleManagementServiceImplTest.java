@@ -8,7 +8,6 @@ import hu.uni.miskolc.iit.service.VehicleManagementService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import java.text.ParseException;
 import java.text.DateFormat;
@@ -17,12 +16,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.*;
-import static org.mockito.Matchers.any;
+
+import static org.easymock.EasyMock.mock;
 import static org.junit.Assert.*;
-
-
 
 public class VehicleManagementServiceImplTest {
 
@@ -32,6 +28,8 @@ public class VehicleManagementServiceImplTest {
     private Ship ship;
     private Car car;
 
+//TODO EasyMock megoldása a tesztekben
+
     @Before
     public void setUp() throws Exception {
         vehicleRepository = mock(VehicleRepository.class);
@@ -39,6 +37,7 @@ public class VehicleManagementServiceImplTest {
         vehicle = new Vehicle();
         car = new Car();
 
+        // TODO: Dátum kezelés LocalDate. java 8 docs-ba van rá példa
         DateFormat format = new SimpleDateFormat("yyyy-MM");
         Date date = null;
         try {
@@ -99,7 +98,9 @@ public class VehicleManagementServiceImplTest {
         car.setDrawBar(true);
 
         VehicleEntity mockedVehicleEntity = VehicleMapper.mapModelToEntity(car);
+/*
         when(vehicleRepository.save(any(VehicleEntity.class))).thenReturn(mockedVehicleEntity);
+*/
 
         Vehicle actual = vehicleManagementService.addNewVehicle(car);
         assertEquals(car, actual);
@@ -129,8 +130,8 @@ public class VehicleManagementServiceImplTest {
         ship.setYearOfManufacture(date);
 
         VehicleEntity mockedVehicleEntity = VehicleMapper.mapModelToEntity(ship);
-        when(vehicleRepository.save(any(VehicleEntity.class))).thenReturn(mockedVehicleEntity);
-        when(vehicleRepository.exists(any(Long.class))).thenReturn(true);
+     /*   when(vehicleRepository.save(any(VehicleEntity.class))).thenReturn(mockedVehicleEntity);
+        when(vehicleRepository.exists(any(Long.class))).thenReturn(true);*/
 
         Vehicle actual = vehicleManagementService.addNewVehicle(ship);
 
@@ -141,7 +142,9 @@ public class VehicleManagementServiceImplTest {
     @Test
     public void getVehicleById() throws Exception {
         VehicleEntity mockEntity = VehicleMapper.mapModelToEntity(car);
+/*
         when(vehicleRepository.findOne(any(Long.class))).thenReturn(mockEntity);
+*/
 
         Vehicle actual = vehicleManagementService.getVehicleById(5L);
         assertEquals(car,actual);
@@ -178,7 +181,9 @@ public class VehicleManagementServiceImplTest {
         vehicles.add(shipModel);
 
         List<VehicleEntity> expectedEntities = VehicleMapper.mapModelListToEntityList(vehicles);
+/*
         when(vehicleRepository.findAll()).thenReturn(expectedEntities);
+*/
 
         List<Vehicle> expected = new ArrayList<>();
         expected.add(shipModel);
@@ -193,7 +198,9 @@ public class VehicleManagementServiceImplTest {
         vehicles.add(car);
 
         List<VehicleEntity> expectedEntities = VehicleMapper.mapModelListToEntityList(vehicles);
+/*
         when(vehicleRepository.findAll()).thenReturn(expectedEntities);
+*/
 
         List<Vehicle> actual = vehicleManagementService.getVehicles();
         assertEquals(vehicles, actual);
@@ -210,8 +217,8 @@ public class VehicleManagementServiceImplTest {
         }
 
         VehicleEntity mockEntity = VehicleMapper.mapModelToEntity(car);
-        when(vehicleRepository.findOne(any(Long.class))).thenReturn(mockEntity);
-        when(vehicleRepository.save(any(VehicleEntity.class))).thenReturn(mockEntity);
+       /* when(vehicleRepository.findOne(any(Long.class))).thenReturn(mockEntity);
+        when(vehicleRepository.save(any(VehicleEntity.class))).thenReturn(mockEntity);*/
 
         UpdateVehicleRequest updateVehicleRequest = new UpdateVehicleRequest();
 
@@ -237,11 +244,15 @@ public class VehicleManagementServiceImplTest {
 
     @Test
     public void removeVehicleCar() throws Exception {
+/*
         when(vehicleRepository.exists(any(Long.class))).thenReturn(true);
+*/
 
         vehicleManagementService.removeVehicle(car);
 
+/*
         verify(vehicleRepository,times(1)).delete(car.getId());
+*/
     }
 
     @Test
@@ -249,11 +260,15 @@ public class VehicleManagementServiceImplTest {
         ship = new Ship();
         ship.setId(1L);
 
+/*
         when(vehicleRepository.exists(any(Long.class))).thenReturn(true);
+*/
 
         vehicleManagementService.removeVehicle(ship);
 
+/*
         verify(vehicleRepository,times(1)).delete(ship.getId());
+*/
     }
 
 

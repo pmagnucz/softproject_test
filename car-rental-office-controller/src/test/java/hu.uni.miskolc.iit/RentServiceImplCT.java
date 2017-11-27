@@ -2,36 +2,28 @@ package hu.uni.miskolc.iit;
 
 import hu.uni.miskolc.iit.exception.*;
 import hu.uni.miskolc.iit.model.*;
-import hu.uni.miskolc.iit.repositories.RentRepository;
 import hu.uni.miskolc.iit.service.RentManagementService;
 import hu.uni.miskolc.iit.service.UserManagementService;
 import hu.uni.miskolc.iit.service.VehicleManagementService;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 /**
  * Created by zsoltme on 2017.11.18..
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = App.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@RunWith(SpringJUnit4ClassRunner.class)
 public class RentServiceImplCT {
-
+//TODO: újra kell írni az egészet. Repository lehet mock, de a controller és a service NEM
     Rent rent;
 
     Car car;
