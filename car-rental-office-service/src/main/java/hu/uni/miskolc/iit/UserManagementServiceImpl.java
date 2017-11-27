@@ -58,16 +58,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 
     @Override
     public User getUserById(long id) throws UserNotFoundException {
-        List<UserEntity> elements = (List<UserEntity>) userRepository.findAll();
-        User user = null;
-
-        for (int i = 0; i < elements.size(); i++) {
-            if (id == elements.get(i).getId()) {
-                user = UserMapper.mapUserEntityToModel(elements.get(i));
-            }
-        }
-
-        return user;
+        return UserMapper.mapUserEntityToModel(userRepository.findOne(id));
     }
 
     @Override
