@@ -84,21 +84,7 @@ public class RentManagementServiceImpl implements RentManagementService {
         validate(rent);
         RentEntity mappedEntity = RentMapper.mapModelToEntity(rent);
 
-        this.rentRepository.findOne(Long.valueOf(rent.getId())).setCustomerId(mappedEntity.getCustomerId());
-        this.rentRepository.findOne(Long.valueOf(rent.getId())).setCompanyId(mappedEntity.getCompanyId());
-        this.rentRepository.findOne(Long.valueOf(rent.getId())).setVehicleId(mappedEntity.getVehicleId());
-        this.rentRepository.findOne(Long.valueOf(rent.getId())).setStartDate(mappedEntity.getStartDate());
-        this.rentRepository.findOne(Long.valueOf(rent.getId())).setEndDate(mappedEntity.getEndDate());
-        this.rentRepository.findOne(Long.valueOf(rent.getId())).setDurationExtendable(mappedEntity.getDurationExtendable());
-        this.rentRepository.findOne(Long.valueOf(rent.getId())).setExtendedHours(mappedEntity.getExtendedHours());
-        this.rentRepository.findOne(Long.valueOf(rent.getId())).setKmUsed(mappedEntity.getKmUsed());
-        this.rentRepository.findOne(Long.valueOf(rent.getId())).setDayFee(mappedEntity.getDayFee());
-        this.rentRepository.findOne(Long.valueOf(rent.getId())).setKmFee(mappedEntity.getKmFee());
-        this.rentRepository.findOne(Long.valueOf(rent.getId())).setOtherFee(mappedEntity.getOtherFee());
-        this.rentRepository.findOne(Long.valueOf(rent.getId())).setTotalFee(mappedEntity.getTotalFee());
-        this.rentRepository.findOne(Long.valueOf(rent.getId())).setPaid(mappedEntity.getPaid());
-
-        Rent updatedRent = RentMapper.mapEntityToModel(this.rentRepository.save(rentRepository.findOne(Long.valueOf(rent.getId()))));
+        Rent updatedRent = RentMapper.mapEntityToModel(this.rentRepository.save(mappedEntity));
         return updatedRent;
     }
 
