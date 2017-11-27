@@ -1,9 +1,7 @@
 package hu.uni.miskolc.iit;
 
 import hu.uni.miskolc.iit.controller.RentController;
-import hu.uni.miskolc.iit.exception.ExistingVehiclePlateNumber;
-import hu.uni.miskolc.iit.exception.NotValidPlateNumberFormatException;
-import hu.uni.miskolc.iit.exception.UserTypeDoesNotExistException;
+import hu.uni.miskolc.iit.exception.*;
 import hu.uni.miskolc.iit.model.*;
 import hu.uni.miskolc.iit.repositories.RentRepository;
 import hu.uni.miskolc.iit.repositories.UserRepository;
@@ -18,9 +16,6 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -60,16 +55,6 @@ public class RentManagementIT {
         VehicleManagementService vehicleService = new VehicleManagementServiceImpl(vehicleRepository);
 
         rent = new Rent();
-
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date startDate = null;
-        Date endDate = null;
-        try {
-            startDate = format.parse("2017-02-01");
-            endDate = format.parse("2017-03-01");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
 
         rent.setId(1L);
         rent.setCustomerId(1L);
@@ -163,8 +148,6 @@ public class RentManagementIT {
             rent = rentController.createRent(rent).getBody();
             rent2 = rentController.createRent(rent2).getBody();
 
-            System.out.println("------------------ads" + rent2.getId());
-
             SearchRentRequest searchRentRequest = new SearchRentRequest
                     (10,10,10,rent.getStartDate(),rent.getEndDate());
 
@@ -192,4 +175,83 @@ public class RentManagementIT {
     @Test
     public void getRentCount() throws Exception {
     }
+
+    @Test(expected = NegativeValueException.class)
+    public void negativeNumberException() throws Exception {
+        rent.setExtendedHours(-1);
+        rent.setKmUsed(-1);
+        rent.setKmFee(-1);
+        rent.setDayFee(-1);
+        rent.setOtherFee(-1);
+        rent.setTotalFee(-1);
+
+        rentController.createRent(rent);
+
+    }
+
+    @Test(expected = WrongRentDateException.class)
+    public void wrongDateException() throws Exception {
+
+        rent.setStartDate(LocalDate.parse("2017-05-01"));
+        rent.setEndDate(LocalDate.parse("2017-04-01"));
+
+        rentController.createRent(rent);
+    }
+
+    @Test(expected = RentIdAlreadyExistsException.class)
+    public void rentIdAlreadyExistsException() throws Exception {
+        Rent rentTest = rentController.createRent(rent).getBody();
+        rent.setId(rentTest.getId());
+        rentController.createRent(rent);
+    }
+
+    @Test(expected = RentWrongTotalFeeException.class)
+    public void wrongTotalFeeException() throws Exception {
+        rent.setTotalFee(1);
+
+        rentController.createRent(rent);
+    }
+
+    @Test
+    public void userNotFoundException() throws Exception {
+        rent.setCustomerId(0L);
+        rent.setCompanyId(0L);
+
+        try {
+            rentController.createRent(rent);
+        } catch(UserNotFoundException actual) {
+            Assert.assertEquals("User Ids wrong: Customer - " + rent.getCustomerId() + ",Company - " + rent.getCompanyId() + ".",actual.getMessage());
+        }
+    }
+
+    @Test
+    public void userCustomerNotFoundException() throws Exception {
+        rent.setCustomerId(15L);
+        rent.setCompanyId(0L);
+
+        try {
+            rentController.createRent(rent);
+        } catch(UserNotFoundException actual) {
+            Assert.assertEquals("Customer with Id: " + rent.getCustomerId() + " does not exist.",actual.getMessage());
+        }
+    }
+
+    @Test
+    public void userCompanyNotFoundException() throws Exception {
+        rent.setCustomerId(0L);
+        rent.setCompanyId(30L);
+        try {
+            rentController.createRent(rent);
+        } catch(UserNotFoundException actual) {
+            Assert.assertEquals("Company with Id: " + rent.getCompanyId() + " does not exist.",actual.getMessage());
+        }
+    }
+
+    @Test(expected = VehicleNotFoundException.class)
+    public void vehicleNotFoundException() throws Exception {
+        rent.setVehicleId(50L);
+
+        rentController.createRent(rent);
+    }
+
 }
