@@ -181,6 +181,17 @@ public class RentManagementIT {
 
     @Test
     public void deleteRent() throws Exception {
+        Rent rentTest = rentController.createRent(rent).getBody();
+
+        int rentSize = rentController.getRentCount().getBody();
+
+        Assert.assertEquals(1,rentSize);
+
+        rentController.deleteRent(rentTest);
+
+        rentSize = rentController.getRentCount().getBody();
+
+        Assert.assertEquals(0,rentSize);
     }
 
     @Test
