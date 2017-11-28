@@ -162,6 +162,17 @@ public class RentManagementIT {
 
     @Test
     public void getAllRent() throws Exception {
+        Rent rentTest1 = rentController.createRent(rent).getBody();
+        rent.setId(2L);
+        Rent rentTest2 = rentController.createRent(rent).getBody();
+
+        List<Rent> expected = new ArrayList<>();
+        expected.add(rentTest1);
+        expected.add(rentTest2);
+
+        List<Rent> actual = rentController.getAllRent().getBody();
+
+        Assert.assertEquals(expected,actual);
     }
 
     @Test
