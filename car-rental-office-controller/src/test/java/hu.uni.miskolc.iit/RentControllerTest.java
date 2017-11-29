@@ -37,8 +37,8 @@ public class RentControllerTest {
     private UserRepository userRepository;
     private VehicleRepository vehicleRepository;
 
-    private Rent rent;
-    private Rent rent2;
+    Rent rent;
+    Rent rent2;
 
     @Before
     public void setUp() {
