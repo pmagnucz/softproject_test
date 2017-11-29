@@ -177,6 +177,28 @@ public class RentManagementIT {
 
     @Test
     public void updateRent() throws Exception {
+        Rent rentUpdate = new Rent();
+
+        rentUpdate.setId(2L);
+        rentUpdate.setCustomerId(1L);
+        rentUpdate.setCompanyId(0L);
+        rentUpdate.setVehicleId(1L);
+        rentUpdate.setStartDate(LocalDate.parse("2017-05-01"));
+        rentUpdate.setEndDate(LocalDate.parse("2017-06-01"));
+        rentUpdate.setDurationExtendable(false);
+        rentUpdate.setExtendedHours(0);
+        rentUpdate.setKmUsed(200);
+        rentUpdate.setDayFee(250000.0);
+        rentUpdate.setKmFee(200000.0);
+        rentUpdate.setOtherFee(0.0);
+        rentUpdate.setTotalFee(450000.0);
+        rentUpdate.setPaid(true);
+
+        Rent rentTest = rentController.createRent(rent).getBody();
+        rentUpdate.setId(rentTest.getId());
+        rentController.updateRent(rentUpdate);
+        Rent rentUpdated = rentController.getRentById(Math.toIntExact(rentUpdate.getId())).getBody();
+        Assert.assertEquals(rentUpdate,rentUpdated);
     }
 
     @Test
