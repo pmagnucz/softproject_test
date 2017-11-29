@@ -218,6 +218,13 @@ public class RentManagementIT {
 
     @Test
     public void getRentCount() throws Exception {
+        rentController.createRent(rent);
+        rent.setId(10L);
+        rentController.createRent(rent);
+
+        int count = rentController.getRentCount().getBody();
+        Assert.assertEquals(2,count);
+
     }
 
     @Test(expected = NegativeValueException.class)
