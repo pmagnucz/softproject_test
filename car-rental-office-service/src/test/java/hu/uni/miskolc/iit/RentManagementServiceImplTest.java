@@ -21,6 +21,9 @@ import java.util.Date;
 import java.util.List;
 
 import static org.easymock.EasyMock.mock;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
 /**
@@ -94,10 +97,15 @@ public class RentManagementServiceImplTest {
     @Test
     public void addNewRent() throws Exception {
         RentEntity mockEntity = RentMapper.mapModelToEntity(rent);
-        /*when(rentRepository.save(any(RentEntity.class))).thenReturn(mockEntity);
 
-        when(userRepository.exists(any(Long.class))).thenReturn(true);
-        when(vehicleRepository.exists(any(Long.class))).thenReturn(true);*/
+        expect(rentRepository.save(anyObject(RentEntity.class))).andReturn(mockEntity);
+        expect(rentRepository.exists(anyLong())).andReturn(false);
+        expect(userRepository.exists(anyLong())).andReturn(true);
+        expect(vehicleRepository.exists(anyLong())).andReturn(true);
+
+        replay(rentRepository);
+        replay(userRepository);
+        replay(vehicleRepository);
 
         Rent actual = rentManagementService.addNewRent(rent);
         assertEquals(rent,actual);
@@ -106,9 +114,10 @@ public class RentManagementServiceImplTest {
     @Test
     public void getRentById() throws Exception {
         RentEntity mockEntity = RentMapper.mapModelToEntity(rent);
-/*
-        when(rentRepository.findOne(any(Long.class))).thenReturn(mockEntity);
-*/
+
+        expect(rentRepository.findOne(anyLong())).andReturn(mockEntity);
+
+        replay(rentRepository);
 
         Rent actual = rentManagementService.getRentById(5);
         assertEquals(rent,actual);
@@ -133,9 +142,10 @@ public class RentManagementServiceImplTest {
         rents.add(rent2);
 
         List<RentEntity> expectedEntities = RentMapper.mapRentListToRentEntityList(rents);
-/*
-        when(rentRepository.findAll()).thenReturn(expectedEntities);
-*/
+
+        expect(rentRepository.findAll()).andReturn(expectedEntities);
+
+        replay(rentRepository);
 
         List<Rent> expected = new ArrayList<>();
         expected.add(rent);
@@ -151,9 +161,10 @@ public class RentManagementServiceImplTest {
         rents.add(rent2);
 
         List<RentEntity> expectedEntities = RentMapper.mapRentListToRentEntityList(rents);
-/*
-        when(rentRepository.findAll()).thenReturn(expectedEntities);
-*/
+
+        expect(rentRepository.findAll()).andReturn(expectedEntities);
+
+        replay(rentRepository);
 
         List<Rent> actual = rentManagementService.getRents();
         assertEquals(rents, actual);
@@ -180,14 +191,17 @@ public class RentManagementServiceImplTest {
         rent2.setStartDate(startDateExpected);
         rent2.setEndDate(endDateExpected);
 
-
         RentEntity mockEntity = RentMapper.mapModelToEntity(rent);
-       /* when(rentRepository.findOne(any(Long.class))).thenReturn(mockEntity);
-        when(rentRepository.save(any(RentEntity.class))).thenReturn(mockEntity);
 
-        when(rentRepository.exists(any(Long.class))).thenReturn(true);
-        when(userRepository.exists(any(Long.class))).thenReturn(true);
-        when(vehicleRepository.exists(any(Long.class))).thenReturn(true);*/
+        expect(rentRepository.findOne(anyLong())).andReturn(mockEntity).anyTimes();
+        expect(rentRepository.save(anyObject(RentEntity.class))).andReturn(mockEntity);
+        expect(rentRepository.exists(anyLong())).andReturn(true);
+        expect(userRepository.exists(anyLong())).andReturn(true);
+        expect(vehicleRepository.exists(anyLong())).andReturn(true);
+
+        replay(rentRepository);
+        replay(userRepository);
+        replay(vehicleRepository);
 
         rentManagementService.updateRent(rent2);
 
@@ -198,14 +212,18 @@ public class RentManagementServiceImplTest {
 
     @Test
     public void removeRent() throws Exception {
-       /* when(rentRepository.exists(any(Long.class))).thenReturn(true);
-        when(userRepository.exists(any(Long.class))).thenReturn(true);
-        when(vehicleRepository.exists(any(Long.class))).thenReturn(true);
+        expect(rentRepository.exists(anyLong())).andReturn(true);
+        expect(userRepository.exists(anyLong())).andReturn(true);
+        expect(vehicleRepository.exists(anyLong())).andReturn(true);
+
+        rentRepository.delete(rent.getId());
+        expectLastCall();
+
+        replay(rentRepository);
+        replay(userRepository);
+        replay(vehicleRepository);
 
         rentManagementService.removeRent(rent);
-
-        verify(rentRepository,times(1)).delete(Long.valueOf(rent.getId()));
-*/
     }
 
     @Test(expected = NegativeValueException.class)
@@ -243,9 +261,9 @@ public class RentManagementServiceImplTest {
     public void rentIdAlreadyExistsException() throws Exception {
         rent.setId(1L);
 
-/*
-        when(rentRepository.exists(1L)).thenReturn(true);
-*/
+        expect(rentRepository.exists(1L)).andReturn(true);
+
+        replay(rentRepository);
 
         rentManagementService.addNewRent(rent);
     }
@@ -262,6 +280,10 @@ public class RentManagementServiceImplTest {
         rent.setCustomerId(0L);
         rent.setCompanyId(0L);
 
+        expect(userRepository.exists(anyLong())).andReturn(false).anyTimes();
+
+        replay(userRepository);
+
         try {
             rentManagementService.addNewRent(rent);
         } catch(UserNotFoundException actual) {
@@ -274,6 +296,10 @@ public class RentManagementServiceImplTest {
         rent.setCustomerId(15L);
         rent.setCompanyId(0L);
 
+        expect(userRepository.exists(anyLong())).andReturn(false).anyTimes();
+
+        replay(userRepository);
+
         try {
             rentManagementService.addNewRent(rent);
         } catch(UserNotFoundException actual) {
@@ -285,6 +311,11 @@ public class RentManagementServiceImplTest {
     public void userCompanyNotFoundException() throws Exception {
         rent.setCustomerId(0L);
         rent.setCompanyId(30L);
+
+        expect(userRepository.exists(anyLong())).andReturn(false).anyTimes();
+
+        replay(userRepository);
+
         try {
             rentManagementService.addNewRent(rent);
         } catch(UserNotFoundException actual) {
@@ -296,9 +327,8 @@ public class RentManagementServiceImplTest {
     public void vehicleNotFoundException() throws Exception {
         rent.setVehicleId(50L);
 
-/*
-        when(userRepository.exists(any(Long.class))).thenReturn(true);
-*/
+        expect(userRepository.exists(anyLong())).andReturn(true);
+        replay(userRepository);
 
         rentManagementService.addNewRent(rent);
     }

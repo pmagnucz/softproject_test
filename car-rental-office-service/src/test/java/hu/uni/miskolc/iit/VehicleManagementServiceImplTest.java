@@ -16,8 +16,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-
 import static org.easymock.EasyMock.mock;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
 public class VehicleManagementServiceImplTest {
@@ -98,9 +100,10 @@ public class VehicleManagementServiceImplTest {
         car.setDrawBar(true);
 
         VehicleEntity mockedVehicleEntity = VehicleMapper.mapModelToEntity(car);
-/*
-        when(vehicleRepository.save(any(VehicleEntity.class))).thenReturn(mockedVehicleEntity);
-*/
+
+        expect(vehicleRepository.save(anyObject(VehicleEntity.class))).andReturn(mockedVehicleEntity);
+
+        replay(vehicleRepository);
 
         Vehicle actual = vehicleManagementService.addNewVehicle(car);
         assertEquals(car, actual);
@@ -130,8 +133,10 @@ public class VehicleManagementServiceImplTest {
         ship.setYearOfManufacture(date);
 
         VehicleEntity mockedVehicleEntity = VehicleMapper.mapModelToEntity(ship);
-     /*   when(vehicleRepository.save(any(VehicleEntity.class))).thenReturn(mockedVehicleEntity);
-        when(vehicleRepository.exists(any(Long.class))).thenReturn(true);*/
+        expect(vehicleRepository.save(anyObject(VehicleEntity.class))).andReturn(mockedVehicleEntity);
+        expect(vehicleRepository.exists(anyLong())).andReturn(true);
+
+        replay(vehicleRepository);
 
         Vehicle actual = vehicleManagementService.addNewVehicle(ship);
 
@@ -142,9 +147,10 @@ public class VehicleManagementServiceImplTest {
     @Test
     public void getVehicleById() throws Exception {
         VehicleEntity mockEntity = VehicleMapper.mapModelToEntity(car);
-/*
-        when(vehicleRepository.findOne(any(Long.class))).thenReturn(mockEntity);
-*/
+
+        expect(vehicleRepository.findOne(anyLong())).andReturn(mockEntity);
+
+        replay(vehicleRepository);
 
         Vehicle actual = vehicleManagementService.getVehicleById(5L);
         assertEquals(car,actual);
@@ -181,9 +187,10 @@ public class VehicleManagementServiceImplTest {
         vehicles.add(shipModel);
 
         List<VehicleEntity> expectedEntities = VehicleMapper.mapModelListToEntityList(vehicles);
-/*
-        when(vehicleRepository.findAll()).thenReturn(expectedEntities);
-*/
+
+        expect(vehicleRepository.findAll()).andReturn(expectedEntities);
+
+        replay(vehicleRepository);
 
         List<Vehicle> expected = new ArrayList<>();
         expected.add(shipModel);
@@ -198,9 +205,10 @@ public class VehicleManagementServiceImplTest {
         vehicles.add(car);
 
         List<VehicleEntity> expectedEntities = VehicleMapper.mapModelListToEntityList(vehicles);
-/*
-        when(vehicleRepository.findAll()).thenReturn(expectedEntities);
-*/
+
+        expect(vehicleRepository.findAll()).andReturn(expectedEntities);
+
+        replay(vehicleRepository);
 
         List<Vehicle> actual = vehicleManagementService.getVehicles();
         assertEquals(vehicles, actual);
@@ -217,8 +225,11 @@ public class VehicleManagementServiceImplTest {
         }
 
         VehicleEntity mockEntity = VehicleMapper.mapModelToEntity(car);
-       /* when(vehicleRepository.findOne(any(Long.class))).thenReturn(mockEntity);
-        when(vehicleRepository.save(any(VehicleEntity.class))).thenReturn(mockEntity);*/
+
+        expect(vehicleRepository.findOne(anyLong())).andReturn(mockEntity);
+        expect(vehicleRepository.save(anyObject(VehicleEntity.class))).andReturn(mockEntity);
+
+        replay(vehicleRepository);
 
         UpdateVehicleRequest updateVehicleRequest = new UpdateVehicleRequest();
 
@@ -244,15 +255,14 @@ public class VehicleManagementServiceImplTest {
 
     @Test
     public void removeVehicleCar() throws Exception {
-/*
-        when(vehicleRepository.exists(any(Long.class))).thenReturn(true);
-*/
+
+        expect(vehicleRepository.exists(anyLong())).andReturn(true);
+
+        vehicleRepository.delete(car.getId());
+
+        replay(vehicleRepository);
 
         vehicleManagementService.removeVehicle(car);
-
-/*
-        verify(vehicleRepository,times(1)).delete(car.getId());
-*/
     }
 
     @Test
@@ -260,15 +270,13 @@ public class VehicleManagementServiceImplTest {
         ship = new Ship();
         ship.setId(1L);
 
-/*
-        when(vehicleRepository.exists(any(Long.class))).thenReturn(true);
-*/
+        expect(vehicleRepository.exists(anyLong())).andReturn(true);
+
+        vehicleRepository.delete(ship.getId());
+
+        replay(vehicleRepository);
 
         vehicleManagementService.removeVehicle(ship);
-
-/*
-        verify(vehicleRepository,times(1)).delete(ship.getId());
-*/
     }
 
 
