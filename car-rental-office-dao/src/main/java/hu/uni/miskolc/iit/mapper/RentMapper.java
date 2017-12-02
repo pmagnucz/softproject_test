@@ -6,6 +6,7 @@ import hu.uni.miskolc.iit.model.Rent;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,17 +16,14 @@ import java.util.List;
  */
 public class RentMapper {
     public static RentEntity mapModelToEntity(Rent rent){
-        //converting format for Date to String
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-
         RentEntity rentEntity = new RentEntity();
 
         rentEntity.setId(rent.getId());
         rentEntity.setCustomerId(rent.getCustomerId());
         rentEntity.setCompanyId(rent.getCompanyId());
         rentEntity.setVehicleId(rent.getVehicleId());
-        rentEntity.setStartDate(format.format(rent.getStartDate()));
-        rentEntity.setEndDate(format.format(rent.getEndDate()));
+        rentEntity.setStartDate(rent.getStartDate().toString());
+        rentEntity.setEndDate(rent.getEndDate().toString());
         rentEntity.setDurationExtendable(String.valueOf(rent.isDurationExtendable()));
         rentEntity.setExtendedHours(String.valueOf(rent.getExtendedHours()));
         rentEntity.setKmUsed(String.valueOf(rent.getKmUsed()));
@@ -50,24 +48,12 @@ public class RentMapper {
     public static Rent mapEntityToModel(RentEntity rentEntity){
         Rent rent = new Rent();
 
-        //converting format for String to Date
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-
-        Date startDate = null;
-        Date endDate = null;
-        try {
-            startDate = format.parse(rentEntity.getStartDate());
-            endDate = format.parse(rentEntity.getEndDate());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
         rent.setId(rentEntity.getId());
         rent.setCustomerId(rentEntity.getCustomerId());
         rent.setCompanyId(rentEntity.getCompanyId());
         rent.setVehicleId(rentEntity.getVehicleId());
-        rent.setStartDate(startDate);
-        rent.setEndDate(endDate);
+        rent.setStartDate(LocalDate.parse(rentEntity.getStartDate()));
+        rent.setEndDate(LocalDate.parse(rentEntity.getEndDate()));
         rent.setDurationExtendable(Boolean.valueOf(rentEntity.getDurationExtendable()));
         rent.setExtendedHours(Integer.parseInt(rentEntity.getExtendedHours()));
         rent.setKmUsed(Integer.parseInt(rentEntity.getKmUsed()));

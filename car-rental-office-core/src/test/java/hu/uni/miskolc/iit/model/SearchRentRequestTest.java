@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 
 import static org.junit.Assert.*;
@@ -16,12 +17,7 @@ public class SearchRentRequestTest {
 
     @Before
     public void setUp() throws Exception {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String startDateString =  "2017-09-01";
-        Date startDate = dateFormat.parse(startDateString);
-        String endDateString =  "2017-10-01";
-        Date endDate = dateFormat.parse(endDateString);
-        searchRentRequest = new SearchRentRequest(1,2,3,startDate,endDate);
+        searchRentRequest = new SearchRentRequest(1,2,3,LocalDate.parse("2017-09-01"),LocalDate.parse("2017-10-01"));
     }
 
     @After
@@ -51,19 +47,15 @@ public class SearchRentRequestTest {
 
     @Test
     public void getStartDate() throws Exception {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String startDateString =  "2017-09-01";
-        Date expected = dateFormat.parse(startDateString);
-        Date actual = searchRentRequest.getStartDate();
+        LocalDate expected = LocalDate.parse("2017-09-01");
+        LocalDate actual = searchRentRequest.getStartDate();
         assertEquals(expected,actual);
     }
 
     @Test
     public void getEndDate() throws Exception {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String endDateString =  "2017-10-01";
-        Date expected = dateFormat.parse(endDateString);
-        Date actual = searchRentRequest.getEndDate();
+        LocalDate expected = LocalDate.parse("2017-10-01");
+        LocalDate actual = searchRentRequest.getEndDate();
         assertEquals(expected,actual);
     }
 

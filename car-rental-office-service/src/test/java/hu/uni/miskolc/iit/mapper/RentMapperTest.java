@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
 
 import static org.junit.Assert.*;
@@ -25,22 +26,12 @@ public class RentMapperTest {
     public void setUp() throws Exception {
         rent = new Rent();
 
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date startDate = null;
-        Date endDate = null;
-        try {
-            startDate = format.parse("2017-02-01");
-            endDate = format.parse("2017-03-01");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
         rent.setId(5L);
         rent.setCustomerId(1L);
         rent.setCompanyId(2L);
         rent.setVehicleId(3L);
-        rent.setStartDate(startDate);
-        rent.setEndDate(endDate);
+        rent.setStartDate(LocalDate.parse("2017-02-01"));
+        rent.setEndDate(LocalDate.parse("2017-03-01"));
         rent.setDurationExtendable(true);
         rent.setExtendedHours(24);
         rent.setKmUsed(100);

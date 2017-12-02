@@ -2,7 +2,7 @@ package hu.uni.miskolc.iit.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Rent {
 
@@ -13,10 +13,10 @@ public class Rent {
 	private Long vehicleId;
 
 	@JsonFormat(pattern="yyyy-MM-dd", timezone = "Europe/Budapest")
-	private Date startDate;
+	private LocalDate startDate;
 
 	@JsonFormat(pattern="yyyy-MM-dd", timezone = "Europe/Budapest")
-	private Date endDate;
+	private LocalDate endDate;
 
 	private boolean durationExtendable;
 
@@ -34,7 +34,7 @@ public class Rent {
 
 	}
 
-	public Rent(Long id, Long customerId, Long companyId, Long vehicleId, Date startDate, Date endDate, boolean durationExtendable, int extendedHours, int kmUsed, double dayFee, double kmFee, double otherFee, double totalFee, boolean paid) {
+	public Rent(Long id, Long customerId, Long companyId, Long vehicleId, LocalDate startDate, LocalDate endDate, boolean durationExtendable, int extendedHours, int kmUsed, double dayFee, double kmFee, double otherFee, double totalFee, boolean paid) {
 		this.id = id;
 		this.customerId = customerId;
 		this.companyId = companyId;
@@ -83,19 +83,19 @@ public class Rent {
 		this.vehicleId = vehicleId;
 	}
 
-	public Date getStartDate() {
+	public LocalDate getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(Date startDate) {
+	public void setStartDate(LocalDate startDate) {
 		this.startDate = startDate;
 	}
 
-	public Date getEndDate() {
+	public LocalDate getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(Date endDate) {
+	public void setEndDate(LocalDate endDate) {
 		this.endDate = endDate;
 	}
 

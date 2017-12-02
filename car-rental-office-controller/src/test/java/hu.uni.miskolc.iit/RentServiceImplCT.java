@@ -28,7 +28,7 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 public class RentServiceImplCT {
 //TODO: újra kell írni az egészet. Repository lehet mock, de a controller és a service NEM
-    Rent rent;
+   /* Rent rent;
 
     Car car;
 
@@ -103,5 +103,5 @@ public class RentServiceImplCT {
         Rent expected = rentManagementService.addNewRent(rent);
 
         assertEquals(expected,rentManagementService.getRentById(Math.toIntExact(expected.getId())));
-    }
+    }*/
 }
