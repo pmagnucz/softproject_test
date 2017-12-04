@@ -201,8 +201,40 @@ public class UserManagementIT {
 
         controller.getUserById(1L);
     }
+    
+    @Test
+    public void getUserByFilterOptionsTest(){
+        
+        SearchUserRequest searchUserRequest = new SearchUserRequest();
+        
+        Customer expected = new Customer();
+        
+        expected.setUserName("userName");
+        expected.setAddress("");
+        expected.setPhoneNumber("");
+        expected.setUserId("asd");
+        expected.setYearOfBirth(1990);
+        expected.setDrivingLicenceNumber("");
+        
+        List<Customer> customerList=new ArrayList<>();
+        customerList.add(expected);
+        
+        CreateUserRequest userRequest = new CreateUserRequest();
+        
+        userRequest.setUserName("userName");
+        userRequest.setAddress("");
+        userRequest.setPhoneNumber("");
+        userRequest.setUserId("asd");
+        userRequest.setYearOfBirth(1990);
+        userRequest.setDrivingLicenceNumber("");
+        
+        controller.addNewUser(userRequest);
 
-    public void getUserByFilterOptionsTest(){}
+        List<User> actual = controller.getUserByFilterOptions(searchUserRequest).getBody();
+
+        Assert.assertEquals(customerList, actual);
+            
+    }
 
     public void getUserByFilterOptionsExceptionalFlow(){}
 
