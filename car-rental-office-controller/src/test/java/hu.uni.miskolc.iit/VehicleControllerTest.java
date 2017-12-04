@@ -141,12 +141,14 @@ public class VehicleControllerTest {
         assertEquals(vehicle2, actual);
     }
 
+    @Test
+    public void removeVehicle() throws VehicleNotFoundException{
+        vehicleRepository.delete(vehicle.getId());
+        expectLastCall();
 
+        replay(vehicleRepository);
 
-
-
-
-
-
+        vehicleController.removeVehicle(vehicle);
+    }
 
 }
