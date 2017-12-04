@@ -153,8 +153,15 @@ public class UserManagementIT {
         Assert.assertEquals(expected, actual);
         
     }
+    
+    @Test(expected = UserNotFoundException.class)
+    public void deleteUserTestExceptionalFlow(){
+    
+        User user = new User();
+        user.setId(0L);
 
-    public void deleteUserTestExceptionalFlow(){}
+        controller.removeUser(user);
+    }
 
     public void getUserByIdTest(){}
 
