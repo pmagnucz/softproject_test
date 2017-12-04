@@ -193,7 +193,14 @@ public class UserManagementIT {
         
     }
 
-    public void getUserByIdTestExceptionalFlow(){}
+    @Test(expected = UserNotFoundException.class)
+    public void getUserByIdTestExceptionalFlow(){
+    
+        User user = new User();
+        user.setId(0L);
+
+        controller.getUserById(1L);
+    }
 
     public void getUserByFilterOptionsTest(){}
 
