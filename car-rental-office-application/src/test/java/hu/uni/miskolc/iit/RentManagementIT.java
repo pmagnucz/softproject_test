@@ -17,6 +17,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.util.Date;
 
 import java.util.List;
@@ -82,12 +85,14 @@ public class RentManagementIT {
             userRequest.setDrivingLicenceNumber("test");
 
             Car car = new Car();
-            Date yearOfManufactureDate = new Date(1950-02);
+
+            DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM").parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter();
+            LocalDate date = LocalDate.parse("2001-11", dateTimeFormatter);
 
             car.setId(1L);
             car.setType(VehicleType.CAR);
             car.setManufacturer("test");
-            car.setYearOfManufacture(yearOfManufactureDate);
+            car.setYearOfManufacture(date);
             car.setRentCost(15000);
             car.setPersons(5);
             car.setPerformance(1500.24);

@@ -69,7 +69,7 @@ public class VehicleManagementServiceImpl implements VehicleManagementService {
         for(Vehicle vehicle : vehicleList) {
             if(vehicle.getType() == searchVehicleRequest.getType()
                     || vehicle.getManufacturer() == searchVehicleRequest.getManufacturer()
-                    || vehicle.getYearOfManufacture() == searchVehicleRequest.getYearOfManufacture()
+                    || vehicle.getYearOfManufacture().equals(searchVehicleRequest.getYearOfManufacture())
                     || vehicle.getRentCost() == searchVehicleRequest.getRentCost()) {
                 requestedVehicles.add(vehicle);
             }

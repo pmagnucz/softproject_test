@@ -16,6 +16,7 @@ import org.junit.Test;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -51,22 +52,12 @@ public class RentControllerTest {
 
         rent = new Rent();
 
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date startDate = null;
-        Date endDate = null;
-        try {
-            startDate = format.parse("2017-02-01");
-            endDate = format.parse("2017-03-01");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
         rent.setId(1L);
         rent.setCustomerId(1L);
         rent.setCompanyId(0L);
         rent.setVehicleId(1L);
-        rent.setStartDate(startDate);
-        rent.setEndDate(endDate);
+        rent.setStartDate(LocalDate.parse("2017-02-01"));
+        rent.setEndDate(LocalDate.parse("2017-03-01"));
         rent.setDurationExtendable(true);
         rent.setExtendedHours(24);
         rent.setKmUsed(100);
@@ -82,8 +73,8 @@ public class RentControllerTest {
         rent2.setCustomerId(4L);
         rent2.setCompanyId(5L);
         rent2.setVehicleId(6L);
-        rent2.setStartDate(startDate);
-        rent2.setEndDate(endDate);
+        rent2.setStartDate(LocalDate.parse("2017-02-01"));
+        rent2.setEndDate(LocalDate.parse("2017-03-01"));
         rent2.setDurationExtendable(false);
         rent2.setExtendedHours(48);
         rent2.setKmUsed(200);
@@ -120,26 +111,20 @@ public class RentControllerTest {
 
     @Test
     public void updateRent() {
-        rent2.setId(rent.getId());
+        RentEntity mockEntity = RentMapper.mapModelToEntity(rent2);
 
-        RentEntity mockEntity = RentMapper.mapModelToEntity(rent);
-
+        expect(rentRepository.save(anyObject(RentEntity.class))).andReturn(mockEntity);
         expect(rentRepository.exists(anyLong())).andReturn(true);
         expect(userRepository.exists(anyLong())).andReturn(true);
         expect(vehicleRepository.exists(anyLong())).andReturn(true);
-        expect(rentRepository.findOne(anyLong())).andReturn(mockEntity).anyTimes();
-        expect(rentRepository.save(anyObject(RentEntity.class))).andReturn(mockEntity);
 
         replay(rentRepository);
         replay(userRepository);
         replay(vehicleRepository);
 
-        rentController.updateRent(rent2);
-
-        Rent actual = RentMapper.mapEntityToModel(mockEntity);
+        Rent actual = rentController.updateRent(rent2).getBody();
 
         assertEquals(rent2,actual);
-
     }
 
     @Test
@@ -199,17 +184,7 @@ public class RentControllerTest {
 
     @Test
     public void getRentsByFilterOptions() {
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date startDateRequest = null;
-        Date endDateRequest = null;
-        try {
-            startDateRequest = format.parse("2017-02-02");
-            endDateRequest = format.parse("2017-03-02");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        SearchRentRequest searchRentRequest = new SearchRentRequest(1,100,150,startDateRequest,endDateRequest);
+        SearchRentRequest searchRentRequest = new SearchRentRequest(1,100,150,LocalDate.parse("2017-02-02"),LocalDate.parse("2017-03-02"));
 
         List<Rent> rents = new ArrayList<>();
         rents.add(rent);
@@ -244,18 +219,8 @@ public class RentControllerTest {
 
     @Test(expected = WrongRentDateException.class)
     public void wrongDateException() throws Exception {
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date startDate = null;
-        Date endDate = null;
-        try {
-            startDate = format.parse("2017-03-01");
-            endDate = format.parse("2017-02-01");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        rent.setStartDate(startDate);
-        rent.setEndDate(endDate);
+        rent.setStartDate(LocalDate.parse("2017-03-01"));
+        rent.setEndDate(LocalDate.parse("2017-02-01"));
 
         rentController.createRent(rent);
     }
