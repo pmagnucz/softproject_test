@@ -55,7 +55,27 @@ public class UserManagementIT {
         Assert.assertEquals(expected, actual);
     }
 
-    public void createCompanyTest(){}
+    public void createCompanyTest(){
+    CreateUserRequest createUserRequest = new CreateUserRequest();
+        createUserRequest.setUserName("userName");
+        createUserRequest.setAddress("");
+        createUserRequest.setPhoneNumber("");
+        createUserRequest.setUserId("asd");
+        createUserRequest.setBillingAddress("");
+
+
+        Company expected = new Company();
+        expected.setId(1L);
+        expected.setPhoneNumber("");
+        expected.setUserName("userName");
+        expected.setAddress("");
+        expected.setUserId("asd");
+        expected.setBillingAddress("");
+
+        User actual = controller.createUser(createUserRequest).getBody();
+
+        Assert.assertEquals(expected, actual);
+    }
 
     public void createUserTestExceptionalFlow(){}
 
