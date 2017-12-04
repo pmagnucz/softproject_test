@@ -54,7 +54,7 @@ public class UserManagementIT {
 
         Assert.assertEquals(expected, actual);
     }
-
+    @Test
     public void createCompanyTest(){
     CreateUserRequest createUserRequest = new CreateUserRequest();
         createUserRequest.setUserName("userName");
@@ -76,8 +76,16 @@ public class UserManagementIT {
 
         Assert.assertEquals(expected, actual);
     }
-
-    public void createUserTestExceptionalFlow(){}
+    @Test(expected = UserNotFoundException.class)
+    public void createUserTestExceptionalFlow(){
+    CreateUserRequest userRequest = new CreateUserRequest();
+        createUserRequest.setUserName("userName");
+        createUserRequest.setAddress("");
+        createUserRequest.setPhoneNumber("");
+        createUserRequest.setUserId("asd");
+    
+        controller.addNewUser(userRequest);
+    }
 
     public void getAllUsersTest(){}
 
