@@ -180,4 +180,33 @@ public class VehicleControllerTest {
         Vehicle actual = vehicleController.getVehicleById(vehicle.getId()).getBody();
         assertEquals(vehicle, actual);
     }
+
+    @Test
+    public void getVehiclesByFilterOption() throws NotValidPlateNumberFormatException, ParseException {
+        SearchVehicleRequest searchVehicleRequest = new SearchVehicleRequest();
+
+        DateFormat format = new SimpleDateFormat("yyyy-MM");
+
+        searchVehicleRequest.setManufacturer("kettes");
+        searchVehicleRequest.setRentCost(20000.0);
+        searchVehicleRequest.setYearOfManufacture(format.parse("1960-01"));
+
+        List<Vehicle> vehicles =new ArrayList<>();
+        vehicles.add(vehicle);
+        vehicles.add(vehicle2);
+
+        List<VehicleEntity> expectedEntities = VehicleMapper.mapModelListToEntityList(vehicles);
+
+        expect(vehicleRepository.findAll()).andReturn(expectedEntities);
+
+        replay(vehicleRepository);
+
+        List<Vehicle> expected = new ArrayList<>();
+        expected.add(vehicle2);
+
+        List<Vehicle> actual = vehicleController.getVehicleByFilterOptions(searchVehicleRequest).getBody();
+
+        assertEquals(expected, actual);
+    }
+
 }
