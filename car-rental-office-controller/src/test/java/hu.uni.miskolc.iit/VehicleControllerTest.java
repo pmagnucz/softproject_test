@@ -168,4 +168,16 @@ public class VehicleControllerTest {
         List<Vehicle> actual = vehicleController.getVehicles().getBody();
         assertEquals(vehicles, actual);
     }
+
+    @Test
+    public void getVehicleById() throws VehicleNotFoundException {
+        VehicleEntity mockEntity = VehicleMapper.mapModelToEntity(vehicle);
+
+        expect(vehicleRepository.findOne(anyLong())).andReturn(mockEntity);
+
+        replay(vehicleRepository);
+
+        Vehicle actual = vehicleController.getVehicleById(vehicle.getId()).getBody();
+        assertEquals(vehicle, actual);
+    }
 }
