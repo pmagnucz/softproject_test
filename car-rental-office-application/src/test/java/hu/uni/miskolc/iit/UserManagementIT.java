@@ -122,8 +122,37 @@ public class UserManagementIT {
         controller.updateUser(userRequest);
         
     }
-
-    public void deleteUserTest(){}
+    
+    @Test
+    public void deleteUserTest(){
+    
+        CreateUserRequest userRequest = new CreateUserRequest();
+        
+        createUserRequest.setUserName("userName");
+        createUserRequest.setAddress("");
+        createUserRequest.setPhoneNumber("");
+        createUserRequest.setUserId("asd");
+        createUserRequest.setYearOfBirth(1990);
+        createUserRequest.setDrivingLicenceNumber("");
+        
+        Customer expected = new Customer();
+        
+        expected.setUserName("userName");
+        expected.setAddress("");
+        expected.setPhoneNumber("");
+        expected.setUserId("asd");
+        expected.setYearOfBirth(1990);
+        expected.setDrivingLicenceNumber("");
+        
+        User actual = controller.addNewUser(userRequest).getBody();
+        
+        controller.removeUser(actual);
+        
+        int size = controller.getUsers().getBody().size();
+        
+        Assert.assertEquals(expected, actual);
+        
+    }
 
     public void deleteUserTestExceptionalFlow(){}
 
