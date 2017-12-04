@@ -5,6 +5,7 @@ import hu.uni.miskolc.iit.entity.VehicleEntity;
 import hu.uni.miskolc.iit.exception.ExistingVehiclePlateNumber;
 import hu.uni.miskolc.iit.exception.NotSupportedVehicleTypeException;
 import hu.uni.miskolc.iit.exception.NotValidPlateNumberFormatException;
+import hu.uni.miskolc.iit.exception.VehicleNotFoundException;
 import hu.uni.miskolc.iit.mapper.VehicleMapper;
 import hu.uni.miskolc.iit.model.*;
 import hu.uni.miskolc.iit.repositories.VehicleRepository;
@@ -20,6 +21,7 @@ import java.text.SimpleDateFormat;
 import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertEquals;
 
 public class VehicleControllerTest {
@@ -29,8 +31,10 @@ public class VehicleControllerTest {
 
 
     private Car vehicle;
+    private Car vehicle2;
 
     private CreateVehicleRequest vehicleRequest;
+    private UpdateVehicleRequest updateVehicleRequest;
 
     @Before
     public void setUp() throws ParseException {
@@ -67,6 +71,35 @@ public class VehicleControllerTest {
         vehicleRequest.setVehicleIdentificationNumber(vehicle.getVehicleIdentificationNumber());
         vehicleRequest.setDrawBar(vehicle.isDrawBar());
         vehicleRequest.setId(vehicle.getId());
+
+        vehicle2 = new Car();
+
+        vehicle2.setId(2L);
+        vehicle2.setType(VehicleType.CAR);
+        vehicle2.setManufacturer("kettes");
+        vehicle2.setRentCost(20000.0);
+        vehicle2.setPersons(2);
+        vehicle2.setPerformance(100.0);
+        vehicle2.setVehicleStatus(VehicleStatusType.RESERVED);
+        vehicle2.setYearOfManufacture(format.parse("1960-01"));
+        vehicle2.setPlateNumber("cba321");
+        vehicle2.setVehicleIdentificationNumber("kettoid");
+        vehicle2.setDrawBar(false);
+
+        updateVehicleRequest = new UpdateVehicleRequest();
+        updateVehicleRequest.setId(1L);
+        updateVehicleRequest.setType(vehicle.getType());
+        updateVehicleRequest.setCar(true);
+        updateVehicleRequest.setShip(false);
+        updateVehicleRequest.setManufacturer(vehicle2.getManufacturer());
+        updateVehicleRequest.setRentCost(vehicle2.getRentCost());
+        updateVehicleRequest.setPersons(vehicle2.getPersons());
+        updateVehicleRequest.setPerformance(vehicle.getPerformance());
+        updateVehicleRequest.setVehicleStatus(vehicle.getVehicleStatus());
+        updateVehicleRequest.setYearOfManufacture(vehicle2.getYearOfManufacture());
+        updateVehicleRequest.setPlateNumber(vehicle2.getPlateNumber());
+        updateVehicleRequest.setVehicleIdentificationNumber(vehicle2.getVehicleIdentificationNumber());
+        updateVehicleRequest.setDrawBar(vehicle2.isDrawBar());
     }
 
     @After
@@ -87,7 +120,26 @@ public class VehicleControllerTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    public void updateVehicle() throws VehicleNotFoundException, NotValidPlateNumberFormatException{
+        vehicle2.setId(vehicle.getId());
+        vehicle2.setType(vehicle.getType());
+        vehicle2.setPerformance(vehicle.getPerformance());
+        vehicle2.setVehicleStatus(vehicle.getVehicleStatus());
 
+        VehicleEntity mockEntity = VehicleMapper.mapModelToEntity(vehicle);
+
+        expect(vehicleRepository.findOne(anyLong())).andReturn(mockEntity);
+        expect(vehicleRepository.save(anyObject(VehicleEntity.class))).andReturn(mockEntity);
+
+        replay(vehicleRepository);
+
+        vehicleController.updateVehicle(updateVehicleRequest);
+
+        Vehicle actual = VehicleMapper.mapEntityToModel(mockEntity);
+
+        assertEquals(vehicle2, actual);
+    }
 
 
 
