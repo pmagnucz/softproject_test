@@ -88,8 +88,30 @@ public class UserManagementIT {
     }
 
     public void getAllUsersTest(){}
-
-    public void updateUserTest(){}
+    
+    @Test
+    public void updateUserTest(){
+    CreateUserRequest userRequest = new CreateUserRequest();
+        createUserRequest.setUserName("userName");
+        createUserRequest.setAddress("");
+        createUserRequest.setPhoneNumber("");
+        createUserRequest.setUserId("asd");
+        createUserRequest.setYearOfBirth(1990);
+        createUserRequest.setDrivingLicenceNumber("");
+        
+        Customer actual = (Customer)controller.addNewUser(userRequest).getBody();
+        
+        UpdateUserRequest updateUserRequest = new UpdateUserRequest();
+        updateUserRequest.setUserName(actual.getUserName());
+        updateUserRequest.setAddress(actual.getAdress());
+        updateUserRequest.setPhoneNumber(actual.getPhoneNumber());
+        updateUserRequest.setUserId(actual.getUserId());
+        updateUserRequest.setYearOfBirth(actual.getYearOfBirth());
+        updateUserRequest.setDrivingLicenceNumber(actual.getDrivingLicenceNumber());
+        
+        Customer updated = (Customer)controller.updateUser(updateUserRequest).getBody();
+        Assert.assertEquals(updated, actual);
+    }
 
     public void updateUserTestExceptionalFlow(){}
 
