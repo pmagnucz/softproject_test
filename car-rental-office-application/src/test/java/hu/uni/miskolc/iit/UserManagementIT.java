@@ -79,10 +79,10 @@ public class UserManagementIT {
     @Test(expected = UserNotFoundException.class)
     public void createUserTestExceptionalFlow(){
     CreateUserRequest userRequest = new CreateUserRequest();
-        createUserRequest.setUserName("userName");
-        createUserRequest.setAddress("");
-        createUserRequest.setPhoneNumber("");
-        createUserRequest.setUserId("asd");
+        userRequest.setUserName("userName");
+        userRequest.setAddress("");
+        userRequest.setPhoneNumber("");
+        userRequest.setUserId("asd");
     
         controller.addNewUser(userRequest);
     }
@@ -92,12 +92,12 @@ public class UserManagementIT {
     @Test
     public void updateUserTest(){
     CreateUserRequest userRequest = new CreateUserRequest();
-        createUserRequest.setUserName("userName");
-        createUserRequest.setAddress("");
-        createUserRequest.setPhoneNumber("");
-        createUserRequest.setUserId("asd");
-        createUserRequest.setYearOfBirth(1990);
-        createUserRequest.setDrivingLicenceNumber("");
+        userRequest.setUserName("userName");
+        userRequest.setAddress("");
+        userRequest.setPhoneNumber("");
+        userRequest.setUserId("asd");
+        userRequest.setYearOfBirth(1990);
+        userRequest.setDrivingLicenceNumber("");
         
         Customer actual = (Customer)controller.addNewUser(userRequest).getBody();
         
@@ -128,12 +128,12 @@ public class UserManagementIT {
     
         CreateUserRequest userRequest = new CreateUserRequest();
         
-        createUserRequest.setUserName("userName");
-        createUserRequest.setAddress("");
-        createUserRequest.setPhoneNumber("");
-        createUserRequest.setUserId("asd");
-        createUserRequest.setYearOfBirth(1990);
-        createUserRequest.setDrivingLicenceNumber("");
+        userRequest.setUserName("userName");
+        userRequest.setAddress("");
+        userRequest.setPhoneNumber("");
+        userRequest.setUserId("asd");
+        userRequest.setYearOfBirth(1990);
+        userRequest.setDrivingLicenceNumber("");
         
         Customer expected = new Customer();
         
