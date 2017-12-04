@@ -17,6 +17,8 @@ import org.junit.Test;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
@@ -142,7 +144,7 @@ public class VehicleControllerTest {
     }
 
     @Test
-    public void removeVehicle() throws VehicleNotFoundException{
+    public void removeVehicle() throws VehicleNotFoundException {
         vehicleRepository.delete(vehicle.getId());
         expectLastCall();
 
@@ -151,4 +153,19 @@ public class VehicleControllerTest {
         vehicleController.removeVehicle(vehicle);
     }
 
+    @Test
+    public void getVehicles() {
+        List<Vehicle> vehicles = new ArrayList<>();
+        vehicles.add(vehicle);
+        vehicles.add(vehicle2);
+
+        List<VehicleEntity> expectedEntities = VehicleMapper.mapModelListToEntityList(vehicles);
+
+        expect(vehicleRepository.findAll()).andReturn(expectedEntities);
+
+        replay(vehicleRepository);
+
+        List<Vehicle> actual = vehicleController.getVehicles().getBody();
+        assertEquals(vehicles, actual);
+    }
 }
