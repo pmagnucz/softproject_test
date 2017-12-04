@@ -112,8 +112,16 @@ public class UserManagementIT {
         Customer updated = (Customer)controller.updateUser(updateUserRequest).getBody();
         Assert.assertEquals(updated, actual);
     }
+    
+    @Test(expected = UserNotFoundException.class)
+    public void updateUserTestExceptionalFlow(){
+    
+        UpdateUserRequest userRequest = new UpdateUserRequest();
+        userRequest.setId(0L);
 
-    public void updateUserTestExceptionalFlow(){}
+        controller.updateUser(userRequest);
+        
+    }
 
     public void deleteUserTest(){}
 
