@@ -107,6 +107,47 @@ public class UserManagementServiceImplTest {
         assertEquals(company, actual);
 
 }
+    @Test
+    public void getUserById() throws Exception {
+        UserEntity mockEntity = UserMapper.mapModelToEntity(customer);
+
+        expect(userRepository.findOne(anyLong())).andReturn(mockEntity);
+
+        replay(userRepository);
+
+        User actual = userManagementService.getUserById(2L);
+        assertEquals(customer,actual);
+}
+    @Test
+    public void getUserByFilterOptions() throws Exception {
+        
+        Company company = new Company();
+        company.setId(2L);
+        company.setPhoneNumber("+363231231231");
+        company.setAddress("Miskolc);
+        company.setDrivingLicenceNumber("21213565");
+        company.setCompanyId(1L);
+        company.setBillingAddress("Debrecen");
+
+        SearchUserRequest searchUserRequest =
+                new SearchUserRequest("Jóska István","+363744746","Miskolc","646445465");
+
+        List<User> users = new ArrayList<>();
+        users.add(customer);
+        users.add(company);
+
+        List<UserEntity> expectedEntities = UserMapper.mapModelListToEntityList(users);
+
+        expect(userRepository.findAll()).andReturn(expectedEntities);
+
+        replay(userRepository);
+
+        List<User> expected = new ArrayList<>();
+        expected.add(company);
+        List<User> actual = userManagementService.getUserByFilterOptions(searchUserRequest);
+
+        assertEquals(expected,actual);
+}
 
 
     // TODO: implementálni kell!!
