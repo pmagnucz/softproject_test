@@ -54,12 +54,59 @@ public class UserManagementServiceImplTest {
         customer.setUserId(1L);
         customer.setYearOfBirth(1990);
         customer.setDrivingLincenceNumber("21213565");
-        
-        
-        
-        
-        
+           
     }
+    
+    @After
+     public void tearDown() throws Exception {
+     }
+    
+    @Test
+    public void addNewUserCustomer() throws Exception {
+        customer = new Customer();
+
+        customer.setId(1L);
+        customer.setPhoneNumber("+363231231231");
+        customer.setAddress("Miskolc");
+        customer.setUserName("Jóska István");
+        customer.setUserId(1L);
+        customer.setYearOfBirth(1990);
+        customer.setDrivingLincenceNumber("21213565");
+
+        UserEntity mockedUserEntity = UserMapper.mapModelToEntity(customer);
+
+        expect(userRepository.save(anyObject(UserEntity.class))).andReturn(mockedUserEntity);
+
+        replay(userRepository);
+
+        User actual = userManagementService.addNewUser(customer);
+        assertEquals(customer, actual);
+}
+    
+    @Test
+    public void addNewUserCompany() throws Exception {
+        company = new Company();
+
+        
+        company.setId(2L);
+        company.setPhoneNumber("+363231231231");
+        company.setAddress("Miskolc);
+        company.setDrivingLicenceNumber("21213565");
+        company.setCompanyId(1L);
+        company.setBillingAddress("Debrecen");
+        
+
+        UserEntity mockedUserEntity = UserMapper.mapModelToEntity(company);
+        expect(userRepository.save(anyObject(UserEntity.class))).andReturn(mockedUserEntity);
+        expect(userRepository.exists(anyLong())).andReturn(true);
+
+        replay(userRepository);
+
+        User actual = userManagementService.addNewUser(company);
+
+        assertEquals(company, actual);
+
+}
 
 
     // TODO: implementálni kell!!
