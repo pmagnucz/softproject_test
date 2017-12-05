@@ -160,6 +160,33 @@ public class UserManagementServiceImplTest {
         assertEquals(users, actual);
         
     }
+    
+    @Test
+    public void updateUser() throws Exception {
+        
+        UserEntity mockEntity = UserMapper.mapModelToEntity(customer);
+
+        expect(userRepository.findOne(anyLong())).andReturn(mockEntity);
+        expect(userRepository.save(anyObject(UserEntity.class))).andReturn(mockEntity);
+
+        replay(userRepository);
+
+        UpdateUserRequest updateUserRequest = new UpdateUserRequest();
+
+        updateUserRequest.setId(1L);
+        updateUserRequest.setPhoneNumber("+363664647");
+        updateUserRequest.setAddress("Eger");
+        updateUserRequest.setUserName("Jóska Pista");
+        updateUserRequest.setUserId(1L);
+        updateUserRequest.setYearOfBirth(1992);
+        updateUserRequest.setDrivingLicenceNumber("323232434");
+        
+        userManagementService.updateUser(updateUserRequest);
+
+        User actual = UserMapper.mapEntityToModel(mockEntity);
+
+        assertNotEquals(customer,actual);
+}
 
 
     // TODO: implementálni kell!!
