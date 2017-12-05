@@ -187,6 +187,19 @@ public class UserManagementServiceImplTest {
 
         assertNotEquals(customer,actual);
 }
+    
+    
+    @Test
+    public void removeUserCustomer() throws Exception {
+
+        expect(userRepository.exists(anyLong())).andReturn(true);
+
+        userRepository.delete(customer.getId());
+
+        replay(userRepository);
+
+        userManagementService.removeUser(customer);
+}
 
 
     // TODO: implementálni kell!!
