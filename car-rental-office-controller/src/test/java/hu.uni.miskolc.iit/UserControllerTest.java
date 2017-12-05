@@ -1,12 +1,10 @@
 package hu.uni.miskolc.iit;
 
 import hu.uni.miskolc.iit.controller.UserManagementController;
-import hu.uni.miskolc.iit.entity.UserEntity;
+import hu.uni.miskolc.iit.dao.UserManagementDao;
 import hu.uni.miskolc.iit.exception.*;
-import hu.uni.miskolc.iit.mapper.UserMapper;
 import hu.uni.miskolc.iit.model.*;
 import hu.uni.miskolc.iit.model.UpdateUserRequest;
-import hu.uni.miskolc.iit.repositories.UserRepository;
 import hu.uni.miskolc.iit.service.UserManagementService;
 import org.junit.After;
 import org.junit.Before;
@@ -28,7 +26,7 @@ public class UserControllerTest {
 
     private UserManagementController userController;
     private UserManagementService userService;
-    private UserRepository userRepository;
+    private UserManagementDao userManagementDao;
 
     private Customer user;
     private Customer user2;
@@ -39,9 +37,9 @@ public class UserControllerTest {
 
     @Before
     public void setUp() {
-        userRepository = mock(UserRepository.class);
+        userManagementDao = mock(UserManagementDao.class);
 
-        userService = new UserManagementServiceImpl(userRepository);
+        userService = new UserManagementServiceImpl(userManagementDao);
         userController = new UserManagementController(userService);
 
         user = new Customer();
@@ -91,51 +89,44 @@ public class UserControllerTest {
     @Test
     public void createUser() throws NegativeValueException, UserNotFoundException, UserTypeDoesNotExistException {
         User expected = user;
-        UserEntity mockEntity = UserMapper.mapModelToEntity(user);
-        expect(userRepository.save(mockEntity)).andReturn(mockEntity);
+        expect(userManagementDao.addUser(anyObject(User.class))).andReturn(user);
 
-        replay(userRepository);
+        replay(userManagementDao);
 
         User actual = userController.createUser(userRequest).getBody();
 
         assertEquals(expected,actual);
 
     }
-    @Test
+
     public void updateUser() {
         user2.setId(user.getId());
         user2.setUserName(user.getUserName());
         user2.setUserId(user.getUserId());
 
-        UserEntity mockEntity = UserMapper.mapModelToEntity(user);
+        expect(userManagementDao.getUserById(anyLong())).andReturn(user);
+        expect(userManagementDao.addUser(anyObject(User.class))).andReturn(user);
 
-        expect(userRepository.findOne(anyLong())).andReturn(mockEntity);
-        expect(userRepository.save(anyObject(UserEntity.class))).andReturn(mockEntity);
+        replay(userManagementDao);
 
-        replay(userRepository);
-
-        userController.updateUser(updateUserRequest);
-
-        User actual = UserMapper.mapUserEntityToModel(mockEntity);
+        User actual = userController.updateUser(updateUserRequest).getBody();
 
         assertEquals(user2,actual);
     }
 
     public void deleteUser() throws NegativeValueException, UserNotFoundException {
-        userRepository.delete(user.getId());
+        userManagementDao.deleteUser(user);
         expectLastCall();
-
-        replay(userRepository);
+        replay(userManagementDao);
 
         userController.deleteUser(user);
     }
 
+//TODO fix it
     public void getUserById() throws UserNotFoundException {
-        UserEntity mockEntity = UserMapper.mapModelToEntity(user);
+        expect(userManagementDao.getUserById(anyLong())).andReturn(user);
 
-        expect(userRepository.findOne(anyLong())).andReturn(mockEntity);
-
-        replay(userRepository);
+        replay(userManagementDao);
 
         User actual = userController.getUserById(user.getId()).getBody();
         assertEquals(user,actual);
@@ -147,11 +138,9 @@ public class UserControllerTest {
         users.add(user);
         users.add(user2);
 
-        List<UserEntity> expectedEntities = UserMapper.mapUserListToUserEntityList(users);
+        expect(userManagementDao.getUsers()).andReturn(users);
 
-        expect(userRepository.findAll()).andReturn(expectedEntities);
-
-        replay(userRepository);
+        replay(userManagementDao);
 
         List<User> actual = userController.getAllUser().getBody();
         assertEquals(users, actual);
@@ -171,11 +160,9 @@ public class UserControllerTest {
         users.add(user);
         users.add(user2);
 
-        List<UserEntity> expectedEntities = UserMapper.mapUserListToUserEntityList(users);
+        expect(userManagementDao.getUsers()).andReturn(users);
 
-        expect(userRepository.findAll()).andReturn(expectedEntities);
-
-        replay(userRepository);
+        replay(userManagementDao);
 
         List<User> expected = new ArrayList<>();
         expected.add(user);

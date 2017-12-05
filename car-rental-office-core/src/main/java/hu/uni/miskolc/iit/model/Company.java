@@ -40,17 +40,20 @@ public class Company extends User {
 
         Company company = (Company) o;
 
-        if (companyId != company.companyId) return false;
-        if (billingAddress != null ? !billingAddress.equals(company.billingAddress) : company.billingAddress != null)
+        if (getCompanyId() != null ? !getCompanyId().equals(company.getCompanyId()) : company.getCompanyId() != null)
             return false;
-        return representative != null ? representative.equals(company.representative) : company.representative == null;
+        if (getBillingAddress() != null ? !getBillingAddress().equals(company.getBillingAddress()) : company.getBillingAddress() != null)
+            return false;
+        return getRepresentative() != null ? getRepresentative().equals(company.getRepresentative()) : company.getRepresentative() == null;
+
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (billingAddress != null ? billingAddress.hashCode() : 0);
-        result = 31 * result + (representative != null ? representative.hashCode() : 0);
+        result = 31 * result + (getCompanyId() != null ? getCompanyId().hashCode() : 0);
+        result = 31 * result + (getBillingAddress() != null ? getBillingAddress().hashCode() : 0);
+        result = 31 * result + (getRepresentative() != null ? getRepresentative().hashCode() : 0);
         return result;
     }
 

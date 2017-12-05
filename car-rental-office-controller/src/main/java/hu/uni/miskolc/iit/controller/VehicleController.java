@@ -1,16 +1,19 @@
 package hu.uni.miskolc.iit.controller;
 
+import hu.uni.miskolc.iit.VehicleManagementServiceImpl;
+import hu.uni.miskolc.iit.dao.VehicleManagementDao;
+import hu.uni.miskolc.iit.dao.VehicleManagementDaoImpl;
 import hu.uni.miskolc.iit.exception.ExistingVehiclePlateNumber;
 import hu.uni.miskolc.iit.exception.NotValidPlateNumberFormatException;
 import hu.uni.miskolc.iit.exception.VehicleNotFoundException;
 import hu.uni.miskolc.iit.model.*;
 import hu.uni.miskolc.iit.service.VehicleManagementService;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
 import java.util.*;
 
 /**
@@ -20,13 +23,13 @@ import java.util.*;
 @RestController
 @RequestMapping("/vehicle")
 public class VehicleController {
-    private static final Logger LOGGER = Logger.getLogger(VehicleController.class);
 
     private VehicleManagementService vehicleManagementService;
 
-    @Autowired
+
     public VehicleController(VehicleManagementService vehicleManagementService) {
-        this.vehicleManagementService = vehicleManagementService;
+        VehicleManagementDao vehicleManagementDao = new VehicleManagementDaoImpl(new File("src/test/resources/vehicleDatabase.json"));
+        this.vehicleManagementService = new VehicleManagementServiceImpl(vehicleManagementDao);
     }
 
     // TODO ki kell szervezni az ismétlődő kódot vagy a három eset három private metódus legyen és itt csak a megfelelőt kell hívni
@@ -49,10 +52,8 @@ public class VehicleController {
             try {
                 return ResponseEntity.ok(vehicleManagementService.addNewVehicle(car));
             } catch (ExistingVehiclePlateNumber existingVehiclePlateNumber) {
-                LOGGER.error(existingVehiclePlateNumber);
                 return ResponseEntity.badRequest().body(null);
             } catch (NotValidPlateNumberFormatException e) {
-                LOGGER.error(e);
                 return ResponseEntity.badRequest().body(null);
             }
         } else if (createVehicleRequest.getType() == VehicleType.SHIP) {
@@ -72,10 +73,8 @@ public class VehicleController {
             try {
                 return ResponseEntity.ok(vehicleManagementService.addNewVehicle(ship));
             } catch (ExistingVehiclePlateNumber existingVehiclePlateNumber) {
-                LOGGER.error(existingVehiclePlateNumber);
                 return ResponseEntity.badRequest().body(null);
             } catch (NotValidPlateNumberFormatException e) {
-                LOGGER.error(e);
                 return ResponseEntity.badRequest().body(null);
             }
         } else {
@@ -93,10 +92,8 @@ public class VehicleController {
             try {
                 return ResponseEntity.ok(vehicleManagementService.addNewVehicle(other));
             } catch (ExistingVehiclePlateNumber existingVehiclePlateNumber) {
-                LOGGER.error(existingVehiclePlateNumber);
                 return ResponseEntity.badRequest().body(null);
             } catch (NotValidPlateNumberFormatException e) {
-                LOGGER.error(e);
                 return ResponseEntity.badRequest().body(null);
             }
         }
@@ -107,7 +104,6 @@ public class VehicleController {
         try {
             return ResponseEntity.ok(vehicleManagementService.getVehicleById(vehicleId));
         } catch (VehicleNotFoundException e) {
-            LOGGER.error(e);
             return ResponseEntity.badRequest().body(null);
         }
     }
@@ -117,7 +113,6 @@ public class VehicleController {
         try {
             return ResponseEntity.ok(vehicleManagementService.getVehicleByFilterOptions(searchVehicleRequest));
         } catch (NotValidPlateNumberFormatException e) {
-            LOGGER.error(e);
             return ResponseEntity.badRequest().body(null);
         }
     }
@@ -133,10 +128,8 @@ public class VehicleController {
         try {
             return ResponseEntity.ok(vehicleManagementService.updateVehicle(updateVehicleRequest));
         } catch (VehicleNotFoundException e) {
-            LOGGER.error(e);
             return ResponseEntity.badRequest().body(null);
         } catch (NotValidPlateNumberFormatException e) {
-            LOGGER.error(e);
             return ResponseEntity.badRequest().body(null);
         }
     }
@@ -146,7 +139,7 @@ public class VehicleController {
         try {
             vehicleManagementService.removeVehicle(vehicle);
         } catch (VehicleNotFoundException e) {
-            LOGGER.error(e);
+
         }
     }
 }

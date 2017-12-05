@@ -7,9 +7,7 @@ import hu.uni.miskolc.iit.service.UserManagementService;
 import hu.uni.miskolc.iit.service.VehicleManagementService;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -21,7 +19,6 @@ import static org.junit.Assert.*;
 /**
  * Created by zsoltme on 2017.11.18..
  */
-@RunWith(SpringJUnit4ClassRunner.class)
 public class RentServiceImplCT {
 //TODO: újra kell írni az egészet. Repository lehet mock, de a controller és a service NEM
     Rent rent;
@@ -103,6 +100,6 @@ public class RentServiceImplCT {
     public void getRentById() throws NegativeValueException, RentWrongTotalFeeException, RentIdAlreadyExistsException, WrongRentDateException, UserNotFoundException, VehicleNotFoundException, RentNotFoundException {
         Rent expected = rentManagementService.addNewRent(rent);
 
-        assertEquals(expected,rentManagementService.getRentById(Math.toIntExact(expected.getId())));
+        assertEquals(expected,rentManagementService.getRentById(expected.getId()));
     }
 }

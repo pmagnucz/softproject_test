@@ -34,7 +34,7 @@ public class RentController {
     }
 
     @RequestMapping(value = "/getById", method = RequestMethod.POST)
-    public ResponseEntity<Rent> getRentById(@RequestBody int id){
+    public ResponseEntity<Rent> getRentById(@RequestBody long id){
         return ResponseEntity.ok(rentManagementService.getRentById(id));
     }
 

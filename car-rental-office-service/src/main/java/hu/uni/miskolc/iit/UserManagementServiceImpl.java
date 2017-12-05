@@ -1,15 +1,10 @@
 package hu.uni.miskolc.iit;
 
-import hu.uni.miskolc.iit.entity.UserEntity;
+import hu.uni.miskolc.iit.dao.UserManagementDao;
 import hu.uni.miskolc.iit.exception.UserNotFoundException;
 import hu.uni.miskolc.iit.exception.UserTypeDoesNotExistException;
-import hu.uni.miskolc.iit.mapper.UserMapper;
 import hu.uni.miskolc.iit.model.*;
-import hu.uni.miskolc.iit.repositories.UserRepository;
 import hu.uni.miskolc.iit.service.UserManagementService;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,15 +12,11 @@ import java.util.List;
 /**
  * Created by pmagnucz on 2017. 09. 28..
  */
-@Service
 public class UserManagementServiceImpl implements UserManagementService {
-    private static final Logger LOGGER = Logger.getLogger(UserManagementServiceImpl.class);
+    private UserManagementDao userManagementDao;
 
-    private UserRepository userRepository;
-
-    @Autowired
-    public UserManagementServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserManagementServiceImpl(UserManagementDao userManagementDao) {
+        this.userManagementDao = userManagementDao;
     }
 
     @Override
@@ -38,8 +29,7 @@ public class UserManagementServiceImpl implements UserManagementService {
             customer.setPhoneNumber(createUserRequest.getPhoneNumber());
             customer.setUserName(createUserRequest.getUserName());
             customer.setAddress(createUserRequest.getAddress());
-            UserEntity userEntity = UserMapper.mapModelToEntity(customer);
-            return UserMapper.mapUserEntityToModel(userRepository.save(userEntity));
+            return userManagementDao.addUser(customer);
         } else if (createUserRequest.getCompanyId() != null && !createUserRequest.getCompanyId().isEmpty()) {
             Company company = new Company();
             company.setCompanyId(createUserRequest.getCompanyId());
@@ -48,97 +38,64 @@ public class UserManagementServiceImpl implements UserManagementService {
             company.setPhoneNumber(createUserRequest.getPhoneNumber());
             company.setUserName(createUserRequest.getUserName());
             company.setAddress(createUserRequest.getAddress());
-            UserEntity userEntity = UserMapper.mapModelToEntity(company);
-            return UserMapper.mapUserEntityToModel(userRepository.save(userEntity));
+            return userManagementDao.addUser(company);
         } else {
-            LOGGER.debug("UserTypeDoesNotExistException raised: " + createUserRequest.toString());
             throw new UserTypeDoesNotExistException("Only Customer and Company user types are allowed.");
         }
     }
 
     @Override
     public User getUserById(long id) throws UserNotFoundException {
-        List<UserEntity> elements = (List<UserEntity>) userRepository.findAll();
-        User user = null;
-
-        for (int i = 0; i < elements.size(); i++) {
-            if (id == elements.get(i).getId()) {
-                user = UserMapper.mapUserEntityToModel(elements.get(i));
-            }
-        }
-        if (user == null)
+        User result = userManagementDao.getUserById(id);
+        if (result == null)
         {
-            throw new UserNotFoundException("User: " + user.toString() + "not found!");
+            throw new UserNotFoundException("User not found with the given id: " + id);
+        } else {
+            return result;
         }
-        return user;
     }
+
 
     @Override
     public List<User> getUserByFilterOptions(SearchUserRequest searchUserRequest) throws UserNotFoundException {
-        List<UserEntity> users = (List<UserEntity>) userRepository.findAll();
-        List<UserEntity> result = new ArrayList<>();
-        for (UserEntity userEntity : users) {
-            if (userEntity.getUserName().equals(searchUserRequest.getUserName()) ||
-                    userEntity.getPhoneNumber().equals(searchUserRequest.getPhoneNumber()) ||
-                    userEntity.getAddress().equals(searchUserRequest.getAddress()) ||
-                    userEntity.getDrivingLicenseNumber().equals(searchUserRequest.getDrivingLicenceNumber())) {
-                result.add(userEntity);
+        List<User> userList = (List<User>) userManagementDao.getUsers();
+        List<User> result = new ArrayList<>();
+        
+        for (User user : userList) {
+            if (user.getUserName().equals(searchUserRequest.getUserName()) ||
+                    user.getPhoneNumber().equals(searchUserRequest.getPhoneNumber()) ||
+                    user.getAddress().equals(searchUserRequest.getAddress())) {
+                result.add(user);
             }
         }
-
         if (result.isEmpty()) {
-            LOGGER.debug("UserNotFoundException raised: " + searchUserRequest.toString());
             throw new UserNotFoundException("User not found to fit with a given criteria.", searchUserRequest);
         } else {
-            return UserMapper.mapUserEntitiesToModelList(result);
+            return result;
         }
     }
 
     @Override
     public List<User> getUsers() {
-        return UserMapper.mapUserEntitiesToModelList((List<UserEntity>) userRepository.findAll());
+        return (List<User>) userManagementDao.getUsers();
     }
 
     @Override
     public User updateUser(UpdateUserRequest updateUserRequest) throws UserNotFoundException {
-        UserEntity userEntity = userRepository.findOne(updateUserRequest.getId());
-        if (userEntity.getUserName().equals(updateUserRequest.getUserName())) {
-            userEntity.setAddress(updateUserRequest.getAddress());
-            userEntity.setPhoneNumber(updateUserRequest.getPhoneNumber());
-
-            if (updateUserRequest.isCustomer()) {
-                //Customer
-                userEntity.setCustomerId(updateUserRequest.getUserId());
-                userEntity.setDrivingLicenseNumber(updateUserRequest.getDrivingLicenceNumber());
-                userEntity.setYearOfBirth(Integer.toString(updateUserRequest.getYearOfBirth()));
-                userEntity.setAddress(updateUserRequest.getAddress());
-                userEntity.setPhoneNumber(updateUserRequest.getPhoneNumber());
-            } else if (updateUserRequest.isCompany()) {
-                //Company
-                userEntity.setPhoneNumber(updateUserRequest.getPhoneNumber());
-                userEntity.setCompanyId(updateUserRequest.getCompanyId());
-                userEntity.setBillingAddress(updateUserRequest.getBillingAddress());
-                userEntity.setAddress(updateUserRequest.getAddress());
-                userEntity.setRepresentative(String.valueOf(updateUserRequest.getRepresentative()));
-            }
-
-            UserEntity updatedUser = userRepository.save(userEntity);
-            return UserMapper.mapUserEntityToModel(updatedUser);
-        }
         throw new UserNotFoundException("User: " + updateUserRequest.toString() + "not found!");
     }
 
     @Override
     public void deleteUser(User user) throws UserNotFoundException {
-        if (userRepository.findOne(user.getId()) == null)
+        if (userManagementDao.getUserById(user.getId()) == null)
         {
             throw new UserNotFoundException("User: " + user.toString() + "not found!");
         }
-        userRepository.delete(user.getId());
+        userManagementDao.deleteUser(user);
     }
 
     @Override
     public int countUser() {
-        return Math.toIntExact(userRepository.count());
+        return userManagementDao.getUsers().size();
     }
 }

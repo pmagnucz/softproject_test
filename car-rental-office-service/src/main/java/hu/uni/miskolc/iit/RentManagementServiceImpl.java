@@ -1,16 +1,14 @@
 package hu.uni.miskolc.iit;
 
-import hu.uni.miskolc.iit.entity.RentEntity;
+import hu.uni.miskolc.iit.dao.RentManagementDao;
+import hu.uni.miskolc.iit.dao.UserManagementDao;
+import hu.uni.miskolc.iit.dao.VehicleManagementDao;
 import hu.uni.miskolc.iit.exception.*;
-import hu.uni.miskolc.iit.mapper.RentMapper;
 import hu.uni.miskolc.iit.model.Rent;
 import hu.uni.miskolc.iit.model.SearchRentRequest;
-import hu.uni.miskolc.iit.repositories.RentRepository;
-import hu.uni.miskolc.iit.repositories.UserRepository;
-import hu.uni.miskolc.iit.repositories.VehicleRepository;
+import hu.uni.miskolc.iit.model.User;
+import hu.uni.miskolc.iit.model.Vehicle;
 import hu.uni.miskolc.iit.service.RentManagementService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,43 +17,40 @@ import java.util.List;
  * Created by zsoltme on 2017.10.17..
  */
 
-@Service
 public class RentManagementServiceImpl implements RentManagementService {
 
-    private RentRepository rentRepository;
-    private UserRepository userRepository;
-    private VehicleRepository vehicleRepository;
+    private RentManagementDao rentManagementDao;
+    private UserManagementDao userManagementDao;
+    private VehicleManagementDao vehicleManagementDao;
 
-    @Autowired
-    public RentManagementServiceImpl(RentRepository rentRepository,UserRepository userRepository,VehicleRepository vehicleRepository) {
-        this.rentRepository = rentRepository;
-        this.userRepository = userRepository;
-        this.vehicleRepository = vehicleRepository;
+    public RentManagementServiceImpl(RentManagementDao rentManagementDao, UserManagementDao userManagementDao, VehicleManagementDao vehicleManagementDao) {
+        this.rentManagementDao = rentManagementDao;
+        this.userManagementDao = userManagementDao;
+        this.vehicleManagementDao = vehicleManagementDao;
     }
 
     @Override
     public Rent addNewRent(Rent rent) throws WrongRentDateException, NegativeValueException, RentWrongTotalFeeException,
             RentIdAlreadyExistsException, UserNotFoundException, VehicleNotFoundException {
         if(rent.getId() != null) {
-            if(rentRepository.exists(rent.getId())) {
+            if(rentManagementDao.exists(rent)) {
                 throw new RentIdAlreadyExistsException(String.valueOf(rent.getId()));
             }
         }
 
         validate(rent);
-        RentEntity rentEntity = RentMapper.mapModelToEntity(rent);
-        Rent storedRent = RentMapper.mapEntityToModel(this.rentRepository.save(rentEntity));
+        Rent storedRent = rentManagementDao.createRent(rent);
         return storedRent;
     }
 
     @Override
-    public Rent getRentById(int id) {
-        return RentMapper.mapEntityToModel(rentRepository.findOne(Long.valueOf(id)));
+    public Rent getRentById(Long id) {
+        return rentManagementDao.getRentById(id);
     }
 
     @Override
     public List<Rent> getRentByFilterOptions(SearchRentRequest searchRentRequest) {
-        List<Rent> rentList = RentMapper.mapRentEntityListToModelList(((List)this.rentRepository.findAll()));
+        List<Rent> rentList = (List<Rent>) rentManagementDao.getRents();
         List<Rent> requestedRents = new ArrayList<Rent>();
 
         for(Rent rent : rentList) {
@@ -73,47 +68,30 @@ public class RentManagementServiceImpl implements RentManagementService {
 
     @Override
     public List<Rent> getRents() {
-        return RentMapper.mapRentEntityListToModelList((List<RentEntity>)rentRepository.findAll());
+        return (List<Rent>) rentManagementDao.getRents();
     }
 
     @Override
     public Rent updateRent(Rent rent) throws UserNotFoundException, NegativeValueException, WrongRentDateException, RentWrongTotalFeeException, VehicleNotFoundException, RentNotFoundException {
-        if(!rentRepository.exists(Long.valueOf(rent.getId()))){
+        if(!rentManagementDao.exists(rent)){
             throw new RentNotFoundException(String.valueOf(rent.getId()));
         }
         validate(rent);
-        RentEntity mappedEntity = RentMapper.mapModelToEntity(rent);
-
-        this.rentRepository.findOne(Long.valueOf(rent.getId())).setCustomerId(mappedEntity.getCustomerId());
-        this.rentRepository.findOne(Long.valueOf(rent.getId())).setCompanyId(mappedEntity.getCompanyId());
-        this.rentRepository.findOne(Long.valueOf(rent.getId())).setVehicleId(mappedEntity.getVehicleId());
-        this.rentRepository.findOne(Long.valueOf(rent.getId())).setStartDate(mappedEntity.getStartDate());
-        this.rentRepository.findOne(Long.valueOf(rent.getId())).setEndDate(mappedEntity.getEndDate());
-        this.rentRepository.findOne(Long.valueOf(rent.getId())).setDurationExtendable(mappedEntity.getDurationExtendable());
-        this.rentRepository.findOne(Long.valueOf(rent.getId())).setExtendedHours(mappedEntity.getExtendedHours());
-        this.rentRepository.findOne(Long.valueOf(rent.getId())).setKmUsed(mappedEntity.getKmUsed());
-        this.rentRepository.findOne(Long.valueOf(rent.getId())).setDayFee(mappedEntity.getDayFee());
-        this.rentRepository.findOne(Long.valueOf(rent.getId())).setKmFee(mappedEntity.getKmFee());
-        this.rentRepository.findOne(Long.valueOf(rent.getId())).setOtherFee(mappedEntity.getOtherFee());
-        this.rentRepository.findOne(Long.valueOf(rent.getId())).setTotalFee(mappedEntity.getTotalFee());
-        this.rentRepository.findOne(Long.valueOf(rent.getId())).setPaid(mappedEntity.getPaid());
-
-        Rent updatedRent = RentMapper.mapEntityToModel(this.rentRepository.save(rentRepository.findOne(Long.valueOf(rent.getId()))));
-        return updatedRent;
+        return rentManagementDao.createRent(rent);
     }
 
     @Override
     public void removeRent(Rent rent) throws UserNotFoundException, NegativeValueException, WrongRentDateException, RentWrongTotalFeeException, VehicleNotFoundException, RentNotFoundException {
-        if(!rentRepository.exists(Long.valueOf(rent.getId()))) {
+        if(!rentManagementDao.exists(rent)) {
             throw new RentNotFoundException(String.valueOf(rent.getId()));
         }
         validate(rent);
-        this.rentRepository.delete(Long.valueOf(rent.getId()));
+        this.rentManagementDao.deleteRent(rent);
     }
 
     @Override
     public int rentCount() {
-        return Math.toIntExact(rentRepository.count());
+        return Math.toIntExact(rentManagementDao.getRents().size());
     }
 
     @Override
@@ -158,7 +136,9 @@ public class RentManagementServiceImpl implements RentManagementService {
             throw new RentWrongTotalFeeException(String.valueOf(rent.getTotalFee() + ", should be: " + (rent.getDayFee()+rent.getKmFee()+rent.getOtherFee())));
         }
 
-        if(!userRepository.exists(Long.valueOf(rent.getCustomerId())) && !userRepository.exists(Long.valueOf(rent.getCompanyId()))){
+        User user = userManagementDao.getUserById(rent.getCustomerId());
+        User company = userManagementDao.getUserById(rent.getCompanyId());
+        if(!userManagementDao.exists(user) || !userManagementDao.exists(company)){
             if(rent.getCustomerId() > 0) {
                 throw new UserNotFoundException("Customer with Id: " + rent.getCustomerId() + " does not exist.");
             } else if (rent.getCompanyId() > 0){
@@ -168,7 +148,8 @@ public class RentManagementServiceImpl implements RentManagementService {
             }
         }
 
-        if(!vehicleRepository.exists(rent.getVehicleId())){
+        Vehicle rentedVehicle = vehicleManagementDao.getVehicleById(rent.getVehicleId());
+        if(!vehicleManagementDao.exists(rentedVehicle)){
             throw new VehicleNotFoundException("Vehicle with Id: " + rent.getVehicleId() + " does not exist.");
         }
     }

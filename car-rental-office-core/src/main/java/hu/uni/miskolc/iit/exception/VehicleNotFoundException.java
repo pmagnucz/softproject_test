@@ -7,6 +7,9 @@ public class VehicleNotFoundException extends Exception{
         this.message = message;
     }
 
+    public VehicleNotFoundException() {
+    }
+
     @Override
     public String toString() {
         return message;

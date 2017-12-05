@@ -6,8 +6,6 @@ import hu.uni.miskolc.iit.model.Customer;
 import hu.uni.miskolc.iit.exception.UserNotFoundException;
 import hu.uni.miskolc.iit.model.*;
 import hu.uni.miskolc.iit.service.UserManagementService;
-import org.apache.log4j.Logger;
-import org.apache.log4j.spi.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +18,6 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/user")
 public class UserManagementController {
-    private static final Logger LOGGER = Logger.getLogger(UserManagementController.class);
     private UserManagementService userManagementService;
 
     @Autowired
@@ -33,7 +30,6 @@ public class UserManagementController {
         try {
             return ResponseEntity.ok(userManagementService.createNewUser(createUserRequest));
         } catch (UserTypeDoesNotExistException e) {
-            LOGGER.error("UserTypeNotExistException raised at createUser", e);
             throw e;
         }
     }
@@ -49,7 +45,6 @@ public class UserManagementController {
             User result = userManagementService.updateUser(user);
             return ResponseEntity.ok(result);
         } catch (UserNotFoundException e){
-            LOGGER.error("UserNotFoundException raised at updateUser", e);
             return ResponseEntity.badRequest().body(null);
         }
     }
@@ -59,7 +54,6 @@ public class UserManagementController {
         try {
             userManagementService.deleteUser(user);
         } catch (UserNotFoundException e) {
-            LOGGER.error("UserNotFoundException raised at deleteUser", e);
             throw e;
         }
     }
@@ -70,7 +64,6 @@ public class UserManagementController {
             User user = userManagementService.getUserById(userId);
             return ResponseEntity.ok(user);
         } catch (UserNotFoundException e) {
-            LOGGER.error("UserNotFoundException raised at getUserById", e);
             throw e;
         }
     }
@@ -80,7 +73,6 @@ public class UserManagementController {
         try {
             return ResponseEntity.ok(userManagementService.getUserByFilterOptions(searchUserRequest));
         } catch (UserNotFoundException e) {
-            LOGGER.error("UserNotFoundException raised at getUserBySearchRequest", e);
             throw e;
         }
     }
