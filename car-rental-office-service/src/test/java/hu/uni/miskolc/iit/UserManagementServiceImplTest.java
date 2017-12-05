@@ -143,6 +143,23 @@ public class UserManagementServiceImplTest {
 
         assertEquals(expected,actual);
 }
+    
+    
+    @Test
+    public void getUser() throws Exception {
+        List<User> users = new ArrayList<>();
+        users.add(customer);
+
+        List<UserEntity> expectedEntities = UserMapper.mapModelListToEntityList(users);
+
+        expect(userRepository.findAll()).andReturn(expectedEntities);
+
+        replay(userRepository);
+
+        List<User> actual = userManagementService.getUsers();
+        assertEquals(users, actual);
+        
+    }
 
 
     // TODO: implementálni kell!!
