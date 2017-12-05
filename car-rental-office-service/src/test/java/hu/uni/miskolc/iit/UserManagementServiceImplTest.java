@@ -200,6 +200,20 @@ public class UserManagementServiceImplTest {
 
         userManagementService.removeUser(customer);
 }
+    
+    @Test
+    public void removeUserCompany() throws Exception {
+        company = new Company();
+        company.setId(1L);
+
+        expect(userRepository.exists(anyLong())).andReturn(true);
+
+        userRepository.delete(company.getId());
+
+        replay(userRepository);
+
+        userManagementService.removeUser(company);
+}
 
 
     // TODO: implementálni kell!!
