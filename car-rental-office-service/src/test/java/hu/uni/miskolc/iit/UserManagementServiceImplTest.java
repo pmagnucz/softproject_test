@@ -116,20 +116,20 @@ public class UserManagementServiceImplTest {
     @Test
     public void getUserByFilterOptions() throws Exception {
         
-        Company company = new Company();
-        company.setId(2L);
-        company.setPhoneNumber("+363231231231");
-        company.setAddress("Miskolc);
-        company.setDrivingLicenceNumber("21213565");
-        company.setCompanyId(1L);
-        company.setBillingAddress("Debrecen");
+        Company companyModel = new Company();
+        companyModel.setId(2L);
+        companyModel.setPhoneNumber("+363231231231");
+        companyModel.setAddress("Miskolc);
+        companyModel.setDrivingLicenceNumber("21213565");
+        companyModel.setCompanyId(1L);
+        companyModel.setBillingAddress("Debrecen");
 
         SearchUserRequest searchUserRequest =
                 new SearchUserRequest("Jóska István","+363744746","Miskolc","646445465");
 
         List<User> users = new ArrayList<>();
         users.add(customer);
-        users.add(company);
+        users.add(companyModel);
 
         List<UserEntity> expectedEntities = UserMapper.mapModelListToEntityList(users);
 
@@ -138,7 +138,7 @@ public class UserManagementServiceImplTest {
         replay(userRepository);
 
         List<User> expected = new ArrayList<>();
-        expected.add(company);
+        expected.add(companyModel);
         List<User> actual = userManagementService.getUserByFilterOptions(searchUserRequest);
 
         assertEquals(expected,actual);
