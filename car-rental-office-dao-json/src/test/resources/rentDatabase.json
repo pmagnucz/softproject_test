@@ -1,0 +1,1 @@
+[{"id":1,"customerId":1,"companyId":null,"vehicleId":1,"startDate":"2017-02-01","endDate":"2017-03-01","durationExtendable":true,"extendedHours":24,"kmUsed":100,"dayFee":150000.0,"kmFee":100000.0,"otherFee":0.0,"totalFee":250000.0,"paid":false}]
