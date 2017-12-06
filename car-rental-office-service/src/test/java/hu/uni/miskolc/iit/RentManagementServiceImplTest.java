@@ -13,6 +13,7 @@ import org.junit.Test;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -38,6 +39,7 @@ public class RentManagementServiceImplTest {
     private Rent rentAfterUpdate;
 
     private Car car;
+    private Customer customer;
 
     @Before
     public void setUp() throws Exception {
@@ -46,22 +48,13 @@ public class RentManagementServiceImplTest {
         vehicleManagementDao = mock(VehicleManagementDao.class);
         rentManagementService = new RentManagementServiceImpl(rentManagementDao,userManagementDao,vehicleManagementDao);
 
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date startDate = null;
-        Date endDate = null;
-        try {
-            startDate = format.parse("2017-02-01");
-            endDate = format.parse("2017-03-01");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
         rentObject = new Rent();
         rentObject.setId(1L);
         rentObject.setCustomerId(1L);
+        rentObject.setCompanyId(0L);
         rentObject.setVehicleId(1L);
-        rentObject.setStartDate(startDate);
-        rentObject.setEndDate(endDate);
+        rentObject.setStartDate(LocalDate.parse("2017-02-01"));
+        rentObject.setEndDate(LocalDate.parse("2017-03-01"));
         rentObject.setDurationExtendable(true);
         rentObject.setExtendedHours(24);
         rentObject.setKmUsed(100);
@@ -73,10 +66,11 @@ public class RentManagementServiceImplTest {
 
         anotherRentObject = new Rent();
         anotherRentObject.setId(2L);
+        anotherRentObject.setCustomerId(0L);
         anotherRentObject.setCompanyId(2L);
         anotherRentObject.setVehicleId(2L);
-        anotherRentObject.setStartDate(startDate);
-        anotherRentObject.setEndDate(endDate);
+        anotherRentObject.setStartDate(LocalDate.parse("2017-05-01"));
+        anotherRentObject.setEndDate(LocalDate.parse("2017-06-01"));
         anotherRentObject.setDurationExtendable(false);
         anotherRentObject.setExtendedHours(48);
         anotherRentObject.setKmUsed(200);
@@ -102,7 +96,7 @@ public class RentManagementServiceImplTest {
         car.setPerformance(101.0D);
         car.setVehicleStatus(VehicleStatusType.FREE);
 
-        Customer customer = new Customer();
+        customer = new Customer();
         customer.setId(1L);
 
         expect(rentManagementDao.createRent(anyObject(Rent.class))).andReturn(rentObject);
@@ -131,7 +125,7 @@ public class RentManagementServiceImplTest {
         assertEquals(rentObject,actual);
     }
 
-//TODO
+   @Test
    public void getRentByFilterOptions() throws Exception {
         List<Rent> rents = new ArrayList<>();
         rents.add(rentObject);
@@ -140,17 +134,7 @@ public class RentManagementServiceImplTest {
 
         replay(rentManagementDao);
 
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date startDateRequest = null;
-        Date endDateRequest = null;
-        try {
-            startDateRequest = format.parse("2017-02-02");
-            endDateRequest = format.parse("2017-03-02");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        SearchRentRequest searchRentRequest = new SearchRentRequest(1, 0,1,startDateRequest,endDateRequest);
+        SearchRentRequest searchRentRequest = new SearchRentRequest(1, 0,1,LocalDate.parse("2017-02-02"),LocalDate.parse("2017-03-02"));
 
         List<Rent> expected = new ArrayList<>();
         expected.add(rentObject);
@@ -173,31 +157,21 @@ public class RentManagementServiceImplTest {
 
     }
 
-    //TODO
+    @Test
     public void updateRent() throws Exception {
-
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date startDateExpected = null;
-        Date endDateExpected = null;
-        try {
-            startDateExpected = format.parse("2017-05-01");
-            endDateExpected = format.parse("2017-07-01");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
         rentAfterUpdate = new Rent();
         rentAfterUpdate.setId(1L);
         rentAfterUpdate.setCustomerId(300L);
         rentAfterUpdate.setCompanyId(7L);
         rentAfterUpdate.setVehicleId(2L);
-        rentAfterUpdate.setStartDate(startDateExpected);
-        rentAfterUpdate.setEndDate(endDateExpected);
+        rentAfterUpdate.setStartDate(LocalDate.parse("2017-05-01"));
+        rentAfterUpdate.setEndDate(LocalDate.parse("2017-07-01"));
 
-        expect(rentManagementDao.getRentById(anyLong())).andReturn(rentObject).anyTimes();
-        expect(rentManagementDao.createRent(anyObject(Rent.class))).andReturn(rentObject);
         expect(rentManagementDao.exists(anyObject(Rent.class))).andReturn(true);
-        expect(userManagementDao.exists(anyObject(User.class))).andReturn(true);
+        expect(rentManagementDao.createRent(anyObject(Rent.class))).andReturn(rentAfterUpdate);
+
+        expect(userManagementDao.exists(anyObject(User.class))).andReturn(true).anyTimes();
+        expect(userManagementDao.getUserById(anyLong())).andReturn(customer).anyTimes();
         expect(vehicleManagementDao.exists(anyObject(Vehicle.class))).andReturn(true);
         expect(vehicleManagementDao.getVehicleById(anyLong())).andReturn(car);
 
@@ -210,10 +184,12 @@ public class RentManagementServiceImplTest {
         assertEquals(rentAfterUpdate, actual);
     }
 
-    //TODO
+    @Test
     public void removeRent() throws Exception {
         expect(rentManagementDao.exists(anyObject(Rent.class))).andReturn(true);
-        expect(userManagementDao.exists(anyObject(User.class))).andReturn(true);
+
+        expect(userManagementDao.exists(anyObject(User.class))).andReturn(true).anyTimes();
+        expect(userManagementDao.getUserById(anyLong())).andReturn(customer).anyTimes();
         expect(vehicleManagementDao.exists(anyObject(Vehicle.class))).andReturn(true);
         expect(vehicleManagementDao.getVehicleById(anyLong())).andReturn(car);
 
@@ -242,18 +218,8 @@ public class RentManagementServiceImplTest {
 
     @Test(expected = WrongRentDateException.class)
     public void wrongDateException() throws Exception {
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date startDate = null;
-        Date endDate = null;
-        try {
-            startDate = format.parse("2017-03-01");
-            endDate = format.parse("2017-02-01");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        rentObject.setStartDate(startDate);
-        rentObject.setEndDate(endDate);
+        rentObject.setStartDate(LocalDate.parse("2017-03-01"));
+        rentObject.setEndDate(LocalDate.parse("2017-02-01"));
 
         rentManagementService.addNewRent(rentObject);
     }
@@ -276,43 +242,55 @@ public class RentManagementServiceImplTest {
         rentManagementService.addNewRent(anotherRentObject);
     }
 
-    //TODO
+    @Test
     public void userNotFoundException() throws Exception {
-        anotherRentObject.setCustomerId(0L);
-        anotherRentObject.setCompanyId(0L);
+        rentObject.setCustomerId(0L);
+        rentObject.setCompanyId(0L);
 
+        expect(rentManagementDao.exists(anyObject(Rent.class))).andReturn(false);
+        replay(rentManagementDao);
+        expect(userManagementDao.getUserById(anyLong())).andReturn(customer).anyTimes();
         expect(userManagementDao.exists(anyObject(User.class))).andReturn(false).anyTimes();
+
 
         replay(userManagementDao);
 
         try {
-            rentManagementService.addNewRent(anotherRentObject);
+            rentManagementService.addNewRent(rentObject);
         } catch(UserNotFoundException actual) {
-            assertEquals("User Ids wrong: Customer - " + anotherRentObject.getCustomerId() + ",Company - " + anotherRentObject.getCompanyId() + ".",actual.getMessage());
+            assertEquals("User Ids wrong: Customer - " + rentObject.getCustomerId() + ",Company - " + rentObject.getCompanyId() + ".",actual.getMessage());
         }
     }
 
-    //TODO
+    @Test
     public void userCustomerNotFoundException() throws Exception {
-        anotherRentObject.setCustomerId(15L);
-        anotherRentObject.setCompanyId(0L);
+        rentObject.setCustomerId(15L);
+        rentObject.setCompanyId(0L);
 
+        expect(rentManagementDao.exists(anyObject(Rent.class))).andReturn(false);
+        replay(rentManagementDao);
+
+        expect(userManagementDao.getUserById(anyLong())).andReturn(customer).anyTimes();
         expect(userManagementDao.exists(anyObject(User.class))).andReturn(false).anyTimes();
 
         replay(userManagementDao);
 
         try {
-            rentManagementService.addNewRent(anotherRentObject);
+            rentManagementService.addNewRent(rentObject);
         } catch(UserNotFoundException actual) {
-            assertEquals("Customer with Id: " + anotherRentObject.getCustomerId() + " does not exist.",actual.getMessage());
+            assertEquals("Customer with Id: " + rentObject.getCustomerId() + " does not exist.",actual.getMessage());
         }
     }
 
-    //TODO
+    @Test
     public void userCompanyNotFoundException() throws Exception {
-        anotherRentObject.setCustomerId(0L);
-        anotherRentObject.setCompanyId(30L);
+        rentObject.setCustomerId(0L);
+        rentObject.setCompanyId(30L);
 
+        expect(rentManagementDao.exists(anyObject(Rent.class))).andReturn(false);
+        replay(rentManagementDao);
+
+        expect(userManagementDao.getUserById(anyLong())).andReturn(customer).anyTimes();
         expect(userManagementDao.exists(anyObject(User.class))).andReturn(false).anyTimes();
 
         replay(userManagementDao);
@@ -324,15 +302,19 @@ public class RentManagementServiceImplTest {
         }
     }
 
-//TODO
+    @Test(expected = VehicleNotFoundException.class)
    public void vehicleNotFoundException() throws Exception {
-        anotherRentObject.setVehicleId(50L);
+       rentObject.setVehicleId(50L);
 
-        expect(userManagementDao.exists(anyObject(User.class))).andReturn(true);
-        expect(vehicleManagementDao.getVehicleById(anyLong())).andThrow(new VehicleNotFoundException());
+       expect(userManagementDao.exists(anyObject(User.class))).andReturn(true).anyTimes();
+       expect(userManagementDao.getUserById(anyLong())).andReturn(customer).anyTimes();
+
+        expect(vehicleManagementDao.getVehicleById(anyLong())).andReturn(car);
+        expect(vehicleManagementDao.exists(anyObject(Vehicle.class))).andReturn(false);
         replay(userManagementDao);
+        replay(vehicleManagementDao);
 
-        rentManagementService.addNewRent(anotherRentObject);
+        rentManagementService.addNewRent(rentObject);
     }
 
     @Test(expected = RentNotFoundException.class)
