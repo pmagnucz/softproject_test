@@ -3,9 +3,7 @@ package hu.uni.miskolc.iit.controller;
 import hu.uni.miskolc.iit.VehicleManagementServiceImpl;
 import hu.uni.miskolc.iit.dao.VehicleManagementDao;
 import hu.uni.miskolc.iit.dao.VehicleManagementDaoImpl;
-import hu.uni.miskolc.iit.exception.ExistingVehiclePlateNumber;
-import hu.uni.miskolc.iit.exception.NotValidPlateNumberFormatException;
-import hu.uni.miskolc.iit.exception.VehicleNotFoundException;
+import hu.uni.miskolc.iit.exception.*;
 import hu.uni.miskolc.iit.model.*;
 import hu.uni.miskolc.iit.service.VehicleManagementService;
 
@@ -34,7 +32,7 @@ public class VehicleController {
 
     // TODO ki kell szervezni az ismétlődő kódot vagy a három eset három private metódus legyen és itt csak a megfelelőt kell hívni
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public ResponseEntity<Vehicle> addNewVehicle(@RequestBody CreateVehicleRequest createVehicleRequest) {
+    public ResponseEntity<Vehicle> addNewVehicle(@RequestBody CreateVehicleRequest createVehicleRequest) throws ExistingVehiclePlateNumber, NotSupportedVehicleTypeException, NotValidPlateNumberFormatException{
         if (createVehicleRequest.getType() == VehicleType.CAR) {
             Car car = new Car();
             car.setPlateNumber(createVehicleRequest.getPlateNumber());
@@ -100,7 +98,7 @@ public class VehicleController {
     }
 
     @RequestMapping(value = "/getVehicle/{vehicleId}", method = RequestMethod.GET)
-    public ResponseEntity<Vehicle> getVehicleById(@PathVariable Long vehicleId) {
+    public ResponseEntity<Vehicle> getVehicleById(@PathVariable Long vehicleId) throws VehicleNotFoundException {
         try {
             return ResponseEntity.ok(vehicleManagementService.getVehicleById(vehicleId));
         } catch (VehicleNotFoundException e) {
@@ -109,10 +107,12 @@ public class VehicleController {
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
-    public ResponseEntity<List<Vehicle>> getVehicleByFilterOptions(@RequestBody SearchVehicleRequest searchVehicleRequest) {
+    public ResponseEntity<List<Vehicle>> getVehicleByFilterOptions(@RequestBody SearchVehicleRequest searchVehicleRequest) throws NotSupportedVehicleTypeException, NotValidPlateNumberFormatException {
         try {
             return ResponseEntity.ok(vehicleManagementService.getVehicleByFilterOptions(searchVehicleRequest));
         } catch (NotValidPlateNumberFormatException e) {
+            return ResponseEntity.badRequest().body(null);
+        } catch (NotSupportedVehicleTypeException e) {
             return ResponseEntity.badRequest().body(null);
         }
     }
@@ -124,7 +124,7 @@ public class VehicleController {
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public ResponseEntity<Vehicle> updateVehicle(@RequestBody UpdateVehicleRequest updateVehicleRequest) {
+    public ResponseEntity<Vehicle> updateVehicle(@RequestBody UpdateVehicleRequest updateVehicleRequest) throws VehicleNotFoundException, NotSupportedVehicleTypeException, NotValidPlateNumberFormatException{
         try {
             return ResponseEntity.ok(vehicleManagementService.updateVehicle(updateVehicleRequest));
         } catch (VehicleNotFoundException e) {
@@ -135,7 +135,7 @@ public class VehicleController {
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-    public void removeVehicle(@RequestBody Vehicle vehicle) {
+    public void removeVehicle(@RequestBody Vehicle vehicle) throws VehicleNotFoundException{
         try {
             vehicleManagementService.removeVehicle(vehicle);
         } catch (VehicleNotFoundException e) {

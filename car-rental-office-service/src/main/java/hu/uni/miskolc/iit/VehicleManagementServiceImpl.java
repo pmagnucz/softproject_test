@@ -22,7 +22,7 @@ public class VehicleManagementServiceImpl implements VehicleManagementService {
     }
 
     @Override
-    public Vehicle addNewVehicle(Vehicle vehicle) {
+    public Vehicle addNewVehicle(Vehicle vehicle) throws NotSupportedVehicleTypeException {
         // Common check, all required field has value, the value fit to the regex
         if (vehicle.getType() == VehicleType.CAR) {
             Vehicle storedCar = vehicleManagementDao.addVehicle(vehicle);
@@ -33,7 +33,7 @@ public class VehicleManagementServiceImpl implements VehicleManagementService {
             return storedShip;
             // SHIP
         } else {
-            throw new NotSupportedVehicleTypeException(vehicle.getType().toString());
+            throw new NotSupportedVehicleTypeException("Not supported vehicle type.");
         }
     }
 

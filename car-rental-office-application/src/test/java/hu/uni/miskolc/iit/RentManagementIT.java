@@ -36,9 +36,9 @@ public class RentManagementIT {
 
     @Before
     public void setUp() throws UserTypeDoesNotExistException, ExistingVehiclePlateNumber, NotValidPlateNumberFormatException {
-        rentManagementDao = new RentManagementDaoImpl(new File("src/main/resources/rentDatabase.json"));
-        userManagementDao = new UserManagementDaoImpl(new File("src/main/resources/userDatabase.json"));
-        vehicleManagementDao = new VehicleManagementDaoImpl(new File("src/main/resources/vehicleDatabase.json"));
+        rentManagementDao = new RentManagementDaoImpl(new File("src/test/resources/rentDatabase.json"));
+        userManagementDao = new UserManagementDaoImpl(new File("src/test/resources/userDatabase.json"));
+        vehicleManagementDao = new VehicleManagementDaoImpl(new File("src/test/resources/vehicleDatabase.json"));
         RentManagementService rentService = new RentManagementServiceImpl(rentManagementDao,userManagementDao,vehicleManagementDao);
         rentController = new RentController(rentService);
 

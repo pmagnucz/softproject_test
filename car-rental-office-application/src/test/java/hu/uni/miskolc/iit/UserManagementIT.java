@@ -24,7 +24,7 @@ public class UserManagementIT {
 
     @Before
     public void setUp(){
-        UserManagementDao userManagementDao = new UserManagementDaoImpl(new File("src/main/resources/userDatabase.json"));
+        UserManagementDao userManagementDao = new UserManagementDaoImpl(new File("src/test/resources/userDatabase.json"));
         userManagementDao.clear();
         UserManagementService service = new UserManagementServiceImpl(userManagementDao);
         controller = new UserManagementController(service);

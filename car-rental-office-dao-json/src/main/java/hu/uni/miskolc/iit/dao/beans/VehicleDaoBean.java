@@ -188,7 +188,7 @@ public class VehicleDaoBean {
     }
 
     public Vehicle extract() {
-        if (!this.plateNumber.isEmpty())
+        if (this.getType() == VehicleType.CAR)
         {
             Car result = new Car();
             result.setPlateNumber(this.getPlateNumber());
