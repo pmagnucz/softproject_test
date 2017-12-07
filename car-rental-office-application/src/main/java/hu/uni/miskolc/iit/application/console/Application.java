@@ -11,8 +11,8 @@ public class Application {
 
     public static void main(String[] args) {
         ApplicationContext context = new AnnotationConfigApplicationContext(ConsoleConfig.class);
-        UserManagementController userManagementController = (UserManagementController)context.getBean("userManagmentController");
-        System.out.println(userManagementController.getAllUser());
+        UserManagementController userManagementController = (UserManagementController)context.getBean("userManagementController");
+        System.out.println(userManagementController.getAllUser().getBody());
     }
 
 }

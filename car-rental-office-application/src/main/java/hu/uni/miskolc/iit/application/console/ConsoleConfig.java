@@ -21,6 +21,9 @@ import java.io.File;
 
 @Configuration
 public class ConsoleConfig {
+    private static final String USER_DB_PATH = "userDBpath";
+    private static final String VEHICLE_DB_PATH = "vehicleDBpath";
+    private static final String RENT_DB_PATH = "rentDBpath";
 
     @Bean(value = "userManagementController")
     public UserManagementController getUserManagementController(){
@@ -34,7 +37,7 @@ public class ConsoleConfig {
 
     @Bean
     public UserManagementDao getUserManagementDao(){
-        return new UserManagementDaoImpl(new File("src/test/resources/userDatabase.json"));
+        return new UserManagementDaoImpl(new File(System.getProperty(USER_DB_PATH)));
     }
 
     // Vehicle beans
@@ -50,7 +53,7 @@ public class ConsoleConfig {
 
     @Bean
     public VehicleManagementDaoImpl getVehicleManagementDao(){
-        return new VehicleManagementDaoImpl(new File("src/test/resources/vehicleDatabase.json"));
+        return new VehicleManagementDaoImpl(new File(System.getProperty(VEHICLE_DB_PATH)));
     }
 
     // Rent beans
@@ -66,7 +69,7 @@ public class ConsoleConfig {
 
     @Bean
     public RentManagementDao getRentManagementDao(){
-        return new RentManagementDaoImpl(new File("src/test/resources/rentDatabase.json"));
+        return new RentManagementDaoImpl(new File(System.getProperty(RENT_DB_PATH)));
     }
 
 }
