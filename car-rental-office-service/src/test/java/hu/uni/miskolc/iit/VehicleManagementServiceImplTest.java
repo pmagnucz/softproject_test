@@ -121,17 +121,36 @@ public class VehicleManagementServiceImplTest {
 
     @Test
     public void updateVehicle() throws Exception {
-        expect(vehicleRepository.findOne(anyLong())).andReturn(mockEntity);
-        expect(vehicleRepository.save(anyObject(VehicleEntity.class))).andReturn(mockEntity);
 
-        replay(vehicleRepository);
+        DateFormat format = new SimpleDateFormat("yyyy-MM");
+        Date manufactureDate = null;
+
+        try {
+            manufactureDate = format.parse("1960-01");
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Car expectedCar = new Car();
+        expectedCar.setId(1L);
+        expectedCar.setManufacturer("Ford2222");
+        expectedCar.setType(VehicleType.CAR);
+        expectedCar.setYearOfManufacture(manufactureDate);
+        expectedCar.setRentCost(25000);
+        expectedCar.setPersons(2);
+        expectedCar.setPerformance(2500.24);
+        expectedCar.setVehicleStatus(VehicleStatusType.FREE);
+        expectedCar.setPlateNumber("AAA-222");
+        expectedCar.setVehicleIdentificationNumber("222222sd");
+        expectedCar.setDrawBar(true);
 
         UpdateVehicleRequest updateVehicleRequest = new UpdateVehicleRequest();
 
         updateVehicleRequest.setId(1L);
         updateVehicleRequest.setType(VehicleType.CAR);
         updateVehicleRequest.setManufacturer("Ford2222");
-        updateVehicleRequest.setYearOfManufacture(date);
+        updateVehicleRequest.setYearOfManufacture(manufactureDate);
         updateVehicleRequest.setRentCost(25000);
         updateVehicleRequest.setPersons(2);
         updateVehicleRequest.setCar(true);
@@ -141,11 +160,14 @@ public class VehicleManagementServiceImplTest {
         updateVehicleRequest.setVehicleIdentificationNumber("222222sd");
         updateVehicleRequest.setDrawBar(true);
 
-        vehicleManagementService.updateVehicle(updateVehicleRequest);
+        expect(vehicleManagementDao.getVehicleById(anyLong())).andReturn(car);
+        expect(vehicleManagementDao.addVehicle(anyObject(Vehicle.class))).andReturn(car);
 
-        Vehicle actual = VehicleMapper.mapEntityToModel(mockEntity);
+        replay(vehicleManagementDao);
 
-        Assert.assertNotEquals(car,actual);
+        Vehicle actual = vehicleManagementService.updateVehicle(updateVehicleRequest);
+
+        Assert.assertEquals(expectedCar,actual)
     }
 
     // TODO fix it
