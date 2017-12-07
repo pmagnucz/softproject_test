@@ -108,6 +108,27 @@ public class UserManagementServiceImplTest {
 
     @Test
     public void getUsers() throws Exception {
+        
+        customer = new Customer();
+
+        customer.setId(1L);
+        customer.setPhoneNumber("+363231231231");
+        customer.setAddress("Miskolc");
+        customer.setUserName("Jóska István");
+        customer.setUserId(1L);
+        customer.setYearOfBirth(1990);
+        customer.setDrivingLincenceNumber("21213565");
+
+        List<User> expected = new ArrayList<>();
+        expected.add(customer);
+
+        expect(userManagementDao.getUsers()).andReturn(expected);
+        replay(userManagementDao);
+
+        List<User> actual = userManagementService.getUsers();
+
+        Assert.assertNotNull(actual);
+        Assert.assertEquals(expected, actual);
 
     }
 
