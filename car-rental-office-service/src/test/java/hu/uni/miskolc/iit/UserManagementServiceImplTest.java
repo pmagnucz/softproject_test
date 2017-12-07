@@ -91,7 +91,7 @@ public class UserManagementServiceImplTest {
         customer.setYearOfBirth(1990);
         customer.setDrivingLicenceNumber("21213565");
        
-        expect(userManagementDao.getUserById(anyLong())).andReturn(car);
+        expect(userManagementDao.getUserById(anyLong())).andReturn(customer);
         replay(userManagementDao);
 
         User actual = userManagementService.getUserById(1L);
