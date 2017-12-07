@@ -82,7 +82,60 @@ public class UserManagementServiceImpl implements UserManagementService {
 
     @Override
     public User updateUser(UpdateUserRequest updateUserRequest) throws UserNotFoundException {
-        throw new UserNotFoundException("User: " + updateUserRequest.toString() + "not found!");
+        User user = userManagementDao.getUserById(updateUserRequest.getId());
+        if (updateUserRequest.isCustomer()){
+            Customer customer = (Customer) user;
+            if (updateUserRequest.getUserId() != null && !updateUserRequest.getUserId().isEmpty())
+            {
+                customer.setUserId(updateUserRequest.getUserId());
+            }
+            if (updateUserRequest.getAddress() != null && !updateUserRequest.getAddress().isEmpty())
+            {
+                customer.setAddress(updateUserRequest.getAddress());
+            }
+            if (updateUserRequest.getDrivingLicenceNumber() != null && !updateUserRequest.getDrivingLicenceNumber().isEmpty())
+            {
+                customer.setDrivingLicenceNumber(updateUserRequest.getDrivingLicenceNumber());
+            }
+            if (updateUserRequest.getPhoneNumber() != null && !updateUserRequest.getPhoneNumber().isEmpty())
+            {
+                customer.setPhoneNumber(updateUserRequest.getPhoneNumber());
+            }
+            if (updateUserRequest.getUserName() != null && !updateUserRequest.getUserName().isEmpty())
+            {
+                customer.setUserName(updateUserRequest.getUserName());
+            }
+            return customer;
+        } else if (updateUserRequest.isCompany()){
+            Company company = (Company) user;
+            if (updateUserRequest.getUserName() != null && !updateUserRequest.getUserName().isEmpty())
+            {
+                company.setUserName(updateUserRequest.getUserName());
+            }
+            if (updateUserRequest.getAddress() != null && !updateUserRequest.getAddress().isEmpty())
+            {
+                company.setAddress(updateUserRequest.getAddress());
+            }
+            if (updateUserRequest.getPhoneNumber() != null && !updateUserRequest.getPhoneNumber().isEmpty())
+            {
+                company.setPhoneNumber(updateUserRequest.getPhoneNumber());
+            }
+            if (updateUserRequest.getCompanyId() != null && !updateUserRequest.getCompanyId().isEmpty())
+            {
+                company.setCompanyId(updateUserRequest.getCompanyId());
+            }
+            if (updateUserRequest.getBillingAddress() != null && !updateUserRequest.getBillingAddress().isEmpty())
+            {
+                company.setBillingAddress(updateUserRequest.getBillingAddress());
+            }
+            if (updateUserRequest.getRepresentative() != null)
+            {
+                company.setRepresentative(updateUserRequest.getRepresentative());
+            }
+
+            return company;
+        }
+        throw new UserNotFoundException("The requested user not found! UserId = " + updateUserRequest.getId());
     }
 
     @Override

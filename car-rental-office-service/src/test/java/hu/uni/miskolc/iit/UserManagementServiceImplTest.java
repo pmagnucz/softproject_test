@@ -25,8 +25,8 @@ import java.io.File;
 
 public class UserManagementServiceImplTest {
     private UserManagementService userManagementService;
-    private UserManagementDao userManagementDao = new UserManagementDaoImpl(new File("src/test/resources/database.json"));
-    private User user;
+    private UserManagementDao userManagementDao;
+
     private Customer customer;
     private Company company;
    
@@ -37,17 +37,8 @@ public class UserManagementServiceImplTest {
 
         userManagementService = new UserManagementServiceImpl(userManagementDao);
         userManagementDao = mock(UserManagementDao.class);
-       
-        
-        user = new User();
+
         customer = new Customer();
-        
-        
-        user.setId(1L);
-        user.setPhoneNumber("+363231231231");
-        user.setAddress("Miskolc");
-        user.setUserName("Jóska István");
-        
         customer.setId(1L);
         customer.setPhoneNumber("+363231231231");
         customer.setAddress("Miskolc");
@@ -55,6 +46,15 @@ public class UserManagementServiceImplTest {
         customer.setUserId("aaa111");
         customer.setYearOfBirth(1990);
         customer.setDrivingLicenceNumber("21213565");
+
+        company = new Company();
+        company.setCompanyId("companyId");
+        company.setBillingAddress("Budapest, Ganz utca 12");
+        company.setRepresentative(customer);
+        company.setId(2L);
+        company.setPhoneNumber("363231243512");
+        company.setUserName("testCompany");
+        company.setAddress("Budapest, Andrássy krt. 10");
     }
 
     @Test
@@ -65,22 +65,17 @@ public class UserManagementServiceImplTest {
 
     @Test
     public void createNewUser() throws Exception {
-        
-        Customer customer = new Customer();
 
-        customer.setId(1L);
-        customer.setPhoneNumber("+363231231231");
-        customer.setAddress("Miskolc");
-        customer.setUserName("Jóska István");
-        customer.setUserId("aaa111");
-        customer.setYearOfBirth(1990);
-        customer.setDrivingLicenceNumber("21213565");
-
-        expect(userManagementDao.addUser(anyObject(User.class))).andReturn(customer);
+        expect(userManagementDao.addUser(anyObject(Customer.class))).andReturn(customer);
         replay(userManagementDao);
 
-        CreateUserRequest createUserRequest =
-                new CreateUserRequest();
+        CreateUserRequest createUserRequest = new CreateUserRequest();
+        createUserRequest.setUserName("testUser");
+        createUserRequest.setAddress("Miskolc");
+        createUserRequest.setPhoneNumber("+363231231231");
+        createUserRequest.setUserId("userId");
+        createUserRequest.setYearOfBirth(1990);
+        createUserRequest.setDrivingLicenceNumber("21213565");
 
         User actual = userManagementService.createNewUser(createUserRequest);
 
@@ -91,17 +86,6 @@ public class UserManagementServiceImplTest {
 
     @Test
     public void getUserById() throws Exception {
-        
-        customer = new Customer();
-
-        customer.setId(1L);
-        customer.setPhoneNumber("+363231231231");
-        customer.setAddress("Miskolc");
-        customer.setUserName("Jóska István");
-        customer.setUserId("aaa111");
-        customer.setYearOfBirth(1990);
-        customer.setDrivingLicenceNumber("21213565");
-       
         expect(userManagementDao.getUserById(anyLong())).andReturn(customer);
         replay(userManagementDao);
 
@@ -114,60 +98,24 @@ public class UserManagementServiceImplTest {
 
     @Test
     public void getUserByFilterOptions() throws Exception {
-        
-        Customer customer = new Customer();
-
-        customer.setId(1L);
-        customer.setPhoneNumber("+363231231231");
-        customer.setAddress("Miskolc");
-        customer.setUserName("Jóska István");
-        customer.setUserId("aaa111");
-        customer.setYearOfBirth(1990);
-        customer.setDrivingLicenceNumber("21213565");
-
-        
-        Company company = new Company();
-        company.setId(2L);
-        company.setPhoneNumber("+363231231231");
-        company.setAddress("Miskolc");
-        company.setCompanyId("aaa111");
-        company.setBillingAddress("Debrecen");
-
-        
         List<User> users = new ArrayList<>();
         users.add(customer);
-        users.add(company);
+
         expect(userManagementDao.getUsers()).andReturn(users);
-        
         replay(userManagementDao);
-        
-        SearchUserRequest searchUserRequest =
-                new SearchUserRequest("Jóska István","+363744746","Miskolc","646445465");
-      
-        List<User> expected = new ArrayList<>();
-        expected.add(customer);
+
+        SearchUserRequest searchUserRequest = new SearchUserRequest("Jóska István","+363231231231","Miskolc","21213565");
         List<User> actual = userManagementService.getUserByFilterOptions(searchUserRequest);
 
         Assert.assertNotNull(actual);
-        Assert.assertEquals(expected,actual);
-
+        Assert.assertEquals(users,actual);
     }
 
     @Test
     public void getUsers() throws Exception {
-        
-        customer = new Customer();
-
-        customer.setId(1L);
-        customer.setPhoneNumber("+363231231231");
-        customer.setAddress("Miskolc");
-        customer.setUserName("Jóska István");
-        customer.setUserId("aaa111");
-        customer.setYearOfBirth(1990);
-        customer.setDrivingLicenceNumber("21213565");
-
         List<User> expected = new ArrayList<>();
         expected.add(customer);
+        expected.add(company);
 
         expect(userManagementDao.getUsers()).andReturn(expected);
         replay(userManagementDao);
@@ -181,74 +129,56 @@ public class UserManagementServiceImplTest {
 
     @Test
     public void updateUser() throws Exception {
-        
         Customer customerUpdated = new Customer();
-
         customerUpdated.setId(1L);
         customerUpdated.setPhoneNumber("+363231231231");
         customerUpdated.setAddress("Miskolc");
         customerUpdated.setUserName("Jóska István");
-        customerUpdated.setUserId("aaa111");
+        customerUpdated.setUserId("NewUserId");
         customerUpdated.setYearOfBirth(1990);
         customerUpdated.setDrivingLicenceNumber("21213565");
-        
-        UpdateUserRequest updateUserRequest = new UpdateUserRequest();
 
         expect(userManagementDao.exists(anyObject(User.class))).andReturn(true);
+        expect(userManagementDao.getUserById(1L)).andReturn(customer);
         expect(userManagementDao.addUser(anyObject(User.class))).andReturn(customerUpdated);
-        
+
         replay(userManagementDao);
-        
+
+
+        UpdateUserRequest updateUserRequest = new UpdateUserRequest();
+        updateUserRequest.setId(1L);
+        updateUserRequest.setUserName("Jóska István");
+        updateUserRequest.setUserId("NewUserId");
+        updateUserRequest.setCustomer(true);
+
         User actual = userManagementService.updateUser(updateUserRequest);
 
         Assert.assertEquals(customerUpdated, actual);
-
     }
 
     @Test
     public void deleteUser() throws Exception {
-              
-        Customer customer = new Customer();
-
-        customer.setId(1L);
-        customer.setPhoneNumber("+363231231231");
-        customer.setAddress("Miskolc");
-        customer.setUserName("Jóska István");
-        customer.setUserId("aaa111");
-        customer.setYearOfBirth(1990);
-        customer.setDrivingLicenceNumber("21213565");
-
         expect(userManagementDao.exists(anyObject())).andReturn(true);
+        expect(userManagementDao.getUserById(1L)).andReturn(customer);
         expectLastCall();
         replay(userManagementDao);
 
         userManagementService.deleteUser(customer);
-
     }
 
     @Test
     public void countUser() throws Exception {
+        List<User> expected = new ArrayList<>();
+        expected.add(customer);
+        expected.add(company);
 
-        customer = new Customer();
-
-        customer.setId(1L);
-        customer.setPhoneNumber("+363231231231");
-        customer.setAddress("Miskolc");
-        customer.setUserName("Jóska István");
-        customer.setUserId("aaa111");
-        customer.setYearOfBirth(1990);
-        customer.setDrivingLicenceNumber("21213565");
-
-        List<User> userList = new ArrayList<>();
-        userList.add(customer);
-
-        expect(userManagementDao.getUsers()).andReturn(userList);
+        expect(userManagementDao.getUsers()).andReturn(expected);
         replay(userManagementDao);
 
         int actual = userManagementService.countUser();
 
         Assert.assertNotNull(actual);
-        Assert.assertEquals(1, actual);
+        Assert.assertEquals(expected.size(), actual);
 
     }
 }
