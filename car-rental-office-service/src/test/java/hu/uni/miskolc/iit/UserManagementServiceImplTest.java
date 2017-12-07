@@ -176,6 +176,22 @@ public class UserManagementServiceImplTest {
 
     @Test
     public void deleteUser() throws Exception {
+              
+        Customer customer = new Customer();
+
+        customer.setId(1L);
+        customer.setPhoneNumber("+363231231231");
+        customer.setAddress("Miskolc");
+        customer.setUserName("Jóska István");
+        customer.setUserId(1L);
+        customer.setYearOfBirth(1990);
+        customer.setDrivingLincenceNumber("21213565");
+
+        expect(userManagementDao.exists(anyObject())).andReturn(true);
+        expectLastCall();
+        replay(userManagementDao);
+
+        userManagementService.removeUser(customer);
 
     }
 
