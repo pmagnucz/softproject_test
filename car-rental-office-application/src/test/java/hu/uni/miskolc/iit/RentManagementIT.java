@@ -11,10 +11,9 @@ import hu.uni.miskolc.iit.service.VehicleManagementService;
 import org.junit.*;
 
 import java.io.File;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.temporal.ChronoField;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -43,14 +42,27 @@ public class RentManagementIT {
         UserManagementService userService = new UserManagementServiceImpl(userManagementDao);
         VehicleManagementService vehicleService = new VehicleManagementServiceImpl(vehicleManagementDao);
 
+        DateFormat formatRent = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat formatManufacture = new SimpleDateFormat("yyyy-MM");
+        Date startDate = null;
+        Date endDate = null;
+        Date manufactureDate= null;
+        try {
+            startDate = formatRent.parse("2017-02-01");
+            endDate = formatRent.parse("2017-03-01");
+            manufactureDate = formatManufacture.parse("1960-01");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         rent = new Rent();
 
         rent.setId(1L);
         rent.setCustomerId(1L);
         rent.setCompanyId(0L);
         rent.setVehicleId(1L);
-        rent.setStartDate(LocalDate.parse("2017-02-01"));
-        rent.setEndDate(LocalDate.parse("2017-03-01"));
+        rent.setStartDate(startDate);
+        rent.setEndDate(endDate);
         rent.setDurationExtendable(true);
         rent.setExtendedHours(24);
         rent.setKmUsed(100);
@@ -72,13 +84,10 @@ public class RentManagementIT {
 
             Car car = new Car();
 
-            DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM").parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter();
-            LocalDate date = LocalDate.parse("2001-11", dateTimeFormatter);
-
             car.setId(1L);
             car.setType(VehicleType.CAR);
             car.setManufacturer("test");
-            car.setYearOfManufacture(new Date());
+            car.setYearOfManufacture(manufactureDate);
             car.setRentCost(15000);
             car.setPersons(5);
             car.setPerformance(1500.24);
@@ -123,15 +132,25 @@ public class RentManagementIT {
 
     @Test
     public void updateRent() throws Exception {
-        
+
+        DateFormat formatRent = new SimpleDateFormat("yyyy-MM-dd");
+        Date startDate = null;
+        Date endDate = null;
+        try {
+            startDate = formatRent.parse("2017-05-01");
+            endDate = formatRent.parse("2017-06-01");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         Rent rentUpdate = new Rent();
 
         rentUpdate.setId(2L);
         rentUpdate.setCustomerId(1L);
         rentUpdate.setCompanyId(0L);
         rentUpdate.setVehicleId(1L);
-        rentUpdate.setStartDate(LocalDate.parse("2017-05-01"));
-        rentUpdate.setEndDate(LocalDate.parse("2017-06-01"));
+        rentUpdate.setStartDate(startDate);
+        rentUpdate.setEndDate(endDate);
         rentUpdate.setDurationExtendable(false);
         rentUpdate.setExtendedHours(0);
         rentUpdate.setKmUsed(200);
@@ -180,9 +199,18 @@ public class RentManagementIT {
 
     @Test(expected = WrongRentDateException.class)
     public void wrongDateException() throws Exception {
+        DateFormat formatRent = new SimpleDateFormat("yyyy-MM-dd");
+        Date startDate = null;
+        Date endDate = null;
+        try {
+            startDate = formatRent.parse("2017-03-01");
+            endDate = formatRent.parse("2017-02-01");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
-        rent.setStartDate(LocalDate.parse("2017-05-01"));
-        rent.setEndDate(LocalDate.parse("2017-04-01"));
+        rent.setStartDate(startDate);
+        rent.setEndDate(endDate);
 
         rentController.createRent(rent);
     }
