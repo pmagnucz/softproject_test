@@ -1,10 +1,7 @@
 package hu.uni.miskolc.iit;
 
 import hu.uni.miskolc.iit.dao.VehicleManagementDao;
-import hu.uni.miskolc.iit.model.Car;
-import hu.uni.miskolc.iit.model.Vehicle;
-import hu.uni.miskolc.iit.model.VehicleStatusType;
-import hu.uni.miskolc.iit.model.VehicleType;
+import hu.uni.miskolc.iit.model.*;
 import hu.uni.miskolc.iit.service.VehicleManagementService;
 import org.easymock.EasyMock;
 import org.easymock.internal.IMocksControlState;
@@ -24,17 +21,30 @@ import static org.easymock.EasyMock.*;
 public class VehicleManagementServiceImplTest {
     private VehicleManagementDao vehicleManagementDao;
     private VehicleManagementService vehicleManagementService;
+
+    private Vehicle vehicle;
+    private Ship ship;
+    private Car car;
     // TODO VehicleManagementServiceImplTest fix the missing tests
 
     @Before
     public void setUp() throws Exception {
         vehicleManagementDao = EasyMock.mock(VehicleManagementDao.class);
         vehicleManagementService = new VehicleManagementServiceImpl(vehicleManagementDao);
-    }
 
-    @Test
-    public void addNewVehicle() throws Exception {
-        Car car = new Car();
+        vehicle = new Vehicle();
+
+        vehicle.setId(1L);
+        vehicle.setType(VehicleType.CAR);
+        vehicle.setManufacturer("Ford");
+        vehicle.setYearOfManufacture(date);
+        vehicle.setRentCost(15000);
+        vehicle.setPersons(5);
+        vehicle.setPerformance(1500.24);
+        vehicle.setVehicleStatus(VehicleStatusType.FREE);
+
+        car = new Car();
+
         car.setPlateNumber("AAA-123");
         car.setVehicleIdentificationNumber("ID123123AS");
         car.setDrawBar(false);
@@ -47,6 +57,23 @@ public class VehicleManagementServiceImplTest {
         car.setPerformance(75.0D);
         car.setVehicleStatus(VehicleStatusType.FREE);
 
+        ship = new Ship();
+
+        ship.setId(2L);
+        ship.setLength(2000.0);
+        ship.setWithTrailer(true);
+        ship.setType(VehicleType.SHIP);
+        ship.setShipId("M");
+        ship.setManufacturer("Lambo");
+        ship.setPerformance(120);
+        ship.setPersons(6);
+        ship.setRentCost(13000);
+        ship.setVehicleStatus(VehicleStatusType.RESERVED);
+        ship.setYearOfManufacture(new Date());
+    }
+
+    @Test
+    public void addNewVehicleCar() throws Exception {
         expect(vehicleManagementDao.addVehicle(anyObject(Vehicle.class))).andReturn(car);
         replay(vehicleManagementDao);
 
@@ -57,20 +84,18 @@ public class VehicleManagementServiceImplTest {
     }
 
     @Test
-    public void getVehicleById() throws Exception {
-        Car car = new Car();
-        car.setPlateNumber("AAA-123");
-        car.setVehicleIdentificationNumber("ID123123AS");
-        car.setDrawBar(false);
-        car.setId(1L);
-        car.setType(VehicleType.CAR);
-        car.setManufacturer("Opel");
-        car.setYearOfManufacture(new Date());
-        car.setRentCost(40.0D);
-        car.setPersons(5);
-        car.setPerformance(75.0D);
-        car.setVehicleStatus(VehicleStatusType.FREE);
+    public void addNewVehicleShip() throws Exception {
+        expect(vehicleManagementDao.addVehicle(anyObject(Vehicle.class))).andReturn(ship);
+        replay(vehicleManagementDao);
 
+        Vehicle actual = vehicleManagementService.addNewVehicle(ship);
+
+        Assert.assertNotNull(actual);
+        Assert.assertEquals(ship, actual);
+    }
+
+    @Test
+    public void getVehicleById() throws Exception {
         expect(vehicleManagementDao.getVehicleById(anyLong())).andReturn(car);
         replay(vehicleManagementDao);
 
@@ -82,19 +107,6 @@ public class VehicleManagementServiceImplTest {
 
     @Test
     public void getVehicles() throws Exception {
-        Car car = new Car();
-        car.setPlateNumber("AAA-123");
-        car.setVehicleIdentificationNumber("ID123123AS");
-        car.setDrawBar(false);
-        car.setId(1L);
-        car.setType(VehicleType.CAR);
-        car.setManufacturer("Opel");
-        car.setYearOfManufacture(new Date());
-        car.setRentCost(40.0D);
-        car.setPersons(5);
-        car.setPerformance(75.0D);
-        car.setVehicleStatus(VehicleStatusType.FREE);
-
         List<Vehicle> expected = new ArrayList<>();
         expected.add(car);
 
@@ -109,24 +121,35 @@ public class VehicleManagementServiceImplTest {
 
     @Test
     public void updateVehicle() throws Exception {
+        expect(vehicleRepository.findOne(anyLong())).andReturn(mockEntity);
+        expect(vehicleRepository.save(anyObject(VehicleEntity.class))).andReturn(mockEntity);
 
+        replay(vehicleRepository);
+
+        UpdateVehicleRequest updateVehicleRequest = new UpdateVehicleRequest();
+
+        updateVehicleRequest.setId(1L);
+        updateVehicleRequest.setType(VehicleType.CAR);
+        updateVehicleRequest.setManufacturer("Ford2222");
+        updateVehicleRequest.setYearOfManufacture(date);
+        updateVehicleRequest.setRentCost(25000);
+        updateVehicleRequest.setPersons(2);
+        updateVehicleRequest.setCar(true);
+        updateVehicleRequest.setPerformance(2500.24);
+        updateVehicleRequest.setVehicleStatus(VehicleStatusType.FREE);
+        updateVehicleRequest.setPlateNumber("AAA-222");
+        updateVehicleRequest.setVehicleIdentificationNumber("222222sd");
+        updateVehicleRequest.setDrawBar(true);
+
+        vehicleManagementService.updateVehicle(updateVehicleRequest);
+
+        Vehicle actual = VehicleMapper.mapEntityToModel(mockEntity);
+
+        Assert.assertNotEquals(car,actual);
     }
 
     // TODO fix it
     public void removeVehicleCar() throws Exception {
-        Car car = new Car();
-        car.setPlateNumber("AAA-123");
-        car.setVehicleIdentificationNumber("ID123123AS");
-        car.setDrawBar(false);
-        car.setId(1L);
-        car.setType(VehicleType.CAR);
-        car.setManufacturer("Opel");
-        car.setYearOfManufacture(new Date());
-        car.setRentCost(40.0D);
-        car.setPersons(5);
-        car.setPerformance(75.0D);
-        car.setVehicleStatus(VehicleStatusType.FREE);
-
         expect(vehicleManagementDao.exists(anyObject())).andReturn(true);
         expectLastCall();
         replay(vehicleManagementDao);
