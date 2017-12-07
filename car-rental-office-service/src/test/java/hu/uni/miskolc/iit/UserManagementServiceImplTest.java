@@ -34,9 +34,8 @@ public class UserManagementServiceImplTest {
     @Before
     public void before()
     {
-
-        userManagementService = new UserManagementServiceImpl(userManagementDao);
         userManagementDao = mock(UserManagementDao.class);
+        userManagementService = new UserManagementServiceImpl(userManagementDao);
 
         customer = new Customer();
         customer.setId(1L);
@@ -55,12 +54,6 @@ public class UserManagementServiceImplTest {
         company.setPhoneNumber("363231243512");
         company.setUserName("testCompany");
         company.setAddress("Budapest, Andrássy krt. 10");
-    }
-
-    @Test
-    public void readDatabase()
-    {
-        Assert.assertNotNull(userManagementService.getUsers());
     }
 
     @Test
@@ -160,6 +153,7 @@ public class UserManagementServiceImplTest {
     public void deleteUser() throws Exception {
         expect(userManagementDao.exists(anyObject())).andReturn(true);
         expect(userManagementDao.getUserById(1L)).andReturn(customer);
+        userManagementDao.deleteUser(customer);
         expectLastCall();
         replay(userManagementDao);
 
