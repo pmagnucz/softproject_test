@@ -27,11 +27,7 @@ public class UserManagementController {
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public ResponseEntity<User> createUser(@RequestBody CreateUserRequest createUserRequest) throws UserTypeDoesNotExistException{
-        try {
-            return ResponseEntity.ok(userManagementService.createNewUser(createUserRequest));
-        } catch (UserTypeDoesNotExistException e) {
-            throw e;
-        }
+        return ResponseEntity.ok(userManagementService.createNewUser(createUserRequest));
     }
 
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
@@ -40,41 +36,24 @@ public class UserManagementController {
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public ResponseEntity<User> updateUser(@RequestBody UpdateUserRequest user) {
-        try {
-            User result = userManagementService.updateUser(user);
-            return ResponseEntity.ok(result);
-        } catch (UserNotFoundException e){
-            return ResponseEntity.badRequest().body(null);
-        }
+    public ResponseEntity<User> updateUser(@RequestBody UpdateUserRequest user) throws UserNotFoundException {
+        User result = userManagementService.updateUser(user);
+        return ResponseEntity.ok(result);
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
     public void deleteUser(@RequestBody User user) throws UserNotFoundException {
-        try {
-            userManagementService.deleteUser(user);
-        } catch (UserNotFoundException e) {
-            throw e;
-        }
+        userManagementService.deleteUser(user);
     }
 
     @RequestMapping(value = "/getUser/{userId}", method = RequestMethod.GET)
     public ResponseEntity<User> getUserById(@PathVariable Long userId) throws UserNotFoundException{
-        try {
-            User user = userManagementService.getUserById(userId);
-            return ResponseEntity.ok(user);
-        } catch (UserNotFoundException e) {
-            throw e;
-        }
+        return ResponseEntity.ok(userManagementService.getUserById(userId));
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity<List<User>> getUserByFilterOptions(@RequestBody SearchUserRequest searchUserRequest) throws UserNotFoundException {
-        try {
-            return ResponseEntity.ok(userManagementService.getUserByFilterOptions(searchUserRequest));
-        } catch (UserNotFoundException e) {
-            throw e;
-        }
+        return ResponseEntity.ok(userManagementService.getUserByFilterOptions(searchUserRequest));
     }
 
     @RequestMapping(value = "/count", method = RequestMethod.GET)

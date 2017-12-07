@@ -1,5 +1,6 @@
 package hu.uni.miskolc.iit.dao;
 
+import hu.uni.miskolc.iit.exception.UserNotFoundException;
 import hu.uni.miskolc.iit.model.User;
 
 import java.util.Collection;
@@ -9,9 +10,9 @@ import java.util.Collection;
  */
 public interface UserManagementDao {
     User addUser(User user);
-    User getUserById(Long id);
+    User getUserById(Long id) throws UserNotFoundException;
     Collection<User> getUsers();
-    void deleteUser(User user);
+    void deleteUser(User user) throws UserNotFoundException;
     boolean exists(User id);
     void clear();
 }

@@ -2,6 +2,7 @@ package hu.uni.miskolc.iit.dao;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hu.uni.miskolc.iit.dao.beans.UserDaoBean;
+import hu.uni.miskolc.iit.exception.UserNotFoundException;
 import hu.uni.miskolc.iit.model.Company;
 import hu.uni.miskolc.iit.model.Customer;
 import hu.uni.miskolc.iit.model.User;
@@ -33,7 +34,7 @@ public class UserManagementDaoImpl implements UserManagementDao{
     }
 
     @Override
-    public User getUserById(Long id) {
+    public User getUserById(Long id) throws UserNotFoundException {
         List<User> users = readDatabase();
         for (User user : users)
         {
@@ -42,7 +43,7 @@ public class UserManagementDaoImpl implements UserManagementDao{
                 return user;
             }
         }
-        return null;
+        throw new UserNotFoundException("The requested User not found with the following id: " + id);
     }
 
     @Override
@@ -51,10 +52,14 @@ public class UserManagementDaoImpl implements UserManagementDao{
     }
 
     @Override
-    public void deleteUser(User user) {
+    public void deleteUser(User user) throws UserNotFoundException {
         List<User> users = readDatabase();
-        users.remove(user);
 
+        if (!users.contains(user)){
+            throw new UserNotFoundException("The requested User not found: " + user.toString());
+        }
+
+        users.remove(user);
         writeDatabase(users);
     }
 

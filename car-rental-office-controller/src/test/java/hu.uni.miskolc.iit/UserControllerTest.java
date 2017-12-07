@@ -99,7 +99,7 @@ public class UserControllerTest {
 
     }
 
-    public void updateUser() {
+    public void updateUser() throws UserNotFoundException {
         user2.setId(user.getId());
         user2.setUserName(user.getUserName());
         user2.setUserId(user.getUserId());

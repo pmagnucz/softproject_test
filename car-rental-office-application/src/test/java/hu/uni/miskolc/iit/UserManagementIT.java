@@ -13,18 +13,20 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by pmagnucz on 2017. 11. 22..
  */
 public class UserManagementIT {
-
     private UserManagementController controller;
+
+    private UserManagementDao userManagementDao;
 
     @Before
     public void setUp(){
-        UserManagementDao userManagementDao = new UserManagementDaoImpl(new File("src/test/resources/userDatabase.json"));
+        userManagementDao = new UserManagementDaoImpl(new File("src/test/resources/userDatabase.json"));
         userManagementDao.clear();
         UserManagementService service = new UserManagementServiceImpl(userManagementDao);
         controller = new UserManagementController(service);
@@ -32,8 +34,7 @@ public class UserManagementIT {
 
     @After
     public void tearDown(){
-        // Clean User repository between tests
-
+        userManagementDao.clear();
     }
 
     @Test
@@ -110,9 +111,37 @@ public class UserManagementIT {
         Assert.assertEquals(0, users.size());
     }
 
-    public void updateUserTest(){}
+    @Test
+    public void updateUserTest() throws UserTypeDoesNotExistException, UserNotFoundException {
+        CreateUserRequest userRequest = new CreateUserRequest();
+        userRequest.setUserName("userName");
+        userRequest.setAddress("");
+        userRequest.setPhoneNumber("");
+        userRequest.setUserId("asd");
+        userRequest.setYearOfBirth(1990);
+        userRequest.setDrivingLicenceNumber("");
 
-    public void updateUserTestExceptionalFlow(){}
+        Customer actual = (Customer)controller.createUser(userRequest).getBody();
+
+        UpdateUserRequest updateUserRequest = new UpdateUserRequest();
+        updateUserRequest.setUserName(actual.getUserName());
+        updateUserRequest.setAddress(actual.getAddress());
+        updateUserRequest.setPhoneNumber(actual.getPhoneNumber());
+        updateUserRequest.setUserId(actual.getUserId());
+        updateUserRequest.setYearOfBirth(actual.getYearOfBirth());
+        updateUserRequest.setDrivingLicenceNumber(actual.getDrivingLicenceNumber());
+
+        Customer updated = (Customer)controller.updateUser(updateUserRequest).getBody();
+        Assert.assertEquals(updated, actual);
+    }
+
+    @Test(expected = UserNotFoundException.class)
+    public void updateUserTestExceptionalFlow() throws UserNotFoundException{
+        UpdateUserRequest updateUserRequest = new UpdateUserRequest();
+        updateUserRequest.setId(0L);
+
+        controller.updateUser(updateUserRequest);
+    }
 
     @Test
     public void deleteUserTest() throws UserNotFoundException, UserTypeDoesNotExistException {
@@ -130,6 +159,7 @@ public class UserManagementIT {
         Assert.assertEquals(0, usersSize);
     }
 
+    @Test(expected = UserNotFoundException.class)
     public void deleteUserTestExceptionalFlow() throws UserNotFoundException {
         // Call delete with not existing user should raise UserNotFoundException
         User user = new User();
@@ -138,14 +168,61 @@ public class UserManagementIT {
         controller.deleteUser(user);
     }
 
-    public void getUserByIdTest(){}
+    @Test
+    public void getUserByIdTest() throws UserTypeDoesNotExistException, UserNotFoundException{
+        Customer expected = new Customer();
+        expected.setId(1L);
+        expected.setPhoneNumber("06202122545");
+        expected.setUserName("customer 1");
+        expected.setAddress("Customer's Address Example St. 23");
+        expected.setUserId("993115AS");
 
+        CreateUserRequest userRequest = new CreateUserRequest();
+        userRequest.setPhoneNumber("06202122545");
+        userRequest.setUserName("customer 1");
+        userRequest.setAddress("Customer's Address Example St. 23");
+        userRequest.setUserId("993115AS");
+
+        controller.createUser(userRequest);
+
+        User actual = controller.getUserById(1L).getBody();
+
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test(expected = UserNotFoundException.class)
     public void getUserByIdTestExceptionalFlow() throws UserNotFoundException {
         // Call getUserById with not existing id should raise UserNotFoundException
         controller.getUserById(0L);
     }
 
-    public void getUserByFilterOptionsTest(){}
+    @Test
+    public void getUserByFilterOptionsTest() throws UserTypeDoesNotExistException, UserNotFoundException{
+        SearchUserRequest searchUserRequest = new SearchUserRequest();
+        searchUserRequest.setUserName("customer 1");
+
+        Customer expected = new Customer();
+        expected.setId(1L);
+        expected.setPhoneNumber("06202122545");
+        expected.setUserName("customer 1");
+        expected.setAddress("Customer's Address Example St. 23");
+        expected.setUserId("993115AS");
+
+        List<Customer> customerList = new ArrayList<>();
+        customerList.add(expected);
+
+        CreateUserRequest userRequest = new CreateUserRequest();
+        userRequest.setPhoneNumber("06202122545");
+        userRequest.setUserName("customer 1");
+        userRequest.setAddress("Customer's Address Example St. 23");
+        userRequest.setUserId("993115AS");
+
+        controller.createUser(userRequest);
+
+        List<User> actual = controller.getUserByFilterOptions(searchUserRequest).getBody();
+
+        Assert.assertEquals(customerList, actual);
+    }
 
     @Test(expected = UserNotFoundException.class)
     public void getUserByFilterOptionsExceptionalFlow() throws UserNotFoundException {
