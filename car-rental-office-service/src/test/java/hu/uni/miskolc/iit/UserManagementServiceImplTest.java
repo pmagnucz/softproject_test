@@ -46,7 +46,7 @@ public class UserManagementServiceImplTest {
         customer.setUserName("Jóska István");
         customer.setUserId(1L);
         customer.setYearOfBirth(1990);
-        customer.setDrivingLincenceNumber("21213565");
+        customer.setDrivingLicenceNumber("21213565");
     }
 
     @Test
@@ -66,7 +66,7 @@ public class UserManagementServiceImplTest {
         customer.setUserName("Jóska István");
         customer.setUserId(1L);
         customer.setYearOfBirth(1990);
-        customer.setDrivingLincenceNumber("21213565");
+        customer.setDrivingLicenceNumber("21213565");
 
         expect(userManagementDao.addUser(anyObject(User.class))).andReturn(customer);
         replay(userManagementDao);
@@ -89,7 +89,7 @@ public class UserManagementServiceImplTest {
         customer.setUserName("Jóska István");
         customer.setUserId(1L);
         customer.setYearOfBirth(1990);
-        customer.setDrivingLincenceNumber("21213565");
+        customer.setDrivingLicenceNumber("21213565");
        
         expect(userManagementDao.getUserById(anyLong())).andReturn(car);
         replay(userManagementDao);
@@ -112,7 +112,7 @@ public class UserManagementServiceImplTest {
         customer.setUserName("Jóska István");
         customer.setUserId(1L);
         customer.setYearOfBirth(1990);
-        customer.setDrivingLincenceNumber("21213565");
+        customer.setDrivingLicenceNumber("21213565");
 
         
         Company company = new Company();
@@ -154,7 +154,7 @@ public class UserManagementServiceImplTest {
         customer.setUserName("Jóska István");
         customer.setUserId(1L);
         customer.setYearOfBirth(1990);
-        customer.setDrivingLincenceNumber("21213565");
+        customer.setDrivingLicenceNumber("21213565");
 
         List<User> expected = new ArrayList<>();
         expected.add(customer);
@@ -180,7 +180,7 @@ public class UserManagementServiceImplTest {
         customerUpdated.setUserName("Jóska István");
         customerUpdated.setUserId(1L);
         customerUpdated.setYearOfBirth(1990);
-        customerUpdated.setDrivingLincenceNumber("21213565");
+        customerUpdated.setDrivingLicenceNumber("21213565");
 
         expect(userManagementDao.exists(anyObject(User.class))).andReturn(true);
         expect(userManagementDao.addUser(anyObject(User.class))).andReturn(customerUpdated);
@@ -204,7 +204,7 @@ public class UserManagementServiceImplTest {
         customer.setUserName("Jóska István");
         customer.setUserId(1L);
         customer.setYearOfBirth(1990);
-        customer.setDrivingLincenceNumber("21213565");
+        customer.setDrivingLicenceNumber("21213565");
 
         expect(userManagementDao.exists(anyObject())).andReturn(true);
         expectLastCall();
