@@ -4,7 +4,6 @@ import hu.uni.miskolc.iit.exception.*;
 import hu.uni.miskolc.iit.model.Rent;
 import hu.uni.miskolc.iit.model.SearchRentRequest;
 import hu.uni.miskolc.iit.service.RentManagementService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,7 +22,6 @@ import java.util.List;
 public class RentController {
     private RentManagementService rentManagementService;
 
-    @Autowired
     public RentController(RentManagementService rentManagementService) {
         this.rentManagementService = rentManagementService;
     }
@@ -34,7 +32,7 @@ public class RentController {
     }
 
     @RequestMapping(value = "/getById", method = RequestMethod.POST)
-    public ResponseEntity<Rent> getRentById(@RequestBody int id){
+    public ResponseEntity<Rent> getRentById(@RequestBody long id){
         return ResponseEntity.ok(rentManagementService.getRentById(id));
     }
 
@@ -49,12 +47,8 @@ public class RentController {
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public ResponseEntity<Rent> updateRent(@RequestBody Rent rent) {
-        Rent result = null;
-        try {
-            result = rentManagementService.updateRent(rent);
-        } catch (Exception e) {}
-
+    public ResponseEntity<Rent> updateRent(@RequestBody Rent rent) throws NegativeValueException, RentWrongTotalFeeException, WrongRentDateException, UserNotFoundException, VehicleNotFoundException, RentNotFoundException {
+        Rent result = rentManagementService.updateRent(rent);
         return ResponseEntity.ok(result);
     }
 

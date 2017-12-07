@@ -40,16 +40,19 @@ public class Customer extends User {
 
         Customer customer = (Customer) o;
 
-        if (userId != customer.userId) return false;
-        if (yearOfBirth != customer.yearOfBirth) return false;
-        return drivingLicenceNumber != null ? drivingLicenceNumber.equals(customer.drivingLicenceNumber) : customer.drivingLicenceNumber == null;
+        if (getYearOfBirth() != customer.getYearOfBirth()) return false;
+        if (getUserId() != null ? !getUserId().equals(customer.getUserId()) : customer.getUserId() != null)
+            return false;
+        return getDrivingLicenceNumber() != null ? getDrivingLicenceNumber().equals(customer.getDrivingLicenceNumber()) : customer.getDrivingLicenceNumber() == null;
+
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + yearOfBirth;
-        result = 31 * result + (drivingLicenceNumber != null ? drivingLicenceNumber.hashCode() : 0);
+        result = 31 * result + (getUserId() != null ? getUserId().hashCode() : 0);
+        result = 31 * result + getYearOfBirth();
+        result = 31 * result + (getDrivingLicenceNumber() != null ? getDrivingLicenceNumber().hashCode() : 0);
         return result;
     }
 

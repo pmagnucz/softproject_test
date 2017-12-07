@@ -1,58 +1,57 @@
 package hu.uni.miskolc.iit;
 
 import hu.uni.miskolc.iit.controller.VehicleController;
+import hu.uni.miskolc.iit.dao.VehicleManagementDao;
+import hu.uni.miskolc.iit.dao.VehicleManagementDaoImpl;
 import hu.uni.miskolc.iit.exception.ExistingVehiclePlateNumber;
 import hu.uni.miskolc.iit.exception.NotSupportedVehicleTypeException;
 import hu.uni.miskolc.iit.exception.NotValidPlateNumberFormatException;
 import hu.uni.miskolc.iit.exception.VehicleNotFoundException;
 import hu.uni.miskolc.iit.model.*;
-import hu.uni.miskolc.iit.repositories.VehicleRepository;
 import hu.uni.miskolc.iit.service.VehicleManagementService;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.temporal.ChronoField;
+import java.io.File;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
- * Created by rozgonyi on 2017. 11. 25..
+ * Created by rozgonyi on 2017. 12. 07..
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = App.class)
-@WebAppConfiguration
 public class VehicleManagementIT {
-
     private VehicleController controller;
 
-    @Autowired
-    private VehicleRepository repository;
+    private VehicleManagementDao vehicleManagementDao;
 
     @Before
     public void setUp(){
-        VehicleManagementService service = new VehicleManagementServiceImpl(repository);
+        vehicleManagementDao = new VehicleManagementDaoImpl(new File("src/test/resources/vehicleDatabase.json"));
+        vehicleManagementDao.clear();
+        VehicleManagementService service = new VehicleManagementServiceImpl(vehicleManagementDao);
         controller = new VehicleController(service);
     }
 
     @After
     public void tearDown() throws Exception{
-        repository.deleteAll();
+        vehicleManagementDao.clear();
     }
 
     @Test
     public void createCarTest() throws NotSupportedVehicleTypeException, ExistingVehiclePlateNumber, NotValidPlateNumberFormatException {
-        DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM").parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter();
-        LocalDate date = LocalDate.parse("2001-11", dateTimeFormatter);
+        DateFormat format = new SimpleDateFormat("yyyy-MM");
+        Date date = null;
+        try {
+            date = format.parse("2001-11");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         CreateVehicleRequest vehicleRequest = new CreateVehicleRequest();
         vehicleRequest.setId(1L);
@@ -82,13 +81,19 @@ public class VehicleManagementIT {
 
         Car actual = (Car)controller.addNewVehicle(vehicleRequest).getBody();
 
+        Assert.assertNotNull(actual);
         Assert.assertEquals(expected, actual);
     }
 
     @Test
     public void createShipTest() throws NotSupportedVehicleTypeException, ExistingVehiclePlateNumber, NotValidPlateNumberFormatException {
-        DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM").parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter();
-        LocalDate date = LocalDate.parse("2009-06", dateTimeFormatter);
+        DateFormat format = new SimpleDateFormat("yyyy-MM");
+        Date date = null;
+        try {
+            date = format.parse("2009-06");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         CreateVehicleRequest vehicleRequest = new CreateVehicleRequest();
         vehicleRequest.setId(2L);
@@ -116,17 +121,22 @@ public class VehicleManagementIT {
         expected.setLength(12.3);
         expected.setWithTrailer(true);
 
-        Ship actual = (Ship) controller.addNewVehicle(vehicleRequest).getBody();
-        //TODO: megnézni, mert ez így elég csúnya
+        Ship actual = (Ship)controller.addNewVehicle(vehicleRequest).getBody();
         expected.setId(actual.getId());
 
+        Assert.assertNotNull(actual);
         Assert.assertEquals(expected, actual);
     }
 
     @Test(expected = NotSupportedVehicleTypeException.class)
     public void createVehicleTestExceptionalFlow() throws NotSupportedVehicleTypeException, ExistingVehiclePlateNumber, NotValidPlateNumberFormatException {
-        DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM").parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter();
-        LocalDate date = LocalDate.parse("2009-06", dateTimeFormatter);
+        DateFormat format = new SimpleDateFormat("yyyy-MM");
+        Date date = null;
+        try {
+            date = format.parse("2009-06");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         CreateVehicleRequest vehicleRequest = new CreateVehicleRequest();
         vehicleRequest.setId(1L);
@@ -151,8 +161,13 @@ public class VehicleManagementIT {
 
     @Test
     public void updateVehicleTest() throws VehicleNotFoundException, NotValidPlateNumberFormatException, ExistingVehiclePlateNumber {
-        DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM").parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter();
-        LocalDate date = LocalDate.parse("2001-11", dateTimeFormatter);
+        DateFormat format = new SimpleDateFormat("yyyy-MM");
+        Date date = null;
+        try {
+            date = format.parse("2001-11");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         CreateVehicleRequest vehicleRequest = new CreateVehicleRequest();
         vehicleRequest.setType(VehicleType.CAR);
@@ -180,6 +195,7 @@ public class VehicleManagementIT {
         updateVehicleRequest.setPlateNumber(actual.getPlateNumber());
         updateVehicleRequest.setVehicleIdentificationNumber(actual.getVehicleIdentificationNumber());
         updateVehicleRequest.setDrawBar(false);
+        updateVehicleRequest.setCar(true);
 
         actual.setDrawBar(false);
 
@@ -198,8 +214,13 @@ public class VehicleManagementIT {
 
     @Test
     public void deleteVehicleTest() throws VehicleNotFoundException, ExistingVehiclePlateNumber, NotValidPlateNumberFormatException {
-        DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM").parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter();
-        LocalDate date = LocalDate.parse("2001-11", dateTimeFormatter);
+        DateFormat format = new SimpleDateFormat("yyyy-MM");
+        Date date = null;
+        try {
+            date = format.parse("2001-11");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         CreateVehicleRequest vehicleRequest = new CreateVehicleRequest();
         vehicleRequest.setId(1L);
@@ -245,8 +266,13 @@ public class VehicleManagementIT {
 
     @Test
     public void getVehicleByIdTest() throws ExistingVehiclePlateNumber, NotValidPlateNumberFormatException, VehicleNotFoundException {
-        DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM").parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter();
-        LocalDate date = LocalDate.parse("2001-11", dateTimeFormatter);
+        DateFormat format = new SimpleDateFormat("yyyy-MM");
+        Date date = null;
+        try {
+            date = format.parse("2001-11");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         CreateVehicleRequest vehicleRequest = new CreateVehicleRequest();
         vehicleRequest.setId(1L);
@@ -282,16 +308,18 @@ public class VehicleManagementIT {
 
     @Test(expected = VehicleNotFoundException.class)
     public void getVehicleByIdTestExceptionalFlow() throws ExistingVehiclePlateNumber, NotValidPlateNumberFormatException, VehicleNotFoundException {
-        Vehicle vehicle = new Vehicle();
-        vehicle.setId(0L);
-
-        controller.getVehicleById(1L);
+        controller.getVehicleById(0L);
     }
 
     @Test
     public void getVehicleByFilterOptionsTest() throws NotValidPlateNumberFormatException, ExistingVehiclePlateNumber {
-        DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM").parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter();
-        LocalDate date = LocalDate.parse("2001-11", dateTimeFormatter);
+        DateFormat format = new SimpleDateFormat("yyyy-MM");
+        Date date = null;
+        try {
+            date = format.parse("2001-11");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         SearchVehicleRequest searchVehicleRequest = new SearchVehicleRequest();
         searchVehicleRequest.setType(VehicleType.CAR);
@@ -309,7 +337,7 @@ public class VehicleManagementIT {
         expected.setVehicleIdentificationNumber("32432423423432");
         expected.setDrawBar(true);
 
-        List<Car> carList=new ArrayList<>();
+        List<Car> carList = new ArrayList<>();
         carList.add(expected);
 
         CreateVehicleRequest vehicleRequest = new CreateVehicleRequest();
@@ -332,5 +360,4 @@ public class VehicleManagementIT {
     }
 
     public void getVehicleByFilterOptionsExceptionalFlow(){}
-
 }

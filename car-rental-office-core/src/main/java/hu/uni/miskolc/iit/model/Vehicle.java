@@ -1,6 +1,5 @@
 package hu.uni.miskolc.iit.model;
 
-import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -10,11 +9,26 @@ public class Vehicle {
     private Long id;
     private VehicleType type;
     private String manufacturer;
-    private LocalDate yearOfManufacture;
+    private Date yearOfManufacture;
     private double rentCost;
     private int persons;
     private double performance;
     private VehicleStatusType vehicleStatus;
+
+    public Vehicle(){
+
+    }
+
+    public Vehicle(Long id, VehicleType type, String manufacturer, Date yearOfManufacture, double rentCost, int persons, double performance, VehicleStatusType vehicleStatus) {
+        this.id = id;
+        this.type = type;
+        this.manufacturer = manufacturer;
+        this.yearOfManufacture = yearOfManufacture;
+        this.rentCost = rentCost;
+        this.persons = persons;
+        this.performance = performance;
+        this.vehicleStatus = vehicleStatus;
+    }
 
     public Long getId() {
         return id;
@@ -40,11 +54,11 @@ public class Vehicle {
         this.manufacturer = manufacturer;
     }
 
-    public LocalDate getYearOfManufacture() {
+    public Date getYearOfManufacture() {
         return yearOfManufacture;
     }
 
-    public void setYearOfManufacture(LocalDate yearOfManufacture) {
+    public void setYearOfManufacture(Date yearOfManufacture) {
         this.yearOfManufacture = yearOfManufacture;
     }
 
@@ -77,21 +91,6 @@ public class Vehicle {
     }
 
     public void setVehicleStatus(VehicleStatusType vehicleStatus) {
-        this.vehicleStatus = vehicleStatus;
-    }
-
-    public Vehicle(){
-
-    }
-
-    public Vehicle(Long id, VehicleType type, String manufacturer, LocalDate yearOfManufacture, double rentCost, int persons, double performance, VehicleStatusType vehicleStatus) {
-        this.id = id;
-        this.type = type;
-        this.manufacturer = manufacturer;
-        this.yearOfManufacture = yearOfManufacture;
-        this.rentCost = rentCost;
-        this.persons = persons;
-        this.performance = performance;
         this.vehicleStatus = vehicleStatus;
     }
 

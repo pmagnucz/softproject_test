@@ -4,6 +4,7 @@ package hu.uni.miskolc.iit.model;
  * Created by pmagnucz on 2017. 10. 18..
  */
 public class CreateUserRequest {
+    private Long id;
     private String userName;
     private String address;
     private String phoneNumber;
@@ -15,6 +16,14 @@ public class CreateUserRequest {
     private String companyId;
     private String billingAddress;
     private Customer representative;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getUserName() {
         return userName;
@@ -91,7 +100,8 @@ public class CreateUserRequest {
     @Override
     public String toString() {
         return "CreateUserRequest{" +
-                "userName='" + userName + '\'' +
+                "id=" + id +
+                ", userName='" + userName + '\'' +
                 ", address='" + address + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", userId='" + userId + '\'' +

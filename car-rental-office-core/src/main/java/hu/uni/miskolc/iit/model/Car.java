@@ -1,8 +1,5 @@
 package hu.uni.miskolc.iit.model;
 
-import jdk.nashorn.internal.ir.CatchNode;
-
-import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -12,6 +9,17 @@ public class Car extends Vehicle {
     private String plateNumber;
     private String vehicleIdentificationNumber;
     private boolean drawBar;
+
+    public Car() {
+
+    }
+
+    public Car(Long id, VehicleType type, String manufacturer, Date yearOfManufacture, double rentCost, int persons, double performance, VehicleStatusType vehicleStatus, String plateNumber, String vehicleIdentificationNumber, boolean drawBar) {
+        super(id, type, manufacturer, yearOfManufacture, rentCost, persons, performance, vehicleStatus);
+        this.plateNumber = plateNumber;
+        this.vehicleIdentificationNumber = vehicleIdentificationNumber;
+        this.drawBar = drawBar;
+    }
 
     public String getPlateNumber() {
         return plateNumber;
@@ -34,23 +42,6 @@ public class Car extends Vehicle {
     }
 
     public void setDrawBar(boolean drawBar) {
-        this.drawBar = drawBar;
-    }
-
-    public Car(){
-
-    }
-
-    public Car(String plateNumber, String vehicleIdentificationNumber, boolean drawBar) {
-        this.plateNumber = plateNumber;
-        this.vehicleIdentificationNumber = vehicleIdentificationNumber;
-        this.drawBar = drawBar;
-    }
-
-    public Car(Long id, VehicleType type, String manufacturer, LocalDate yearOfManufacture, double rentCost, int persons, double performance, VehicleStatusType vehicleStatus, String plateNumber, String vehicleIdentificationNumber, boolean drawBar) {
-        super(id, type, manufacturer, yearOfManufacture, rentCost, persons, performance, vehicleStatus);
-        this.plateNumber = plateNumber;
-        this.vehicleIdentificationNumber = vehicleIdentificationNumber;
         this.drawBar = drawBar;
     }
 

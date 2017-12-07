@@ -1,6 +1,5 @@
 package hu.uni.miskolc.iit.model;
 
-import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -10,7 +9,7 @@ public class UpdateVehicleRequest {
     private Long id;
     private VehicleType type;
     private String manufacturer;
-    private LocalDate yearOfManufacture;
+    private Date yearOfManufacture;
     private double rentCost;
     private int persons;
     private double performance;
@@ -50,11 +49,11 @@ public class UpdateVehicleRequest {
         this.manufacturer = manufacturer;
     }
 
-    public LocalDate getYearOfManufacture() {
+    public Date getYearOfManufacture() {
         return yearOfManufacture;
     }
 
-    public void setYearOfManufacture(LocalDate yearOfManufacture) {
+    public void setYearOfManufacture(Date yearOfManufacture) {
         this.yearOfManufacture = yearOfManufacture;
     }
 

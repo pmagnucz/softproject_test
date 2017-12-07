@@ -1,6 +1,5 @@
 package hu.uni.miskolc.iit.model;
 
-import java.time.LocalDate;
 import java.util.Date;
 
 public class SearchRentRequest {
@@ -8,10 +7,10 @@ public class SearchRentRequest {
     private int customerId;
     private int companyId;
     private int vehicleId;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private Date startDate;
+    private Date endDate;
 
-    public SearchRentRequest(int customerId, int companyId, int vehicleId, LocalDate startDate, LocalDate endDate) {
+    public SearchRentRequest(int customerId, int companyId, int vehicleId, Date startDate, Date endDate) {
         this.customerId = customerId;
         this.companyId = companyId;
         this.vehicleId = vehicleId;
@@ -43,19 +42,19 @@ public class SearchRentRequest {
         this.vehicleId = vehicleId;
     }
 
-    public LocalDate getStartDate() {
+    public Date getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDate startDate) {
+    public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDate getEndDate() {
+    public Date getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDate endDate) {
+    public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
 }

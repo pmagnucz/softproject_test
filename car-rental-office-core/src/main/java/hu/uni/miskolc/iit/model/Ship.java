@@ -1,6 +1,5 @@
 package hu.uni.miskolc.iit.model;
 
-import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -11,6 +10,19 @@ public class Ship extends Vehicle{
     private String shipId;
     private double length;
     private boolean withTrailer;
+
+    public Ship(){
+
+    }
+
+    public Ship(Long id, VehicleType type, String manufacturer, Date yearOfManufacture, double rentCost, int persons, double performance, VehicleStatusType vehicleStatus, String shipId, double length, boolean withTrailer) {
+        super(id, type, manufacturer, yearOfManufacture, rentCost, persons, performance, vehicleStatus);
+        this.shipId = shipId;
+        this.length = length;
+        this.withTrailer = withTrailer;
+    }
+
+
 
     public String getShipId() {
         return shipId;
@@ -33,23 +45,6 @@ public class Ship extends Vehicle{
     }
 
     public void setWithTrailer(boolean withTrailer) {
-        this.withTrailer = withTrailer;
-    }
-
-    public  Ship(){
-
-    }
-
-    public Ship(String shipId, double length, boolean withTrailer) {
-        this.shipId = shipId;
-        this.length = length;
-        this.withTrailer = withTrailer;
-    }
-
-    public Ship(Long id, VehicleType type, String manufacturer, LocalDate yearOfManufacture, double rentCost, int persons, double performance, VehicleStatusType vehicleStatus, String shipId, double length, boolean withTrailer) {
-        super(id, type, manufacturer, yearOfManufacture, rentCost, persons, performance, vehicleStatus);
-        this.shipId = shipId;
-        this.length = length;
         this.withTrailer = withTrailer;
     }
 

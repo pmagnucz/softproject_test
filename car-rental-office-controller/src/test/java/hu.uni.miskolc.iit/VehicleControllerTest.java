@@ -1,16 +1,13 @@
 package hu.uni.miskolc.iit;
 
 import hu.uni.miskolc.iit.controller.VehicleController;
-import hu.uni.miskolc.iit.entity.VehicleEntity;
+import hu.uni.miskolc.iit.dao.VehicleManagementDao;
 import hu.uni.miskolc.iit.exception.ExistingVehiclePlateNumber;
 import hu.uni.miskolc.iit.exception.NotSupportedVehicleTypeException;
 import hu.uni.miskolc.iit.exception.NotValidPlateNumberFormatException;
 import hu.uni.miskolc.iit.exception.VehicleNotFoundException;
-import hu.uni.miskolc.iit.mapper.VehicleMapper;
 import hu.uni.miskolc.iit.model.*;
-import hu.uni.miskolc.iit.repositories.VehicleRepository;
 import hu.uni.miskolc.iit.service.VehicleManagementService;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,17 +17,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.easymock.EasyMock.mock;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertEquals;
 
 public class VehicleControllerTest {
+
     private VehicleController vehicleController;
     private VehicleManagementService vehicleService;
-    private VehicleRepository vehicleRepository;
-
+    private VehicleManagementDao vehicleManagementDao;
 
     private Car vehicle;
     private Car vehicle2;
@@ -40,9 +34,8 @@ public class VehicleControllerTest {
 
     @Before
     public void setUp() throws ParseException {
-        vehicleRepository = mock(VehicleRepository.class);
-
-        vehicleService = new VehicleManagementServiceImpl(vehicleRepository);
+        vehicleManagementDao = mock(VehicleManagementDao.class);
+        vehicleService = new VehicleManagementServiceImpl(vehicleManagementDao);
         vehicleController = new VehicleController(vehicleService);
 
         DateFormat format = new SimpleDateFormat("yyyy-MM");
@@ -104,18 +97,13 @@ public class VehicleControllerTest {
         updateVehicleRequest.setDrawBar(vehicle2.isDrawBar());
     }
 
-    @After
-    public void tearDown() {
-
-    }
 
     @Test
     public void addNewVehicle() throws ExistingVehiclePlateNumber, NotSupportedVehicleTypeException, NotValidPlateNumberFormatException {
         Vehicle expected = vehicle;
-        VehicleEntity mockEntity = VehicleMapper.mapModelToEntity(vehicle);
-        expect(vehicleRepository.save(mockEntity)).andReturn(mockEntity);
 
-        replay(vehicleRepository);
+        expect(vehicleManagementDao.addVehicle(anyObject(Vehicle.class))).andReturn(expected);
+        replay(vehicleManagementDao);
 
         Vehicle actual = vehicleController.addNewVehicle(vehicleRequest).getBody();
 
@@ -129,26 +117,22 @@ public class VehicleControllerTest {
         vehicle2.setPerformance(vehicle.getPerformance());
         vehicle2.setVehicleStatus(vehicle.getVehicleStatus());
 
-        VehicleEntity mockEntity = VehicleMapper.mapModelToEntity(vehicle);
+        expect(vehicleManagementDao.getVehicleById(anyLong())).andReturn(vehicle);
+        expect(vehicleManagementDao.addVehicle(anyObject(Vehicle.class))).andReturn(vehicle2);
 
-        expect(vehicleRepository.findOne(anyLong())).andReturn(mockEntity);
-        expect(vehicleRepository.save(anyObject(VehicleEntity.class))).andReturn(mockEntity);
+        replay(vehicleManagementDao);
 
-        replay(vehicleRepository);
-
-        vehicleController.updateVehicle(updateVehicleRequest);
-
-        Vehicle actual = VehicleMapper.mapEntityToModel(mockEntity);
+        Vehicle actual = vehicleController.updateVehicle(updateVehicleRequest).getBody();
 
         assertEquals(vehicle2, actual);
     }
 
     @Test
     public void removeVehicle() throws VehicleNotFoundException {
-        vehicleRepository.delete(vehicle.getId());
+        expect(vehicleManagementDao.getVehicleById(anyLong())).andReturn(vehicle);
+        vehicleManagementDao.deleteVehicle(vehicle);
         expectLastCall();
-
-        replay(vehicleRepository);
+        replay(vehicleManagementDao);
 
         vehicleController.removeVehicle(vehicle);
     }
@@ -159,11 +143,8 @@ public class VehicleControllerTest {
         vehicles.add(vehicle);
         vehicles.add(vehicle2);
 
-        List<VehicleEntity> expectedEntities = VehicleMapper.mapModelListToEntityList(vehicles);
-
-        expect(vehicleRepository.findAll()).andReturn(expectedEntities);
-
-        replay(vehicleRepository);
+        expect(vehicleManagementDao.getVehicles()).andReturn(vehicles);
+        replay(vehicleManagementDao);
 
         List<Vehicle> actual = vehicleController.getVehicles().getBody();
         assertEquals(vehicles, actual);
@@ -171,11 +152,8 @@ public class VehicleControllerTest {
 
     @Test
     public void getVehicleById() throws VehicleNotFoundException {
-        VehicleEntity mockEntity = VehicleMapper.mapModelToEntity(vehicle);
-
-        expect(vehicleRepository.findOne(anyLong())).andReturn(mockEntity);
-
-        replay(vehicleRepository);
+        expect(vehicleManagementDao.getVehicleById(anyLong())).andReturn(vehicle);
+        replay(vehicleManagementDao);
 
         Vehicle actual = vehicleController.getVehicleById(vehicle.getId()).getBody();
         assertEquals(vehicle, actual);
@@ -191,21 +169,14 @@ public class VehicleControllerTest {
         searchVehicleRequest.setRentCost(20000.0);
         searchVehicleRequest.setYearOfManufacture(format.parse("1960-01"));
 
-        List<Vehicle> vehicles =new ArrayList<>();
-        vehicles.add(vehicle);
-        vehicles.add(vehicle2);
-
-        List<VehicleEntity> expectedEntities = VehicleMapper.mapModelListToEntityList(vehicles);
-
-        expect(vehicleRepository.findAll()).andReturn(expectedEntities);
-
-        replay(vehicleRepository);
-
         List<Vehicle> expected = new ArrayList<>();
         expected.add(vehicle2);
 
-        List<Vehicle> actual = vehicleController.getVehicleByFilterOptions(searchVehicleRequest).getBody();
+        expect(vehicleManagementDao.getVehicles()).andReturn(expected);
+        replay(vehicleManagementDao);
 
+
+        List<Vehicle> actual = vehicleController.getVehicleByFilterOptions(searchVehicleRequest).getBody();
         assertEquals(expected, actual);
     }
 
