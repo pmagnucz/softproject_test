@@ -19,6 +19,9 @@ import java.io.File;
 
 public class UserManagementServiceImplTest {
     private UserManagementService userManagementService;
+    private User user;
+    private Customer customer;
+    private Company company;
    
 // TODO UserManagementServiceImplTest
     @Before
@@ -77,6 +80,24 @@ public class UserManagementServiceImplTest {
 
     @Test
     public void getUserById() throws Exception {
+        
+        customer = new Customer();
+
+        customer.setId(1L);
+        customer.setPhoneNumber("+363231231231");
+        customer.setAddress("Miskolc");
+        customer.setUserName("Jóska István");
+        customer.setUserId(1L);
+        customer.setYearOfBirth(1990);
+        customer.setDrivingLincenceNumber("21213565");
+       
+        expect(userManagementDao.getUserById(anyLong())).andReturn(car);
+        replay(userManagementDao);
+
+        User actual = userManagementService.getUserById(1L);
+
+        Assert.assertNotNull(actual);
+        Assert.assertEquals(customer, actual);
 
     }
 
