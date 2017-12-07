@@ -21,3 +21,10 @@ A kölcsönzéshez szükséges egy ügyfél létrehozása. A kölcsönzéskor eg
 4. Kölcsönzés befejezése
 
 A kölcsönvett járművet visszahozzák. A kölcsönzési díj kiszámítása ilyenkor történik. A díj, napi alapon kerül meghatározásra, ehhez hozzáadódik a futott kilométerdíj. Ha az autó sérülten érkezik vissza, akkor a kölcsönzési díj egy előre megadott összeggel nő. (mivel a többi kárt a biztosító fizeti)
+
+
+Application.java VM arguments
+
+-DuserDBpath=D:\softproject_test\car-rental-office-application\src\main\resources\userDatabase.json
+-DvehicleDBpath=D:\softproject_test\car-rental-office-application\src\main\resources\vehicleDatabase.json
+-DrentDBpath=D:\softproject_test\car-rental-office-application\src\main\resources\rentDatabase.json
