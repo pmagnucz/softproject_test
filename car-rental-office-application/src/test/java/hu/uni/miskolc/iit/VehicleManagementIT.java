@@ -193,6 +193,7 @@ public class VehicleManagementIT {
         updateVehicleRequest.setPlateNumber(actual.getPlateNumber());
         updateVehicleRequest.setVehicleIdentificationNumber(actual.getVehicleIdentificationNumber());
         updateVehicleRequest.setDrawBar(false);
+        updateVehicleRequest.setCar(true);
 
         actual.setDrawBar(false);
 
