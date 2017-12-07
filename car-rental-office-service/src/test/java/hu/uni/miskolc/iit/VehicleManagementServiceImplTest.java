@@ -9,6 +9,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -37,7 +40,7 @@ public class VehicleManagementServiceImplTest {
         vehicle.setId(1L);
         vehicle.setType(VehicleType.CAR);
         vehicle.setManufacturer("Ford");
-        vehicle.setYearOfManufacture(date);
+        vehicle.setYearOfManufacture(new Date());
         vehicle.setRentCost(15000);
         vehicle.setPersons(5);
         vehicle.setPerformance(1500.24);
@@ -167,7 +170,7 @@ public class VehicleManagementServiceImplTest {
 
         Vehicle actual = vehicleManagementService.updateVehicle(updateVehicleRequest);
 
-        Assert.assertEquals(expectedCar,actual)
+        Assert.assertEquals(expectedCar, actual);
     }
 
     // TODO fix it
