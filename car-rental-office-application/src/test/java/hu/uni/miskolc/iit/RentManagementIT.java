@@ -16,6 +16,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import java.util.List;
+import java.util.ArrayList;
+
 /**
  * Created by zsoltme on 2017.11.23..
  */
@@ -120,14 +123,30 @@ public class RentManagementIT {
 
     @Test
     public void getRentById() throws Exception {
+        Rent expected = rentController.createRent(rent).getBody();
+        Rent actual = rentController.getRentById(Math.toIntExact(expected.getId())).getBody();
+
+        Assert.assertEquals(expected,actual);
     }
 
     @Test
     public void getRentByFilterOptions() throws Exception {
+
     }
 
     @Test
     public void getAllRent() throws Exception {
+        Rent rentTest1 = rentController.createRent(rent).getBody();
+        rent.setId(2L);
+        Rent rentTest2 = rentController.createRent(rent).getBody();
+
+        List<Rent> expected = new ArrayList<>();
+        expected.add(rentTest1);
+        expected.add(rentTest2);
+
+        List<Rent> actual = rentController.getAllRent().getBody();
+
+        Assert.assertEquals(expected,actual);
     }
 
     @Test
