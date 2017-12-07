@@ -1,10 +1,15 @@
 package hu.uni.miskolc.iit;
 
+
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.*;
 import hu.uni.miskolc.iit.dao.UserManagementDao;
 import hu.uni.miskolc.iit.dao.UserManagementDaoImpl;
 import hu.uni.miskolc.iit.model.Customer;
 import hu.uni.miskolc.iit.model.Company;
 import hu.uni.miskolc.iit.model.User;
+import hu.uni.miskolc.iit.model.SearchUserRequest;
+import hu.uni.miskolc.iit.model.CreateUserRequest;
 import hu.uni.miskolc.iit.service.UserManagementService;
 import org.junit.Assert;
 import org.junit.Before;
@@ -19,6 +24,7 @@ import java.io.File;
 
 public class UserManagementServiceImplTest {
     private UserManagementService userManagementService;
+    private UserManagementDao userManagementDao = new UserManagementDaoImpl(new File("src/test/resources/database.json"));
     private User user;
     private Customer customer;
     private Company company;
@@ -27,7 +33,7 @@ public class UserManagementServiceImplTest {
     @Before
     public void before()
     {
-        UserManagementDao userManagementDao = new UserManagementDaoImpl(new File("src/test/resources/database.json"));
+
         userManagementService = new UserManagementServiceImpl(userManagementDao);
        
         
@@ -44,7 +50,7 @@ public class UserManagementServiceImplTest {
         customer.setPhoneNumber("+363231231231");
         customer.setAddress("Miskolc");
         customer.setUserName("Jóska István");
-        customer.setUserId(1L);
+        customer.setUserId("aaa111");
         customer.setYearOfBirth(1990);
         customer.setDrivingLicenceNumber("21213565");
     }
@@ -58,20 +64,23 @@ public class UserManagementServiceImplTest {
     @Test
     public void createNewUser() throws Exception {
         
-        customer = new Customer();
+        Customer customer = new Customer();
 
         customer.setId(1L);
         customer.setPhoneNumber("+363231231231");
         customer.setAddress("Miskolc");
         customer.setUserName("Jóska István");
-        customer.setUserId(1L);
+        customer.setUserId("aaa111");
         customer.setYearOfBirth(1990);
         customer.setDrivingLicenceNumber("21213565");
 
         expect(userManagementDao.addUser(anyObject(User.class))).andReturn(customer);
         replay(userManagementDao);
 
-        User actual = userManagementService.addNewUser(customer);
+        CreateUserRequest createUserRequest =
+                new CreateUserRequest();
+
+        User actual = userManagementService.createNewUser(createUserRequest);
 
         Assert.assertNotNull(actual);
         Assert.assertEquals(customer, actual);
@@ -87,7 +96,7 @@ public class UserManagementServiceImplTest {
         customer.setPhoneNumber("+363231231231");
         customer.setAddress("Miskolc");
         customer.setUserName("Jóska István");
-        customer.setUserId(1L);
+        customer.setUserId("aaa111");
         customer.setYearOfBirth(1990);
         customer.setDrivingLicenceNumber("21213565");
        
@@ -110,7 +119,7 @@ public class UserManagementServiceImplTest {
         customer.setPhoneNumber("+363231231231");
         customer.setAddress("Miskolc");
         customer.setUserName("Jóska István");
-        customer.setUserId(1L);
+        customer.setUserId("aaa111");
         customer.setYearOfBirth(1990);
         customer.setDrivingLicenceNumber("21213565");
 
@@ -119,8 +128,7 @@ public class UserManagementServiceImplTest {
         company.setId(2L);
         company.setPhoneNumber("+363231231231");
         company.setAddress("Miskolc");
-        company.setDrivingLicenceNumber("21213565");
-        company.setCompanyId(1L);
+        company.setCompanyId("aaa111");
         company.setBillingAddress("Debrecen");
 
         
@@ -152,7 +160,7 @@ public class UserManagementServiceImplTest {
         customer.setPhoneNumber("+363231231231");
         customer.setAddress("Miskolc");
         customer.setUserName("Jóska István");
-        customer.setUserId(1L);
+        customer.setUserId("aaa111");
         customer.setYearOfBirth(1990);
         customer.setDrivingLicenceNumber("21213565");
 
@@ -178,7 +186,7 @@ public class UserManagementServiceImplTest {
         customerUpdated.setPhoneNumber("+363231231231");
         customerUpdated.setAddress("Miskolc");
         customerUpdated.setUserName("Jóska István");
-        customerUpdated.setUserId(1L);
+        customerUpdated.setUserId("aaa111");
         customerUpdated.setYearOfBirth(1990);
         customerUpdated.setDrivingLicenceNumber("21213565");
 
@@ -202,7 +210,7 @@ public class UserManagementServiceImplTest {
         customer.setPhoneNumber("+363231231231");
         customer.setAddress("Miskolc");
         customer.setUserName("Jóska István");
-        customer.setUserId(1L);
+        customer.setUserId("aaa111");
         customer.setYearOfBirth(1990);
         customer.setDrivingLicenceNumber("21213565");
 
@@ -210,12 +218,34 @@ public class UserManagementServiceImplTest {
         expectLastCall();
         replay(userManagementDao);
 
-        userManagementService.removeUser(customer);
+        userManagementService.deleteUser(customer);
 
     }
 
     @Test
     public void countUser() throws Exception {
 
+        customer = new Customer();
+
+        customer.setId(1L);
+        customer.setPhoneNumber("+363231231231");
+        customer.setAddress("Miskolc");
+        customer.setUserName("Jóska István");
+        customer.setUserId("aaa111");
+        customer.setYearOfBirth(1990);
+        customer.setDrivingLicenceNumber("21213565");
+
+        List<User> userList = new ArrayList<>();
+        userList.add(customer);
+
+        expect(userManagementDao.getUsers()).andReturn(userList);
+        replay(userManagementDao);
+
+        int actual = userManagementService.countUser();
+
+        Assert.assertNotNull(actual);
+        Assert.assertEquals(1, actual);
+
     }
 }
+
