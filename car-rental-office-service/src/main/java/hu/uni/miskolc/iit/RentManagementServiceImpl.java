@@ -136,14 +136,11 @@ public class RentManagementServiceImpl implements RentManagementService {
             throw new RentWrongTotalFeeException(String.valueOf(rent.getTotalFee() + ", should be: " + (rent.getDayFee()+rent.getKmFee()+rent.getOtherFee())));
         }
 
-        if (userManagementDao.getUserById(rent.getCustomerId()) == null && userManagementDao.getUserById(rent.getCompanyId()) == null) {
-            if(rent.getCustomerId() > 0) {
-                throw new UserNotFoundException("Customer with Id: " + rent.getCustomerId() + " does not exist.");
-            } else if (rent.getCompanyId() > 0){
-                throw new UserNotFoundException("Company with Id: " + rent.getCompanyId() + " does not exist.");
-            } else {
-                throw new UserNotFoundException("User Ids wrong: Customer - " + rent.getCustomerId() + ",Company - " + rent.getCompanyId() + ".");
-            }
+        if (rent.getCompanyId() != null && userManagementDao.getUserById(rent.getCompanyId()) == null){
+            throw new UserNotFoundException("Company with Id: " + rent.getCompanyId() + " does not exist.");
+        }
+        if (rent.getCustomerId() != null && userManagementDao.getUserById(rent.getCustomerId()) == null) {
+            throw new UserNotFoundException("Customer with Id: " + rent.getCustomerId() + " does not exist.");
         }
 
         if(vehicleManagementDao.getVehicleById(rent.getVehicleId()) == null) {

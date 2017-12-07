@@ -290,25 +290,7 @@ public class RentManagementServiceImplTest {
         rentManagementService.addNewRent(rentObject);
     }
 
-    @Test
-    public void userNotFoundException() throws Exception {
-        rentObject.setCustomerId(0L);
-        rentObject.setCompanyId(0L);
-
-        expect(rentManagementDao.exists(anyObject(Rent.class))).andReturn(false);
-        replay(rentManagementDao);
-
-        expect(userManagementDao.getUserById(anyLong())).andReturn(null).anyTimes();
-        replay(userManagementDao);
-
-        try {
-            rentManagementService.addNewRent(rentObject);
-        } catch(UserNotFoundException actual) {
-            assertEquals("User Ids wrong: Customer - " + rentObject.getCustomerId() + ",Company - " + rentObject.getCompanyId() + ".",actual.getMessage());
-        }
-    }
-
-    @Test
+    @Test(expected = UserNotFoundException.class)
     public void userCustomerNotFoundException() throws Exception {
         rentObject.setCustomerId(15L);
         rentObject.setCompanyId(0L);
@@ -319,14 +301,10 @@ public class RentManagementServiceImplTest {
         expect(userManagementDao.getUserById(anyLong())).andReturn(null).anyTimes();
         replay(userManagementDao);
 
-        try {
-            rentManagementService.addNewRent(rentObject);
-        } catch(UserNotFoundException actual) {
-            assertEquals("Customer with Id: " + rentObject.getCustomerId() + " does not exist.",actual.getMessage());
-        }
+        rentManagementService.addNewRent(rentObject);
     }
 
-    @Test
+    @Test(expected = UserNotFoundException.class)
     public void userCompanyNotFoundException() throws Exception {
         rentObject.setCustomerId(0L);
         rentObject.setCompanyId(30L);
@@ -337,11 +315,8 @@ public class RentManagementServiceImplTest {
         expect(userManagementDao.getUserById(anyLong())).andReturn(null).anyTimes();
         replay(userManagementDao);
 
-        try {
-            rentManagementService.addNewRent(anotherRentObject);
-        } catch(UserNotFoundException actual) {
-            assertEquals("Company with Id: " + anotherRentObject.getCompanyId() + " does not exist.",actual.getMessage());
-        }
+
+        rentManagementService.addNewRent(anotherRentObject);
     }
 
     @Test(expected = VehicleNotFoundException.class)
