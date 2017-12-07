@@ -53,7 +53,19 @@ public class RentController {
         Rent result = null;
         try {
             result = rentManagementService.updateRent(rent);
-        } catch (Exception e) {}
+        } catch (RentNotFoundException e) {
+            e.printStackTrace();
+        } catch (RentWrongTotalFeeException e) {
+            e.printStackTrace();
+        } catch (VehicleNotFoundException e) {
+            e.printStackTrace();
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
+        } catch (NegativeValueException e) {
+            e.printStackTrace();
+        } catch (WrongRentDateException e) {
+            e.printStackTrace();
+        }
 
         return ResponseEntity.ok(result);
     }

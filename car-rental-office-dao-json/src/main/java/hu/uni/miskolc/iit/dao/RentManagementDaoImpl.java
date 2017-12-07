@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.util.BeanUtil;
 import com.sun.org.apache.regexp.internal.RE;
 import hu.uni.miskolc.iit.dao.beans.RentDaoBean;
 import hu.uni.miskolc.iit.model.Rent;
-import hu.uni.miskolc.iit.model.User;
 
 import java.io.File;
 import java.io.IOException;
@@ -89,7 +88,14 @@ public class RentManagementDaoImpl implements RentManagementDao {
     @Override
     public boolean exists(Rent rent) {
         List<Rent> rents = readDatabase();
-        return rents.contains(rent);
+        for (Rent item : rents)
+        {
+            if (item.getId().equals(rent.getId()))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
