@@ -171,6 +171,25 @@ public class UserManagementServiceImplTest {
 
     @Test
     public void updateUser() throws Exception {
+        
+        Customer customerUpdated = new Customer();
+
+        customerUpdated.setId(1L);
+        customerUpdated.setPhoneNumber("+363231231231");
+        customerUpdated.setAddress("Miskolc");
+        customerUpdated.setUserName("Jóska István");
+        customerUpdated.setUserId(1L);
+        customerUpdated.setYearOfBirth(1990);
+        customerUpdated.setDrivingLincenceNumber("21213565");
+
+        expect(userManagementDao.exists(anyObject(User.class))).andReturn(true);
+        expect(userManagementDao.addUser(anyObject(User.class))).andReturn(customerUpdated);
+        
+        replay(userManagementDao);
+        
+        User actual = userManagementService.updateUser(customerUpdated);
+
+        Assert.assertEquals(customerUpdated, actual);
 
     }
 
