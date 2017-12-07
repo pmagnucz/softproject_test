@@ -119,7 +119,6 @@ public class VehicleManagementIT {
         expected.setWithTrailer(true);
 
         Ship actual = (Ship)controller.addNewVehicle(vehicleRequest).getBody();
-        //TODO: megnézni, mert ez így elég csúnya
         expected.setId(actual.getId());
 
         Assert.assertNotNull(actual);

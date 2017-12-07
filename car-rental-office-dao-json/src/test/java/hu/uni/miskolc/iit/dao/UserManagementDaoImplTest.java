@@ -17,7 +17,6 @@ import static org.junit.Assert.*;
  */
 public class UserManagementDaoImplTest {
     private UserManagementDao userManagementDao;
-    //TODO UserManagementDaoImplTest ExceptionalFlow
 
     @Before
     public void setUp() throws Exception {

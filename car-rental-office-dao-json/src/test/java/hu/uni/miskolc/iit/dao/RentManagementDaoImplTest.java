@@ -20,8 +20,6 @@ import java.util.List;
 public class RentManagementDaoImplTest {
     private RentManagementDao rentManagementDao;
 
- //TODO RentManagementDaoImplTest ExceptionalFlow
-
     @Before
     public void setUp() throws Exception {
         rentManagementDao = new RentManagementDaoImpl(new File("src/test/resources/rentDatabase.json"));

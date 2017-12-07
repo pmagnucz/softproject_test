@@ -49,24 +49,8 @@ public class RentController {
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public ResponseEntity<Rent> updateRent(@RequestBody Rent rent) {
-        Rent result = null;
-        try {
-            result = rentManagementService.updateRent(rent);
-        } catch (RentNotFoundException e) {
-            e.printStackTrace();
-        } catch (RentWrongTotalFeeException e) {
-            e.printStackTrace();
-        } catch (VehicleNotFoundException e) {
-            e.printStackTrace();
-        } catch (UserNotFoundException e) {
-            e.printStackTrace();
-        } catch (NegativeValueException e) {
-            e.printStackTrace();
-        } catch (WrongRentDateException e) {
-            e.printStackTrace();
-        }
-
+    public ResponseEntity<Rent> updateRent(@RequestBody Rent rent) throws NegativeValueException, RentWrongTotalFeeException, WrongRentDateException, UserNotFoundException, VehicleNotFoundException, RentNotFoundException {
+        Rent result = rentManagementService.updateRent(rent);
         return ResponseEntity.ok(result);
     }
 

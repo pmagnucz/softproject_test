@@ -27,7 +27,6 @@ public class UserManagementIT {
     @Before
     public void setUp(){
         userManagementDao = new UserManagementDaoImpl(new File("src/test/resources/userDatabase.json"));
-        userManagementDao.clear();
         UserManagementService service = new UserManagementServiceImpl(userManagementDao);
         controller = new UserManagementController(service);
     }
@@ -63,7 +62,6 @@ public class UserManagementIT {
 
     @Test
     public void createCompanyTest() throws UserTypeDoesNotExistException {
-        //TODO: ennek utána kell járni
         Customer representative = new Customer();
         representative.setId(1L);
         representative.setPhoneNumber("06202122545");
@@ -114,6 +112,7 @@ public class UserManagementIT {
     @Test
     public void updateUserTest() throws UserTypeDoesNotExistException, UserNotFoundException {
         CreateUserRequest userRequest = new CreateUserRequest();
+        userRequest.setId(1L);
         userRequest.setUserName("userName");
         userRequest.setAddress("");
         userRequest.setPhoneNumber("");
@@ -124,12 +123,14 @@ public class UserManagementIT {
         Customer actual = (Customer)controller.createUser(userRequest).getBody();
 
         UpdateUserRequest updateUserRequest = new UpdateUserRequest();
+        updateUserRequest.setId(actual.getId());
         updateUserRequest.setUserName(actual.getUserName());
         updateUserRequest.setAddress(actual.getAddress());
         updateUserRequest.setPhoneNumber(actual.getPhoneNumber());
         updateUserRequest.setUserId(actual.getUserId());
         updateUserRequest.setYearOfBirth(actual.getYearOfBirth());
         updateUserRequest.setDrivingLicenceNumber(actual.getDrivingLicenceNumber());
+        updateUserRequest.setCustomer(true);
 
         Customer updated = (Customer)controller.updateUser(updateUserRequest).getBody();
         Assert.assertEquals(updated, actual);
@@ -170,20 +171,14 @@ public class UserManagementIT {
 
     @Test
     public void getUserByIdTest() throws UserTypeDoesNotExistException, UserNotFoundException{
-        Customer expected = new Customer();
-        expected.setId(1L);
-        expected.setPhoneNumber("06202122545");
-        expected.setUserName("customer 1");
-        expected.setAddress("Customer's Address Example St. 23");
-        expected.setUserId("993115AS");
-
         CreateUserRequest userRequest = new CreateUserRequest();
+        userRequest.setId(1L);
         userRequest.setPhoneNumber("06202122545");
         userRequest.setUserName("customer 1");
         userRequest.setAddress("Customer's Address Example St. 23");
         userRequest.setUserId("993115AS");
 
-        controller.createUser(userRequest);
+        Customer expected = (Customer) controller.createUser(userRequest).getBody();
 
         User actual = controller.getUserById(1L).getBody();
 

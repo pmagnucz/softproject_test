@@ -20,7 +20,6 @@ import static org.junit.Assert.*;
  * Created by pmagnucz on 2017. 12. 04..
  */
 public class VehicleManagementDaoImplTest {
-    //TODO: VehicleManagementDaoImplTest ExceptionalFlow
     private VehicleManagementDao vehicleManagementDao;
 
     @Before

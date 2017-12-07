@@ -30,7 +30,6 @@ public class UserManagementServiceImplTest {
     private Customer customer;
     private Company company;
    
-// TODO UserManagementServiceImplTest
     @Before
     public void before()
     {

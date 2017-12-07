@@ -30,7 +30,6 @@ public class VehicleController {
         this.vehicleManagementService = new VehicleManagementServiceImpl(vehicleManagementDao);
     }
 
-    // TODO ki kell szervezni az ismétlődő kódot vagy a három eset három private metódus legyen és itt csak a megfelelőt kell hívni
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public ResponseEntity<Vehicle> addNewVehicle(@RequestBody CreateVehicleRequest createVehicleRequest) throws ExistingVehiclePlateNumber, NotSupportedVehicleTypeException, NotValidPlateNumberFormatException {
         if (createVehicleRequest.getType() == VehicleType.CAR) {

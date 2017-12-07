@@ -114,7 +114,9 @@ public class UserControllerTest {
         assertEquals(user2,actual);
     }
 
+    @Test
     public void deleteUser() throws NegativeValueException, UserNotFoundException {
+        expect(userManagementDao.getUserById(anyLong())).andReturn(user);
         userManagementDao.deleteUser(user);
         expectLastCall();
         replay(userManagementDao);
@@ -122,7 +124,7 @@ public class UserControllerTest {
         userController.deleteUser(user);
     }
 
-//TODO fix it
+    @Test
     public void getUserById() throws UserNotFoundException {
         expect(userManagementDao.getUserById(anyLong())).andReturn(user);
 

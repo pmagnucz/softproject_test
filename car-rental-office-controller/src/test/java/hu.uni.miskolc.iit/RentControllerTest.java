@@ -7,11 +7,15 @@ import hu.uni.miskolc.iit.exception.*;
 import hu.uni.miskolc.iit.model.Rent;
 import hu.uni.miskolc.iit.model.SearchRentRequest;
 
+import hu.uni.miskolc.iit.model.User;
+import hu.uni.miskolc.iit.model.Vehicle;
 import hu.uni.miskolc.iit.service.RentManagementService;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.jws.soap.SOAPBinding;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -30,7 +34,7 @@ import static org.junit.Assert.assertEquals;
  */
 
 public class RentControllerTest {
-  /*  private RentController rentController;
+    private RentController rentController;
     private RentManagementService rentService;
     private RentManagementDao rentManagementDao;
     private UserManagementDao userManagementDao;
@@ -103,8 +107,10 @@ public class RentControllerTest {
         expect(rentManagementDao.createRent(rent)).andReturn(expected);
 
         expect(rentManagementDao.exists(anyObject(Rent.class))).andReturn(false);
-        expect(userManagementDao.exists(anyLong())).andReturn(true);
-        expect(vehicleManagementDao.exists(anyLong())).andReturn(true);
+        expect(userManagementDao.exists(anyObject(User.class))).andReturn(true);
+        expect(vehicleManagementDao.exists(anyObject(Vehicle.class))).andReturn(true);
+        expect(userManagementDao.getUserById(anyLong())).andReturn(new User()).anyTimes();
+        expect(vehicleManagementDao.getVehicleById(anyLong())).andReturn(new Vehicle()).anyTimes();
 
         replay(rentManagementDao);
         replay(userManagementDao);
@@ -117,30 +123,59 @@ public class RentControllerTest {
     }
 
     @Test
-    public void updateRent() {
-        rent2.setId(rent.getId());
+    public void updateRent() throws NegativeValueException, RentWrongTotalFeeException, RentNotFoundException, WrongRentDateException, UserNotFoundException, VehicleNotFoundException {
+        DateFormat formatRent = new SimpleDateFormat("yyyy-MM-dd");
+        Date startDate = null;
+        Date endDate = null;
+        try {
+            startDate = formatRent.parse("2017-05-01");
+            endDate = formatRent.parse("2017-06-01");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
-        expect(rentManagementDao.exists(anyObject(Rent.class))).andReturn(false);
-        expect(userManagementDao.exists(anyLong())).andReturn(true);
-        expect(vehicleManagementDao.exists(anyLong())).andReturn(true);
+        Rent rentUpdate = new Rent();
+        rentUpdate.setId(1L);
+        rentUpdate.setCustomerId(4L);
+        rentUpdate.setCompanyId(5L);
+        rentUpdate.setVehicleId(6L);
+        rentUpdate.setStartDate(startDate);
+        rentUpdate.setEndDate(endDate);
+        rentUpdate.setDurationExtendable(false);
+        rentUpdate.setExtendedHours(48);
+        rentUpdate.setKmUsed(200);
+        rentUpdate.setDayFee(150000.0);
+        rentUpdate.setKmFee(200000.0);
+        rentUpdate.setOtherFee(0.0);
+        rentUpdate.setTotalFee(350000.0);
+        rentUpdate.setPaid(true);
+
+
+        expect(rentManagementDao.exists(anyObject(Rent.class))).andReturn(true);
+        expect(userManagementDao.exists(anyObject(User.class))).andReturn(true);
+        expect(vehicleManagementDao.exists(anyObject(Vehicle.class))).andReturn(true);
         expect(rentManagementDao.getRentById(anyLong())).andReturn(rent).anyTimes();
-        expect(rentManagementDao.createRent(rent)).andReturn(rent2);
+        expect(rentManagementDao.createRent(rentUpdate)).andReturn(rentUpdate);
+        expect(userManagementDao.getUserById(anyLong())).andReturn(new User()).anyTimes();
+        expect(vehicleManagementDao.getVehicleById(anyLong())).andReturn(new Vehicle()).anyTimes();
 
         replay(rentManagementDao);
         replay(userManagementDao);
         replay(vehicleManagementDao);
 
-        Rent actual = rentController.updateRent(rent2).getBody();
+        Rent actual = rentController.updateRent(rentUpdate).getBody();
 
-        assertEquals(rent2,actual);
+        assertEquals(rentUpdate, actual);
 
     }
 
     @Test
     public void deleteRent() throws NegativeValueException, RentWrongTotalFeeException, RentNotFoundException, WrongRentDateException, UserNotFoundException, VehicleNotFoundException {
         expect(rentManagementDao.exists(anyObject(Rent.class))).andReturn(true);
-        expect(userManagementDao.exists(anyLong())).andReturn(true);
-        expect(vehicleManagementDao.exists(anyLong())).andReturn(true);
+        expect(userManagementDao.exists(anyObject(User.class))).andReturn(true);
+        expect(vehicleManagementDao.exists(anyObject(Vehicle.class))).andReturn(true);
+        expect(userManagementDao.getUserById(anyLong())).andReturn(new User()).anyTimes();
+        expect(vehicleManagementDao.getVehicleById(anyLong())).andReturn(new Vehicle()).anyTimes();
 
         rentManagementDao.deleteRent(rent);
         expectLastCall();
@@ -179,12 +214,14 @@ public class RentControllerTest {
 
     @Test
     public void getRentCount() {
-        expect(rentManagementDao.getRents().size()).andReturn(2);
-
+        List<Rent> expectedList = new ArrayList<>();
+        expectedList.add(new Rent());
+        expectedList.add(new Rent());
+        expect(rentManagementDao.getRents()).andReturn(expectedList);
         replay(rentManagementDao);
 
         int count = rentController.getRentCount().getBody();
-        assertEquals(2,count);
+        assertEquals(2, count);
     }
 
     @Test
@@ -266,62 +303,38 @@ public class RentControllerTest {
         rentController.createRent(rent);
     }
 
-    @Test
-    public void userNotFoundException() throws Exception {
-        rent.setCustomerId(0L);
-        rent.setCompanyId(0L);
-
-        expect(userManagementDao.exists(anyLong())).andReturn(false).anyTimes();
-
-        replay(userManagementDao);
-
-        try {
-            rentController.createRent(rent);
-        } catch(UserNotFoundException actual) {
-            assertEquals("User Ids wrong: Customer - " + rent.getCustomerId() + ",Company - " + rent.getCompanyId() + ".",actual.getMessage());
-        }
-    }
-
-    @Test
+    @Test(expected = UserNotFoundException.class)
     public void userCustomerNotFoundException() throws Exception {
         rent.setCustomerId(15L);
         rent.setCompanyId(0L);
 
-        expect(userManagementDao.exists(anyLong())).andReturn(false).anyTimes();
-
+        expect(userManagementDao.exists(anyObject(User.class))).andReturn(false).anyTimes();
+        expect(userManagementDao.getUserById(anyLong())).andReturn(null).anyTimes();
         replay(userManagementDao);
 
-        try {
-            rentController.createRent(rent);
-        } catch(UserNotFoundException actual) {
-            assertEquals("Customer with Id: " + rent.getCustomerId() + " does not exist.",actual.getMessage());
-        }
+        rentController.createRent(rent);
     }
 
-    @Test
+    @Test(expected = UserNotFoundException.class)
     public void userCompanyNotFoundException() throws Exception {
         rent.setCustomerId(0L);
         rent.setCompanyId(30L);
 
-        expect(userManagementDao.exists(anyLong())).andReturn(false).anyTimes();
-
+        expect(userManagementDao.exists(anyObject(User.class))).andReturn(false).anyTimes();
+        expect(userManagementDao.getUserById(anyLong())).andReturn(null).anyTimes();
         replay(userManagementDao);
 
-        try {
-            rentController.createRent(rent);
-        } catch(UserNotFoundException actual) {
-            assertEquals("Company with Id: " + rent.getCompanyId() + " does not exist.",actual.getMessage());
-        }
+        rentController.createRent(rent);
     }
 
     @Test(expected = VehicleNotFoundException.class)
     public void vehicleNotFoundException() throws Exception {
         rent.setVehicleId(50L);
-
-        expect(userManagementDao.exists(anyLong())).andReturn(true);
+        expect(userManagementDao.getUserById(anyLong())).andReturn(new User()).anyTimes();
+        expect(rentManagementDao.exists(anyObject(Rent.class))).andReturn(false);
+        expect(userManagementDao.exists(anyObject(User.class))).andReturn(true);
         replay(userManagementDao);
 
         rentController.createRent(rent);
     }
-*/
 }

@@ -23,6 +23,9 @@ public class UserManagementServiceImpl implements UserManagementService {
     public User createNewUser(CreateUserRequest createUserRequest) throws UserTypeDoesNotExistException {
         if (createUserRequest.getUserId() != null && !createUserRequest.getUserId().isEmpty()) {
             Customer customer = new Customer();
+            if (createUserRequest.getId() != null){
+                customer.setId(createUserRequest.getId());
+            }
             customer.setUserId(createUserRequest.getUserId());
             customer.setYearOfBirth(createUserRequest.getYearOfBirth());
             customer.setDrivingLicenceNumber(createUserRequest.getDrivingLicenceNumber());
@@ -32,6 +35,9 @@ public class UserManagementServiceImpl implements UserManagementService {
             return userManagementDao.addUser(customer);
         } else if (createUserRequest.getCompanyId() != null && !createUserRequest.getCompanyId().isEmpty()) {
             Company company = new Company();
+            if (createUserRequest.getId() != null){
+                company.setId(createUserRequest.getId());
+            }
             company.setCompanyId(createUserRequest.getCompanyId());
             company.setBillingAddress(createUserRequest.getBillingAddress());
             company.setRepresentative(createUserRequest.getRepresentative());
