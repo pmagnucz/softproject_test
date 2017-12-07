@@ -32,7 +32,7 @@ public class VehicleController {
 
     // TODO ki kell szervezni az ismétlődő kódot vagy a három eset három private metódus legyen és itt csak a megfelelőt kell hívni
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public ResponseEntity<Vehicle> addNewVehicle(@RequestBody CreateVehicleRequest createVehicleRequest) throws ExistingVehiclePlateNumber, NotSupportedVehicleTypeException, NotValidPlateNumberFormatException{
+    public ResponseEntity<Vehicle> addNewVehicle(@RequestBody CreateVehicleRequest createVehicleRequest) throws ExistingVehiclePlateNumber, NotSupportedVehicleTypeException, NotValidPlateNumberFormatException {
         if (createVehicleRequest.getType() == VehicleType.CAR) {
             Car car = new Car();
             car.setPlateNumber(createVehicleRequest.getPlateNumber());
@@ -46,14 +46,7 @@ public class VehicleController {
             car.setPersons(createVehicleRequest.getPersons());
             car.setPerformance(createVehicleRequest.getPerformance());
             car.setVehicleStatus(createVehicleRequest.getVehicleStatus());
-
-            try {
-                return ResponseEntity.ok(vehicleManagementService.addNewVehicle(car));
-            } catch (ExistingVehiclePlateNumber existingVehiclePlateNumber) {
-                return ResponseEntity.badRequest().body(null);
-            } catch (NotValidPlateNumberFormatException e) {
-                return ResponseEntity.badRequest().body(null);
-            }
+            return ResponseEntity.ok(vehicleManagementService.addNewVehicle(car));
         } else if (createVehicleRequest.getType() == VehicleType.SHIP) {
             Ship ship = new Ship();
             ship.setShipId(createVehicleRequest.getShipId());
@@ -67,14 +60,7 @@ public class VehicleController {
             ship.setPersons(createVehicleRequest.getPersons());
             ship.setPerformance(createVehicleRequest.getPerformance());
             ship.setVehicleStatus(createVehicleRequest.getVehicleStatus());
-
-            try {
-                return ResponseEntity.ok(vehicleManagementService.addNewVehicle(ship));
-            } catch (ExistingVehiclePlateNumber existingVehiclePlateNumber) {
-                return ResponseEntity.badRequest().body(null);
-            } catch (NotValidPlateNumberFormatException e) {
-                return ResponseEntity.badRequest().body(null);
-            }
+            return ResponseEntity.ok(vehicleManagementService.addNewVehicle(ship));
         } else {
             Vehicle other = new Vehicle();
 
@@ -86,35 +72,18 @@ public class VehicleController {
             other.setPersons(createVehicleRequest.getPersons());
             other.setPerformance(createVehicleRequest.getPerformance());
             other.setVehicleStatus(createVehicleRequest.getVehicleStatus());
-
-            try {
-                return ResponseEntity.ok(vehicleManagementService.addNewVehicle(other));
-            } catch (ExistingVehiclePlateNumber existingVehiclePlateNumber) {
-                return ResponseEntity.badRequest().body(null);
-            } catch (NotValidPlateNumberFormatException e) {
-                return ResponseEntity.badRequest().body(null);
-            }
+            return ResponseEntity.ok(vehicleManagementService.addNewVehicle(other));
         }
     }
 
     @RequestMapping(value = "/getVehicle/{vehicleId}", method = RequestMethod.GET)
     public ResponseEntity<Vehicle> getVehicleById(@PathVariable Long vehicleId) throws VehicleNotFoundException {
-        try {
-            return ResponseEntity.ok(vehicleManagementService.getVehicleById(vehicleId));
-        } catch (VehicleNotFoundException e) {
-            return ResponseEntity.badRequest().body(null);
-        }
+        return ResponseEntity.ok(vehicleManagementService.getVehicleById(vehicleId));
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity<List<Vehicle>> getVehicleByFilterOptions(@RequestBody SearchVehicleRequest searchVehicleRequest) throws NotSupportedVehicleTypeException, NotValidPlateNumberFormatException {
-        try {
-            return ResponseEntity.ok(vehicleManagementService.getVehicleByFilterOptions(searchVehicleRequest));
-        } catch (NotValidPlateNumberFormatException e) {
-            return ResponseEntity.badRequest().body(null);
-        } catch (NotSupportedVehicleTypeException e) {
-            return ResponseEntity.badRequest().body(null);
-        }
+        return ResponseEntity.ok(vehicleManagementService.getVehicleByFilterOptions(searchVehicleRequest));
     }
 
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
@@ -124,22 +93,12 @@ public class VehicleController {
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public ResponseEntity<Vehicle> updateVehicle(@RequestBody UpdateVehicleRequest updateVehicleRequest) throws VehicleNotFoundException, NotSupportedVehicleTypeException, NotValidPlateNumberFormatException{
-        try {
-            return ResponseEntity.ok(vehicleManagementService.updateVehicle(updateVehicleRequest));
-        } catch (VehicleNotFoundException e) {
-            return ResponseEntity.badRequest().body(null);
-        } catch (NotValidPlateNumberFormatException e) {
-            return ResponseEntity.badRequest().body(null);
-        }
+    public ResponseEntity<Vehicle> updateVehicle(@RequestBody UpdateVehicleRequest updateVehicleRequest) throws VehicleNotFoundException, NotSupportedVehicleTypeException, NotValidPlateNumberFormatException {
+        return ResponseEntity.ok(vehicleManagementService.updateVehicle(updateVehicleRequest));
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-    public void removeVehicle(@RequestBody Vehicle vehicle) throws VehicleNotFoundException{
-        try {
-            vehicleManagementService.removeVehicle(vehicle);
-        } catch (VehicleNotFoundException e) {
-
-        }
+    public void removeVehicle(@RequestBody Vehicle vehicle) throws VehicleNotFoundException {
+        vehicleManagementService.removeVehicle(vehicle);
     }
 }

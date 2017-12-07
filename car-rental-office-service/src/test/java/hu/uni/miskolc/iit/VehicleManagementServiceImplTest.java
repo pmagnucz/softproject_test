@@ -28,7 +28,6 @@ public class VehicleManagementServiceImplTest {
     private Vehicle vehicle;
     private Ship ship;
     private Car car;
-    // TODO VehicleManagementServiceImplTest fix the missing tests
 
     @Before
     public void setUp() throws Exception {
@@ -173,7 +172,6 @@ public class VehicleManagementServiceImplTest {
         Assert.assertEquals(expectedCar, actual);
     }
 
-    // TODO fix it
     public void removeVehicleCar() throws Exception {
         expect(vehicleManagementDao.exists(anyObject())).andReturn(true);
         expectLastCall();

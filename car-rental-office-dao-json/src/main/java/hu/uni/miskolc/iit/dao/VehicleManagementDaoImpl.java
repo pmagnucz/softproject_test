@@ -1,4 +1,5 @@
 package hu.uni.miskolc.iit.dao;
+import hu.uni.miskolc.iit.exception.VehicleNotFoundException;
 import hu.uni.miskolc.iit.model.*;
 
 import java.util.Date;
@@ -33,7 +34,7 @@ public class VehicleManagementDaoImpl implements VehicleManagementDao {
     }
 
     @Override
-    public Vehicle getVehicleById(Long id) {
+    public Vehicle getVehicleById(Long id) throws VehicleNotFoundException {
         List<Vehicle> vehicles = readDatabase();
         for (Vehicle vehicle : vehicles)
         {
@@ -42,7 +43,7 @@ public class VehicleManagementDaoImpl implements VehicleManagementDao {
                 return vehicle;
             }
         }
-        return null;
+        throw new VehicleNotFoundException("The requested vehicle not found! ID=" + id);
     }
 
     @Override
@@ -51,8 +52,11 @@ public class VehicleManagementDaoImpl implements VehicleManagementDao {
     }
 
     @Override
-    public void deleteVehicle(Vehicle vehicle) {
+    public void deleteVehicle(Vehicle vehicle) throws VehicleNotFoundException{
         List<Vehicle> vehicles = readDatabase();
+        if (!vehicles.contains(vehicle)){
+            throw new VehicleNotFoundException("The requested vehicle not found! " + vehicle.toString());
+        }
         vehicles.remove(vehicle);
         writeDatabase(vehicles);
     }

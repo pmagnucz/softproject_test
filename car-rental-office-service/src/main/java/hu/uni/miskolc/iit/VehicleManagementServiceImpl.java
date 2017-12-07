@@ -38,7 +38,7 @@ public class VehicleManagementServiceImpl implements VehicleManagementService {
     }
 
     @Override
-    public Vehicle getVehicleById(Long id) {
+    public Vehicle getVehicleById(Long id) throws VehicleNotFoundException{
         return vehicleManagementDao.getVehicleById(id);
     }
 
@@ -101,7 +101,7 @@ public class VehicleManagementServiceImpl implements VehicleManagementService {
     }
 
     @Override
-    public void removeVehicle(Vehicle vehicle) {
+    public void removeVehicle(Vehicle vehicle) throws VehicleNotFoundException{
         vehicleManagementDao.deleteVehicle(vehicle);
     }
 }
