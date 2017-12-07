@@ -57,8 +57,8 @@ public class RentManagementServiceImpl implements RentManagementService {
             if(rent.getCustomerId() == searchRentRequest.getCustomerId()
                     || rent.getCompanyId() == searchRentRequest.getCompanyId()
                     || rent.getVehicleId() == searchRentRequest.getVehicleId()
-                    || rent.getStartDate() == searchRentRequest.getStartDate()
-                    || rent.getEndDate() == searchRentRequest.getEndDate()) {
+                    || rent.getStartDate().equals(searchRentRequest.getStartDate())
+                    || rent.getEndDate().equals(searchRentRequest.getEndDate())) {
                 requestedRents.add(rent);
             }
         }
@@ -136,9 +136,7 @@ public class RentManagementServiceImpl implements RentManagementService {
             throw new RentWrongTotalFeeException(String.valueOf(rent.getTotalFee() + ", should be: " + (rent.getDayFee()+rent.getKmFee()+rent.getOtherFee())));
         }
 
-        User user = userManagementDao.getUserById(rent.getCustomerId());
-        User company = userManagementDao.getUserById(rent.getCompanyId());
-        if(!userManagementDao.exists(user) || !userManagementDao.exists(company)){
+        if (userManagementDao.getUserById(rent.getCustomerId()) == null && userManagementDao.getUserById(rent.getCompanyId()) == null) {
             if(rent.getCustomerId() > 0) {
                 throw new UserNotFoundException("Customer with Id: " + rent.getCustomerId() + " does not exist.");
             } else if (rent.getCompanyId() > 0){
@@ -148,8 +146,7 @@ public class RentManagementServiceImpl implements RentManagementService {
             }
         }
 
-        Vehicle rentedVehicle = vehicleManagementDao.getVehicleById(rent.getVehicleId());
-        if(!vehicleManagementDao.exists(rentedVehicle)){
+        if(vehicleManagementDao.getVehicleById(rent.getVehicleId()) == null) {
             throw new VehicleNotFoundException("Vehicle with Id: " + rent.getVehicleId() + " does not exist.");
         }
     }
