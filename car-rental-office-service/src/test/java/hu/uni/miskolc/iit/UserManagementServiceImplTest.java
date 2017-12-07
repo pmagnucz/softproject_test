@@ -10,6 +10,7 @@ import hu.uni.miskolc.iit.model.Company;
 import hu.uni.miskolc.iit.model.User;
 import hu.uni.miskolc.iit.model.SearchUserRequest;
 import hu.uni.miskolc.iit.model.CreateUserRequest;
+import hu.uni.miskolc.iit.model.UpdateUserRequest;
 import hu.uni.miskolc.iit.service.UserManagementService;
 import org.junit.Assert;
 import org.junit.Before;
@@ -35,6 +36,7 @@ public class UserManagementServiceImplTest {
     {
 
         userManagementService = new UserManagementServiceImpl(userManagementDao);
+        userManagementDao = mock(UserManagementDao.class);
        
         
         user = new User();
@@ -189,13 +191,15 @@ public class UserManagementServiceImplTest {
         customerUpdated.setUserId("aaa111");
         customerUpdated.setYearOfBirth(1990);
         customerUpdated.setDrivingLicenceNumber("21213565");
+        
+        UpdateUserRequest updateUserRequest = new UpdateUserRequest();
 
         expect(userManagementDao.exists(anyObject(User.class))).andReturn(true);
         expect(userManagementDao.addUser(anyObject(User.class))).andReturn(customerUpdated);
         
         replay(userManagementDao);
         
-        User actual = userManagementService.updateUser(customerUpdated);
+        User actual = userManagementService.updateUser(updateUserRequest);
 
         Assert.assertEquals(customerUpdated, actual);
 
